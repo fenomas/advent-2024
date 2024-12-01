@@ -4,7 +4,7 @@ This is my live-coding environment and hacked-up solutions for [Advent of Code 2
 
 > [Run live in browser](https://fenomas.github.io/advent-2024/)
 
-Puzzle solutions are in: [/src/advent/](https://github.com/fenomas/advent-2023/tree/main/src/advent/). The rigging and HMR and so forth use `solid.js` this year.
+Puzzle solutions are in: [/src/advent/](https://github.com/fenomas/advent-2024/tree/main/src/advent/). The rigging and HMR and so forth use `solid.js` this year.
 
 ## To run locally:
 
