@@ -12,14 +12,12 @@ export const answers = [
 
 export const part1 = (input = '') => {
   let total = 0
-  while (input) {
-    const [match, nums] = input.match(/mul\((\d{1,3},\d{1,3})\)/) || []
-    if (!match) break
 
+  input.matchAll(/mul\((\d{1,3},\d{1,3})\)/g)?.forEach(([, nums]) => {
     const [a, b] = nums.split(',').map((s) => +s)
     total += a * b
-    input = input.slice(input.indexOf(match) + match.length)
-  }
+  })
+
   return total
 }
 
@@ -29,14 +27,12 @@ export const part1 = (input = '') => {
 
 export const part2 = (input = '') => {
   let total = 0
-  input.split("don't()").forEach((part, i) => {
-    if (i === 0) {
-      total += part1(part)
-    } else {
-      const bits = part.split('do()')
-      bits.shift()
-      total += part1(bits.join(''))
-    }
+  input = 'do()' + input
+
+  input.split("don't()").forEach((part) => {
+    const [, ...doPart] = part.split('do()')
+    total += part1(doPart.join(''))
   })
+
   return total
 }
