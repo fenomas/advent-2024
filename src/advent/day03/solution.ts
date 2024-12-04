@@ -1,12 +1,9 @@
-//
-
 export const answers = [
   ['187833789', '94455185'], // real
   ['161', '161'],
   ['161', '48'],
 ]
 
-//
 //
 //
 
@@ -21,8 +18,6 @@ export const part1 = (input = '') => {
   return total
 }
 
-//
-//
 //
 
 export const part2 = (input = '') => {

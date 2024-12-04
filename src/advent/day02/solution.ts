@@ -1,11 +1,8 @@
-//
-
 export const answers = [
   ['341', '404'], // real
   ['2', '4'],
 ]
 
-//
 //
 //
 
@@ -23,8 +20,6 @@ export const part1 = (input = '') => {
   }, 0)
 }
 
-//
-//
 //
 
 export const part2 = (input = '') => {

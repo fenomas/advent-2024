@@ -1,11 +1,8 @@
-//
-
 export const answers = [
   ['1580061', '23046913'], // real
   ['11', '31'],
 ]
 
-//
 //
 //
 
@@ -20,8 +17,6 @@ export const part1 = (input = '') => {
   return l.reduce((acc, a, i) => acc + Math.abs(a - r[i]), 0)
 }
 
-//
-//
 //
 
 export const part2 = (input = '') => {
