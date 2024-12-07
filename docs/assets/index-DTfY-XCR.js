@@ -1,20 +1,22 @@
-(function(){const A=document.createElement("link").relList;if(A&&A.supports&&A.supports("modulepreload"))return;for(const e of document.querySelectorAll('link[rel="modulepreload"]'))X(e);new MutationObserver(e=>{for(const S of e)if(S.type==="childList")for(const l of S.addedNodes)l.tagName==="LINK"&&l.rel==="modulepreload"&&X(l)}).observe(document,{childList:!0,subtree:!0});function n(e){const S={};return e.integrity&&(S.integrity=e.integrity),e.referrerPolicy&&(S.referrerPolicy=e.referrerPolicy),e.crossOrigin==="use-credentials"?S.credentials="include":e.crossOrigin==="anonymous"?S.credentials="omit":S.credentials="same-origin",S}function X(e){if(e.ep)return;e.ep=!0;const S=n(e);fetch(e.href,S)}})();const vM=(M,A)=>M===A,J={equals:vM};let lM=rM;const _=1,L=2,oM={owned:null,cleanups:null,context:null,owner:null};var i=null;let G=null,bM=null,h=null,w=null,d=null,D=0;function $M(M,A){const n=h,X=i,e=M.length===0,S=A===void 0?X:A,l=e?oM:{owned:null,cleanups:null,context:S?S.context:null,owner:S},t=e?M:()=>M(()=>H(()=>E(l)));i=l,h=null;try{return x(t,!0)}finally{h=n,i=X}}function y(M,A){A=A?Object.assign({},J,A):J;const n={value:M,observers:null,observerSlots:null,comparator:A.equals||void 0},X=e=>(typeof e=="function"&&(e=e(n.value)),uM(n,e));return[OM.bind(n),X]}function g(M,A,n){const X=mM(M,A,!1,_);U(X)}function Z(M,A,n){lM=EM;const X=mM(M,A,!1,_);X.user=!0,d?d.push(X):U(X)}function H(M){if(h===null)return M();const A=h;h=null;try{return M()}finally{h=A}}function OM(){if(this.sources&&this.state)if(this.state===_)U(this);else{const M=w;w=null,x(()=>B(this),!1),w=M}if(h){const M=this.observers?this.observers.length:0;h.sources?(h.sources.push(this),h.sourceSlots.push(M)):(h.sources=[this],h.sourceSlots=[M]),this.observers?(this.observers.push(h),this.observerSlots.push(h.sources.length-1)):(this.observers=[h],this.observerSlots=[h.sources.length-1])}return this.value}function uM(M,A,n){let X=M.value;return(!M.comparator||!M.comparator(X,A))&&(M.value=A,M.observers&&M.observers.length&&x(()=>{for(let e=0;e<M.observers.length;e+=1){const S=M.observers[e],l=G&&G.running;l&&G.disposed.has(S),(l?!S.tState:!S.state)&&(S.pure?w.push(S):d.push(S),S.observers&&sM(S)),l||(S.state=_)}if(w.length>1e6)throw w=[],new Error},!1)),A}function U(M){if(!M.fn)return;E(M);const A=D;jM(M,M.value,A)}function jM(M,A,n){let X;const e=i,S=h;h=i=M;try{X=M.fn(A)}catch(l){return M.pure&&(M.state=_,M.owned&&M.owned.forEach(E),M.owned=null),M.updatedAt=n+1,hM(l)}finally{h=S,i=e}(!M.updatedAt||M.updatedAt<=n)&&(M.updatedAt!=null&&"observers"in M?uM(M,X):M.value=X,M.updatedAt=n)}function mM(M,A,n,X=_,e){const S={fn:M,state:X,updatedAt:null,owned:null,sources:null,sourceSlots:null,cleanups:null,value:A,owner:i,context:i?i.context:null,pure:n};return i===null||i!==oM&&(i.owned?i.owned.push(S):i.owned=[S]),S}function I(M){if(M.state===0)return;if(M.state===L)return B(M);if(M.suspense&&H(M.suspense.inFallback))return M.suspense.effects.push(M);const A=[M];for(;(M=M.owner)&&(!M.updatedAt||M.updatedAt<D);)M.state&&A.push(M);for(let n=A.length-1;n>=0;n--)if(M=A[n],M.state===_)U(M);else if(M.state===L){const X=w;w=null,x(()=>B(M,A[0]),!1),w=X}}function x(M,A){if(w)return M();let n=!1;A||(w=[]),d?n=!0:d=[],D++;try{const X=M();return TM(n),X}catch(X){n||(d=null),w=null,hM(X)}}function TM(M){if(w&&(rM(w),w=null),M)return;const A=d;d=null,A.length&&x(()=>lM(A),!1)}function rM(M){for(let A=0;A<M.length;A++)I(M[A])}function EM(M){let A,n=0;for(A=0;A<M.length;A++){const X=M[A];X.user?M[n++]=X:I(X)}for(A=0;A<n;A++)I(M[A])}function B(M,A){M.state=0;for(let n=0;n<M.sources.length;n+=1){const X=M.sources[n];if(X.sources){const e=X.state;e===_?X!==A&&(!X.updatedAt||X.updatedAt<D)&&I(X):e===L&&B(X,A)}}}function sM(M){for(let A=0;A<M.observers.length;A+=1){const n=M.observers[A];n.state||(n.state=L,n.pure?w.push(n):d.push(n),n.observers&&sM(n))}}function E(M){let A;if(M.sources)for(;M.sources.length;){const n=M.sources.pop(),X=M.sourceSlots.pop(),e=n.observers;if(e&&e.length){const S=e.pop(),l=n.observerSlots.pop();X<e.length&&(S.sourceSlots[l]=X,e[X]=S,n.observerSlots[X]=l)}}if(M.tOwned){for(A=M.tOwned.length-1;A>=0;A--)E(M.tOwned[A]);delete M.tOwned}if(M.owned){for(A=M.owned.length-1;A>=0;A--)E(M.owned[A]);M.owned=null}if(M.cleanups){for(A=M.cleanups.length-1;A>=0;A--)M.cleanups[A]();M.cleanups=null}M.state=0}function xM(M){return M instanceof Error?M:new Error(typeof M=="string"?M:"Unknown error",{cause:M})}function hM(M,A=i){throw xM(M)}function f(M,A){return H(()=>M(A||{}))}function PM(M,A,n){let X=n.length,e=A.length,S=X,l=0,t=0,o=A[e-1].nextSibling,m=null;for(;l<e||t<S;){if(A[l]===n[t]){l++,t++;continue}for(;A[e-1]===n[S-1];)e--,S--;if(e===l){const u=S<X?t?n[t-1].nextSibling:n[S-t]:o;for(;t<S;)M.insertBefore(n[t++],u)}else if(S===t)for(;l<e;)(!m||!m.has(A[l]))&&A[l].remove(),l++;else if(A[l]===n[S-1]&&n[t]===A[e-1]){const u=A[--e].nextSibling;M.insertBefore(n[t++],A[l++].nextSibling),M.insertBefore(n[--S],u),A[e]=n[S]}else{if(!m){m=new Map;let r=t;for(;r<S;)m.set(n[r],r++)}const u=m.get(A[l]);if(u!=null)if(t<u&&u<S){let r=l,s=1,a;for(;++r<e&&r<S&&!((a=m.get(A[r]))==null||a!==u+s);)s++;if(s>u-t){const j=A[l];for(;t<u;)M.insertBefore(n[t++],j)}else M.replaceChild(n[t++],A[l++])}else l++;else A[l++].remove()}}}const MM="_$DX_DELEGATE";function CM(M,A,n,X={}){let e;return $M(S=>{e=S,A===document?M():c(A,M(),A.firstChild?null:void 0,n)},X.owner),()=>{e(),A.textContent=""}}function v(M,A,n){let X;const e=()=>{const l=document.createElement("template");return l.innerHTML=M,l.content.firstChild},S=()=>(X||(X=e())).cloneNode(!0);return S.cloneNode=S,S}function wM(M,A=window.document){const n=A[MM]||(A[MM]=new Set);for(let X=0,e=M.length;X<e;X++){const S=M[X];n.has(S)||(n.add(S),A.addEventListener(S,IM))}}function zM(M,A,n){n==null?M.removeAttribute(A):M.setAttribute(A,n)}function NM(M,A,n,X){Array.isArray(n)?(M[`$$${A}`]=n[0],M[`$$${A}Data`]=n[1]):M[`$$${A}`]=n}function LM(M,A,n={}){const X=Object.keys(A||{}),e=Object.keys(n);let S,l;for(S=0,l=e.length;S<l;S++){const t=e[S];!t||t==="undefined"||A[t]||(AM(M,t,!1),delete n[t])}for(S=0,l=X.length;S<l;S++){const t=X[S],o=!!A[t];!t||t==="undefined"||n[t]===o||!o||(AM(M,t,!0),n[t]=o)}return n}function c(M,A,n,X){if(n!==void 0&&!X&&(X=[]),typeof A!="function")return k(M,A,X,n);g(e=>k(M,A(),e,n),X)}function AM(M,A,n){const X=A.trim().split(/\s+/);for(let e=0,S=X.length;e<S;e++)M.classList.toggle(X[e],n)}function IM(M){let A=M.target;const n=`$$${M.type}`,X=M.target,e=M.currentTarget,S=o=>Object.defineProperty(M,"target",{configurable:!0,value:o}),l=()=>{const o=A[n];if(o&&!A.disabled){const m=A[`${n}Data`];if(m!==void 0?o.call(A,m,M):o.call(A,M),M.cancelBubble)return}return A.host&&typeof A.host!="string"&&!A.host._$host&&A.contains(M.target)&&S(A.host),!0},t=()=>{for(;l()&&(A=A._$host||A.parentNode||A.host););};if(Object.defineProperty(M,"currentTarget",{configurable:!0,get(){return A||document}}),M.composedPath){const o=M.composedPath();S(o[0]);for(let m=0;m<o.length-2&&(A=o[m],!!l());m++){if(A._$host){A=A._$host,t();break}if(A.parentNode===e)break}}else t();S(X)}function k(M,A,n,X,e){for(;typeof n=="function";)n=n();if(A===n)return n;const S=typeof A,l=X!==void 0;if(M=l&&n[0]&&n[0].parentNode||M,S==="string"||S==="number"){if(S==="number"&&(A=A.toString(),A===n))return n;if(l){let t=n[0];t&&t.nodeType===3?t.data!==A&&(t.data=A):t=document.createTextNode(A),n=O(M,n,X,t)}else n!==""&&typeof n=="string"?n=M.firstChild.data=A:n=M.textContent=A}else if(A==null||S==="boolean")n=O(M,n,X);else{if(S==="function")return g(()=>{let t=A();for(;typeof t=="function";)t=t();n=k(M,t,n,X)}),()=>n;if(Array.isArray(A)){const t=[],o=n&&Array.isArray(n);if(K(t,A,n,e))return g(()=>n=k(M,t,n,X,!0)),()=>n;if(t.length===0){if(n=O(M,n,X),l)return n}else o?n.length===0?nM(M,t,X):PM(M,n,t):(n&&O(M),nM(M,t));n=t}else if(A.nodeType){if(Array.isArray(n)){if(l)return n=O(M,n,X,A);O(M,n,null,A)}else n==null||n===""||!M.firstChild?M.appendChild(A):M.replaceChild(A,M.firstChild);n=A}}return n}function K(M,A,n,X){let e=!1;for(let S=0,l=A.length;S<l;S++){let t=A[S],o=n&&n[M.length],m;if(!(t==null||t===!0||t===!1))if((m=typeof t)=="object"&&t.nodeType)M.push(t);else if(Array.isArray(t))e=K(M,t,o)||e;else if(m==="function")if(X){for(;typeof t=="function";)t=t();e=K(M,Array.isArray(t)?t:[t],Array.isArray(o)?o:[o])||e}else M.push(t),e=!0;else{const u=String(t);o&&o.nodeType===3&&o.data===u?M.push(o):M.push(document.createTextNode(u))}}return e}function nM(M,A,n=null){for(let X=0,e=A.length;X<e;X++)M.insertBefore(A[X],n)}function O(M,A,n,X){if(n===void 0)return M.textContent="";const e=X||document.createTextNode("");if(A.length){let S=!1;for(let l=A.length-1;l>=0;l--){const t=A[l];if(e!==t){const o=t.parentNode===M;!S&&!l?o?M.replaceChild(e,t):M.insertBefore(e,n):o&&t.remove()}else S=!0}}else M.insertBefore(e,n);return[e]}const BM=[["1580061","23046913"],["11","31"]],kM=(M="")=>{const A=M.split(`
-`).map(e=>e.split(/\s+/)),n=A.map(([e])=>+e).sort(),X=A.map(([,e])=>+e).sort();return n.reduce((e,S,l)=>e+Math.abs(S-X[l]),0)},DM=(M="")=>{const A=M.split(`
-`).map(S=>S.split(/\s+/)),n=A.map(([S])=>+S),X=A.map(([,S])=>+S),e={...[0]};return X.forEach(S=>e[S]=(e[S]||0)+1),n.reduce((S,l)=>S+l*(e[l]||0),0)},UM=Object.freeze(Object.defineProperty({__proto__:null,answers:BM,part1:kM,part2:DM},Symbol.toStringTag,{value:"Module"})),FM=[["341","404"],["2","4"]],GM=(M="")=>M.split(`
-`).reduce((A,n)=>{const X=n.split(/ +/).map(t=>+t),e=(X.at(-1)||0)>X[0]?1:-1,S=[1,2,3].map(t=>t*e);return X.every((t,o,m)=>o===0?!0:S.includes(t-m[o-1]))?A+1:A},0),RM=(M="")=>{const A=(n,X)=>n.every((e,S,l)=>S===0?!0:X.includes(e-l[S-1]));return M.split(`
-`).reduce((n,X)=>{const e=X.split(/ +/).map(o=>+o),S=(e.at(-1)||0)>e[0]?1:-1,l=[1,2,3].map(o=>o*S);return A(e,l)||e.find((o,m,u)=>{const r=[...u];return r.splice(m,1),A(r,l)})?n+1:n},0)},KM=Object.freeze(Object.defineProperty({__proto__:null,answers:FM,part1:GM,part2:RM},Symbol.toStringTag,{value:"Module"})),VM=[["187833789","94455185"],["161","161"],["161","48"]],iM=(M="")=>{let A=0;return M.matchAll(/mul\((\d{1,3},\d{1,3})\)/g)?.forEach(([,n])=>{const[X,e]=n.split(",").map(S=>+S);A+=X*e}),A},HM=(M="")=>{let A=0;return M="do()"+M,M.split("don't()").forEach(n=>{const[,...X]=n.split("do()");A+=iM(X.join(""))}),A},qM=Object.freeze(Object.defineProperty({__proto__:null,answers:VM,part1:iM,part2:HM},Symbol.toStringTag,{value:"Module"})),QM=[["2575","2041"],["18","9"]],WM=(M="")=>{const A=M.split(`
-`).map(S=>S.split("")),n=(S=0,l=0)=>A[S]&&A[S][l]||"-",X=[[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];let e=0;return A.forEach((S,l)=>{S.forEach((t,o)=>{t==="X"&&X.forEach(([m,u])=>{"XMAS".split("").every((s,a)=>n(l+a*m,o+a*u)===s)&&e++})})}),e},YM=(M="")=>{const A=M.split(`
-`).map(S=>S.split("")),n=(S=0,l=0)=>A[S]&&A[S][l]||"-",X=[[1,1],[-1,-1],[1,-1],[-1,1]];let e=0;return A.forEach((S,l)=>{S.forEach((t,o)=>{if(t!=="A")return;const m=X.map(([u,r])=>n(l+u,o+r));m[0]!==m[1]&&m.sort().join("")==="MMSS"&&e++})}),e},JM=Object.freeze(Object.defineProperty({__proto__:null,answers:QM,part1:WM,part2:YM},Symbol.toStringTag,{value:"Module"})),ZM=[["5964","4719"],["143","123"]],MA=(M="")=>q(M).total,q=(M="")=>{const[A,n]=M.split(`
+(function(){const n=document.createElement("link").relList;if(n&&n.supports&&n.supports("modulepreload"))return;for(const S of document.querySelectorAll('link[rel="modulepreload"]'))X(S);new MutationObserver(S=>{for(const e of S)if(e.type==="childList")for(const l of e.addedNodes)l.tagName==="LINK"&&l.rel==="modulepreload"&&X(l)}).observe(document,{childList:!0,subtree:!0});function A(S){const e={};return S.integrity&&(e.integrity=S.integrity),S.referrerPolicy&&(e.referrerPolicy=S.referrerPolicy),S.crossOrigin==="use-credentials"?e.credentials="include":S.crossOrigin==="anonymous"?e.credentials="omit":e.credentials="same-origin",e}function X(S){if(S.ep)return;S.ep=!0;const e=A(S);fetch(S.href,e)}})();const vM=(M,n)=>M===n,J={equals:vM};let lM=rM;const _=1,N=2,oM={owned:null,cleanups:null,context:null,owner:null};var i=null;let G=null,bM=null,h=null,w=null,d=null,D=0;function $M(M,n){const A=h,X=i,S=M.length===0,e=n===void 0?X:n,l=S?oM:{owned:null,cleanups:null,context:e?e.context:null,owner:e},t=S?M:()=>M(()=>H(()=>E(l)));i=l,h=null;try{return P(t,!0)}finally{h=A,i=X}}function p(M,n){n=n?Object.assign({},J,n):J;const A={value:M,observers:null,observerSlots:null,comparator:n.equals||void 0},X=S=>(typeof S=="function"&&(S=S(A.value)),uM(A,S));return[OM.bind(A),X]}function g(M,n,A){const X=mM(M,n,!1,_);U(X)}function Z(M,n,A){lM=EM;const X=mM(M,n,!1,_);X.user=!0,d?d.push(X):U(X)}function H(M){if(h===null)return M();const n=h;h=null;try{return M()}finally{h=n}}function OM(){if(this.sources&&this.state)if(this.state===_)U(this);else{const M=w;w=null,P(()=>I(this),!1),w=M}if(h){const M=this.observers?this.observers.length:0;h.sources?(h.sources.push(this),h.sourceSlots.push(M)):(h.sources=[this],h.sourceSlots=[M]),this.observers?(this.observers.push(h),this.observerSlots.push(h.sources.length-1)):(this.observers=[h],this.observerSlots=[h.sources.length-1])}return this.value}function uM(M,n,A){let X=M.value;return(!M.comparator||!M.comparator(X,n))&&(M.value=n,M.observers&&M.observers.length&&P(()=>{for(let S=0;S<M.observers.length;S+=1){const e=M.observers[S],l=G&&G.running;l&&G.disposed.has(e),(l?!e.tState:!e.state)&&(e.pure?w.push(e):d.push(e),e.observers&&sM(e)),l||(e.state=_)}if(w.length>1e6)throw w=[],new Error},!1)),n}function U(M){if(!M.fn)return;E(M);const n=D;jM(M,M.value,n)}function jM(M,n,A){let X;const S=i,e=h;h=i=M;try{X=M.fn(n)}catch(l){return M.pure&&(M.state=_,M.owned&&M.owned.forEach(E),M.owned=null),M.updatedAt=A+1,hM(l)}finally{h=e,i=S}(!M.updatedAt||M.updatedAt<=A)&&(M.updatedAt!=null&&"observers"in M?uM(M,X):M.value=X,M.updatedAt=A)}function mM(M,n,A,X=_,S){const e={fn:M,state:X,updatedAt:null,owned:null,sources:null,sourceSlots:null,cleanups:null,value:n,owner:i,context:i?i.context:null,pure:A};return i===null||i!==oM&&(i.owned?i.owned.push(e):i.owned=[e]),e}function L(M){if(M.state===0)return;if(M.state===N)return I(M);if(M.suspense&&H(M.suspense.inFallback))return M.suspense.effects.push(M);const n=[M];for(;(M=M.owner)&&(!M.updatedAt||M.updatedAt<D);)M.state&&n.push(M);for(let A=n.length-1;A>=0;A--)if(M=n[A],M.state===_)U(M);else if(M.state===N){const X=w;w=null,P(()=>I(M,n[0]),!1),w=X}}function P(M,n){if(w)return M();let A=!1;n||(w=[]),d?A=!0:d=[],D++;try{const X=M();return TM(A),X}catch(X){A||(d=null),w=null,hM(X)}}function TM(M){if(w&&(rM(w),w=null),M)return;const n=d;d=null,n.length&&P(()=>lM(n),!1)}function rM(M){for(let n=0;n<M.length;n++)L(M[n])}function EM(M){let n,A=0;for(n=0;n<M.length;n++){const X=M[n];X.user?M[A++]=X:L(X)}for(n=0;n<A;n++)L(M[n])}function I(M,n){M.state=0;for(let A=0;A<M.sources.length;A+=1){const X=M.sources[A];if(X.sources){const S=X.state;S===_?X!==n&&(!X.updatedAt||X.updatedAt<D)&&L(X):S===N&&I(X,n)}}}function sM(M){for(let n=0;n<M.observers.length;n+=1){const A=M.observers[n];A.state||(A.state=N,A.pure?w.push(A):d.push(A),A.observers&&sM(A))}}function E(M){let n;if(M.sources)for(;M.sources.length;){const A=M.sources.pop(),X=M.sourceSlots.pop(),S=A.observers;if(S&&S.length){const e=S.pop(),l=A.observerSlots.pop();X<S.length&&(e.sourceSlots[l]=X,S[X]=e,A.observerSlots[X]=l)}}if(M.tOwned){for(n=M.tOwned.length-1;n>=0;n--)E(M.tOwned[n]);delete M.tOwned}if(M.owned){for(n=M.owned.length-1;n>=0;n--)E(M.owned[n]);M.owned=null}if(M.cleanups){for(n=M.cleanups.length-1;n>=0;n--)M.cleanups[n]();M.cleanups=null}M.state=0}function PM(M){return M instanceof Error?M:new Error(typeof M=="string"?M:"Unknown error",{cause:M})}function hM(M,n=i){throw PM(M)}function f(M,n){return H(()=>M(n||{}))}function CM(M,n,A){let X=A.length,S=n.length,e=X,l=0,t=0,o=n[S-1].nextSibling,m=null;for(;l<S||t<e;){if(n[l]===A[t]){l++,t++;continue}for(;n[S-1]===A[e-1];)S--,e--;if(S===l){const u=e<X?t?A[t-1].nextSibling:A[e-t]:o;for(;t<e;)M.insertBefore(A[t++],u)}else if(e===t)for(;l<S;)(!m||!m.has(n[l]))&&n[l].remove(),l++;else if(n[l]===A[e-1]&&A[t]===n[S-1]){const u=n[--S].nextSibling;M.insertBefore(A[t++],n[l++].nextSibling),M.insertBefore(A[--e],u),n[S]=A[e]}else{if(!m){m=new Map;let r=t;for(;r<e;)m.set(A[r],r++)}const u=m.get(n[l]);if(u!=null)if(t<u&&u<e){let r=l,s=1,a;for(;++r<S&&r<e&&!((a=m.get(n[r]))==null||a!==u+s);)s++;if(s>u-t){const j=n[l];for(;t<u;)M.insertBefore(A[t++],j)}else M.replaceChild(A[t++],n[l++])}else l++;else n[l++].remove()}}}const MM="_$DX_DELEGATE";function xM(M,n,A,X={}){let S;return $M(e=>{S=e,n===document?M():c(n,M(),n.firstChild?null:void 0,A)},X.owner),()=>{S(),n.textContent=""}}function v(M,n,A){let X;const S=()=>{const l=document.createElement("template");return l.innerHTML=M,l.content.firstChild},e=()=>(X||(X=S())).cloneNode(!0);return e.cloneNode=e,e}function wM(M,n=window.document){const A=n[MM]||(n[MM]=new Set);for(let X=0,S=M.length;X<S;X++){const e=M[X];A.has(e)||(A.add(e),n.addEventListener(e,LM))}}function zM(M,n,A){A==null?M.removeAttribute(n):M.setAttribute(n,A)}function kM(M,n,A,X){Array.isArray(A)?(M[`$$${n}`]=A[0],M[`$$${n}Data`]=A[1]):M[`$$${n}`]=A}function NM(M,n,A={}){const X=Object.keys(n||{}),S=Object.keys(A);let e,l;for(e=0,l=S.length;e<l;e++){const t=S[e];!t||t==="undefined"||n[t]||(nM(M,t,!1),delete A[t])}for(e=0,l=X.length;e<l;e++){const t=X[e],o=!!n[t];!t||t==="undefined"||A[t]===o||!o||(nM(M,t,!0),A[t]=o)}return A}function c(M,n,A,X){if(A!==void 0&&!X&&(X=[]),typeof n!="function")return B(M,n,X,A);g(S=>B(M,n(),S,A),X)}function nM(M,n,A){const X=n.trim().split(/\s+/);for(let S=0,e=X.length;S<e;S++)M.classList.toggle(X[S],A)}function LM(M){let n=M.target;const A=`$$${M.type}`,X=M.target,S=M.currentTarget,e=o=>Object.defineProperty(M,"target",{configurable:!0,value:o}),l=()=>{const o=n[A];if(o&&!n.disabled){const m=n[`${A}Data`];if(m!==void 0?o.call(n,m,M):o.call(n,M),M.cancelBubble)return}return n.host&&typeof n.host!="string"&&!n.host._$host&&n.contains(M.target)&&e(n.host),!0},t=()=>{for(;l()&&(n=n._$host||n.parentNode||n.host););};if(Object.defineProperty(M,"currentTarget",{configurable:!0,get(){return n||document}}),M.composedPath){const o=M.composedPath();e(o[0]);for(let m=0;m<o.length-2&&(n=o[m],!!l());m++){if(n._$host){n=n._$host,t();break}if(n.parentNode===S)break}}else t();e(X)}function B(M,n,A,X,S){for(;typeof A=="function";)A=A();if(n===A)return A;const e=typeof n,l=X!==void 0;if(M=l&&A[0]&&A[0].parentNode||M,e==="string"||e==="number"){if(e==="number"&&(n=n.toString(),n===A))return A;if(l){let t=A[0];t&&t.nodeType===3?t.data!==n&&(t.data=n):t=document.createTextNode(n),A=O(M,A,X,t)}else A!==""&&typeof A=="string"?A=M.firstChild.data=n:A=M.textContent=n}else if(n==null||e==="boolean")A=O(M,A,X);else{if(e==="function")return g(()=>{let t=n();for(;typeof t=="function";)t=t();A=B(M,t,A,X)}),()=>A;if(Array.isArray(n)){const t=[],o=A&&Array.isArray(A);if(K(t,n,A,S))return g(()=>A=B(M,t,A,X,!0)),()=>A;if(t.length===0){if(A=O(M,A,X),l)return A}else o?A.length===0?AM(M,t,X):CM(M,A,t):(A&&O(M),AM(M,t));A=t}else if(n.nodeType){if(Array.isArray(A)){if(l)return A=O(M,A,X,n);O(M,A,null,n)}else A==null||A===""||!M.firstChild?M.appendChild(n):M.replaceChild(n,M.firstChild);A=n}}return A}function K(M,n,A,X){let S=!1;for(let e=0,l=n.length;e<l;e++){let t=n[e],o=A&&A[M.length],m;if(!(t==null||t===!0||t===!1))if((m=typeof t)=="object"&&t.nodeType)M.push(t);else if(Array.isArray(t))S=K(M,t,o)||S;else if(m==="function")if(X){for(;typeof t=="function";)t=t();S=K(M,Array.isArray(t)?t:[t],Array.isArray(o)?o:[o])||S}else M.push(t),S=!0;else{const u=String(t);o&&o.nodeType===3&&o.data===u?M.push(o):M.push(document.createTextNode(u))}}return S}function AM(M,n,A=null){for(let X=0,S=n.length;X<S;X++)M.insertBefore(n[X],A)}function O(M,n,A,X){if(A===void 0)return M.textContent="";const S=X||document.createTextNode("");if(n.length){let e=!1;for(let l=n.length-1;l>=0;l--){const t=n[l];if(S!==t){const o=t.parentNode===M;!e&&!l?o?M.replaceChild(S,t):M.insertBefore(S,A):o&&t.remove()}else e=!0}}else M.insertBefore(S,A);return[S]}const IM=[["1580061","23046913"],["11","31"]],BM=(M="")=>{const n=M.split(`
+`).map(S=>S.split(/\s+/)),A=n.map(([S])=>+S).sort(),X=n.map(([,S])=>+S).sort();return A.reduce((S,e,l)=>S+Math.abs(e-X[l]),0)},DM=(M="")=>{const n=M.split(`
+`).map(e=>e.split(/\s+/)),A=n.map(([e])=>+e),X=n.map(([,e])=>+e),S={...[0]};return X.forEach(e=>S[e]=(S[e]||0)+1),A.reduce((e,l)=>e+l*(S[l]||0),0)},UM=Object.freeze(Object.defineProperty({__proto__:null,answers:IM,part1:BM,part2:DM},Symbol.toStringTag,{value:"Module"})),FM=[["341","404"],["2","4"]],GM=(M="")=>M.split(`
+`).reduce((n,A)=>{const X=A.split(/ +/).map(t=>+t),S=(X.at(-1)||0)>X[0]?1:-1,e=[1,2,3].map(t=>t*S);return X.every((t,o,m)=>o===0?!0:e.includes(t-m[o-1]))?n+1:n},0),RM=(M="")=>{const n=(A,X)=>A.every((S,e,l)=>e===0?!0:X.includes(S-l[e-1]));return M.split(`
+`).reduce((A,X)=>{const S=X.split(/ +/).map(o=>+o),e=(S.at(-1)||0)>S[0]?1:-1,l=[1,2,3].map(o=>o*e);return n(S,l)||S.find((o,m,u)=>{const r=[...u];return r.splice(m,1),n(r,l)})?A+1:A},0)},KM=Object.freeze(Object.defineProperty({__proto__:null,answers:FM,part1:GM,part2:RM},Symbol.toStringTag,{value:"Module"})),VM=[["187833789","94455185"],["161","161"],["161","48"]],iM=(M="")=>{let n=0;return M.matchAll(/mul\((\d{1,3},\d{1,3})\)/g)?.forEach(([,A])=>{const[X,S]=A.split(",").map(e=>+e);n+=X*S}),n},HM=(M="")=>{let n=0;return M="do()"+M,M.split("don't()").forEach(A=>{const[,...X]=A.split("do()");n+=iM(X.join(""))}),n},WM=Object.freeze(Object.defineProperty({__proto__:null,answers:VM,part1:iM,part2:HM},Symbol.toStringTag,{value:"Module"})),qM=[["2575","2041"],["18","9"]],QM=(M="")=>{const n=M.split(`
+`).map(e=>e.split("")),A=(e=0,l=0)=>n[e]&&n[e][l]||"-",X=[[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];let S=0;return n.forEach((e,l)=>{e.forEach((t,o)=>{t==="X"&&X.forEach(([m,u])=>{"XMAS".split("").every((s,a)=>A(l+a*m,o+a*u)===s)&&S++})})}),S},YM=(M="")=>{const n=M.split(`
+`).map(e=>e.split("")),A=(e=0,l=0)=>n[e]&&n[e][l]||"-",X=[[1,1],[-1,-1],[1,-1],[-1,1]];let S=0;return n.forEach((e,l)=>{e.forEach((t,o)=>{if(t!=="A")return;const m=X.map(([u,r])=>A(l+u,o+r));m[0]!==m[1]&&m.sort().join("")==="MMSS"&&S++})}),S},JM=Object.freeze(Object.defineProperty({__proto__:null,answers:qM,part1:QM,part2:YM},Symbol.toStringTag,{value:"Module"})),ZM=[["5964","4719"],["143","123"]],M3=(M="")=>W(M).total,W=(M="")=>{const[n,A]=M.split(`
 
-`),X=new Map;A.split(`
-`).forEach(l=>{const[t,o]=l.split("|");X.has(t)||X.set(t,[]),X.get(t).push(o)});let e=0;const S=n.split(`
-`).map(l=>l.split(",").reverse()).filter(l=>{const t=new Set,o=l.every(m=>t.has(m)?!1:((X.get(m)||[]).forEach((u="")=>t.add(u)),!0));return o&&(e+=+l[l.length>>1]),!o});return{total:e,wrongSets:S,follows:X}},AA=(M="")=>{const{wrongSets:A,follows:n}=q(M);return A.reduce((X,e)=>(e.sort((S,l)=>n.has(S)&&n.get(S).includes(l)?-1:1),X+ +e[e.length>>1]),0)},nA=Object.freeze(Object.defineProperty({__proto__:null,answers:ZM,part1:MA,part1_impl:q,part2:AA},Symbol.toStringTag,{value:"Module"})),SA=[["4789","1304"],["41","6"]],z=[[-1,0],[0,1],[1,0],[0,-1]],aM=(M="")=>{const A=M.split(`
-`).map(m=>m.split("")),n=(m=0,u=0)=>A[m]&&A[m][u]||"-";let X=[0,0];A.find((m,u)=>m.find((r,s)=>r==="^"&&(X=[u,s])));const e=new Set,S=[];let l=0,[t,o]=X;for(;;){const[m,u]=z[l],r=t*A.length+o;e.has(r)||S.push([t,o]),e.add(r);const s=n(t+m,o+u);if(s==="-")break;s==="#"?l=(l+1)%4:[t,o]=[t+m,o+u]}return{visited:S,lines:A,start:X}},XA=(M="")=>aM(M).visited.length,eA=(M="")=>{const{visited:A,lines:n,start:X}=aM(M),e=[Array.from({length:n.length},()=>[]),Array.from({length:n.length},()=>[])],S=(u,r)=>{e[0][u].push(r),e[1][r].push(u)},l=(u,r)=>{e[0][u]=e[0][u].filter(s=>s!==r),e[1][r]=e[1][r].filter(s=>s!==u)},t=(u,r,s)=>{const[a,j]=z[s],P=a?1:0,[C,b]=P===0?[u,r]:[r,u],$=e[P][C],Y=Math.sign(a||j)>0?$.reduce((T,p)=>p>b&&p<T?p:T,1/0):$.reduce((T,p)=>p<b&&p>T?p:T,-1/0);return isFinite(Y)?Math.abs(Y-b)-1:-1};n.forEach((u,r)=>{u.forEach((s,a)=>{s==="#"&&S(r,a)})});const o=()=>{let[u,r]=X,s=0;const a=z.map(()=>new Set);for(;;){const[j,P]=z[s],C=a[s],b=u*n.length+r;if(C.has(b))return!0;C.add(b);const $=t(u,r,s);if($===-1)return!1;[u,r]=[u+j*$,r+P*$],s=(s+1)%4}};let m=0;return o()&&m++,A.shift(),A.forEach(([u,r])=>{S(u,r),o()&&m++,l(u,r)}),m},tA=Object.freeze(Object.defineProperty({__proto__:null,answers:SA,part1:XA,part2:eA},Symbol.toStringTag,{value:"Module"})),lA=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),oA=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),uA=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),mA=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),rA=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),sA=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),hA=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),wA=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),iA=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),aA=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),cA=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),fA=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),dA=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),_A=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),yA=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),pA=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),gA=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),vA=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),bA=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),$A=`3   4
+`),X=new Map;n.split(`
+`).forEach(l=>{const[t,o]=l.split("|");X.has(t)||X.set(t,[]),X.get(t).push(o)});let S=0;const e=A.split(`
+`).map(l=>l.split(",").reverse()).filter(l=>{const t=new Set,o=l.every(m=>t.has(m)?!1:((X.get(m)||[]).forEach((u="")=>t.add(u)),!0));return o&&(S+=+l[l.length>>1]),!o});return{total:S,wrongSets:e,follows:X}},n3=(M="")=>{const{wrongSets:n,follows:A}=W(M);return n.reduce((X,S)=>(S.sort((e,l)=>A.has(e)&&A.get(e).includes(l)?-1:1),X+ +S[S.length>>1]),0)},A3=Object.freeze(Object.defineProperty({__proto__:null,answers:ZM,part1:M3,part1_impl:W,part2:n3},Symbol.toStringTag,{value:"Module"})),S3=[["4789","1304"],["41","6"]],z=[[-1,0],[0,1],[1,0],[0,-1]],aM=(M="")=>{const n=M.split(`
+`).map(m=>m.split("")),A=(m=0,u=0)=>n[m]&&n[m][u]||"-";let X=[0,0];n.find((m,u)=>m.find((r,s)=>r==="^"&&(X=[u,s])));const S=new Set,e=[];let l=0,[t,o]=X;for(;;){const[m,u]=z[l],r=t*n.length+o;S.has(r)||e.push([t,o]),S.add(r);const s=A(t+m,o+u);if(s==="-")break;s==="#"?l=(l+1)%4:[t,o]=[t+m,o+u]}return{visited:e,lines:n,start:X}},X3=(M="")=>aM(M).visited.length,e3=(M="")=>{const{visited:n,lines:A,start:X}=aM(M),S=[Array.from({length:A.length},()=>[]),Array.from({length:A.length},()=>[])],e=(u,r)=>{S[0][u].push(r),S[1][r].push(u)},l=(u,r)=>{S[0][u]=S[0][u].filter(s=>s!==r),S[1][r]=S[1][r].filter(s=>s!==u)},t=(u,r,s)=>{const[a,j]=z[s],C=a?1:0,[x,b]=C===0?[u,r]:[r,u],$=S[C][x],Y=Math.sign(a||j)>0?$.reduce((T,y)=>y>b&&y<T?y:T,1/0):$.reduce((T,y)=>y<b&&y>T?y:T,-1/0);return isFinite(Y)?Math.abs(Y-b)-1:-1};A.forEach((u,r)=>{u.forEach((s,a)=>{s==="#"&&e(r,a)})});const o=()=>{let[u,r]=X,s=0;const a=z.map(()=>new Set);for(;;){const[j,C]=z[s],x=a[s],b=u*A.length+r;if(x.has(b))return!0;x.add(b);const $=t(u,r,s);if($===-1)return!1;[u,r]=[u+j*$,r+C*$],s=(s+1)%4}};let m=0;return o()&&m++,n.shift(),n.forEach(([u,r])=>{e(u,r),o()&&m++,l(u,r)}),m},t3=Object.freeze(Object.defineProperty({__proto__:null,answers:S3,part1:X3,part2:e3},Symbol.toStringTag,{value:"Module"})),l3=[["1298103531759","140575048428831"],["3749","11387"]],o3=(M="")=>{const n=(A=0,X=[0],S=0)=>S===0?A===X[0]:A<0||A!==Math.floor(A)?!1:n(A-X[S],X,S-1)||n(A/X[S],X,S-1);return M.split(`
+`).reduce((A,X)=>{const[S,e]=X.split(":").map(o=>o.trim()),l=e.split(/ +/).map(o=>+o);return n(+S,l,l.length-1)?A+ +S:A},0)},u3=(M="")=>{const n=(A=0,X=[0],S=0)=>{if(S===0)return A===X[0];if(A<0||A!==Math.floor(A))return!1;const[e,l]=[""+A,""+X[S]];return e.endsWith(l)&&n(+e.slice(0,-l.length),X,S-1)?!0:n(A-X[S],X,S-1)||n(A/X[S],X,S-1)};return M.split(`
+`).reduce((A,X)=>{const[S,e]=X.split(":").map(o=>o.trim()),l=e.split(/ +/).map(o=>+o);return n(+S,l,l.length-1)?A+ +S:A},0)},m3=Object.freeze(Object.defineProperty({__proto__:null,answers:l3,part1:o3,part2:u3},Symbol.toStringTag,{value:"Module"})),r3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),s3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),h3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),w3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),i3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),a3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),c3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),f3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),d3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),_3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),p3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),y3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),g3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),v3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),b3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),$3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),O3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),j3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),T3=`3   4
 4   3
 2   5
 1   3
 3   9
-3   3`,OA=`77221   93653
+3   3`,E3=`77221   93653
 61169   27995
 49546   69782
 11688   41563
@@ -1013,12 +1015,12 @@
 62591   16739
 53735   79935
 14454   69804
-19976   46609`,jA=`7 6 4 2 1
+19976   46609`,P3=`7 6 4 2 1
 1 2 7 8 9
 9 7 6 2 1
 1 3 2 4 5
 8 6 4 4 1
-1 3 6 7 9`,TA=`66 67 68 71 72 69
+1 3 6 7 9`,C3=`66 67 68 71 72 69
 72 75 78 79 79
 38 40 41 42 44 47 48 52
 86 87 88 91 96
@@ -2017,12 +2019,12 @@
 48 46 45 43 42
 95 92 91 88 86 84 83 80
 48 51 52 55 58
-40 42 44 46 49 51`,EA="xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))",xA="xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))",PA=`?% mul(948,148)why() %how(670,744)mul(590,32);where())#}from()>how()mul(611,372)}{~^?>from()^mul(835,665)who()]#^don't()select()select())mul(724,851)[>&mul(188,482)$mul(781,111)[who()<why(),!]mul(678,13)why()$#%who()mul(620,771)<!^}@^+what()mul(281,719)(]'what()where()>&from():!mul(147,678)how(){mul(938,510)where()!$?*['mul(103,563)where())mul(4,125)$*>>^mul(126,929)]& %~mul(161,418)who()>>do()]-''?mul(416,366)~?/where()]who()mul(459,47))>what(){@[(mul(219,400)+do()when()from():who()when()]&{{%mul(804,830)-select()what()*what()%}mul(861,992)who()!',mul(159,874)#<)''<mul(460,777)?mul(909,244)how()+what()]<do()?}mul(749,87)from()(who();why()mul(430,124)/$>how()@$%mul(214,139)&how()>mul(112,835)select()*from()@why()?[{mul(209,568)/; ~)mul(630,749):mul(841,589)/;who()>[mul(778,567)+when() how()<#mul(544,851)what(){+mul(327,103)from()what()/[~-mul(995,415)/when()-mul(880,153)}:}mul(368,920)'how()mul(864,419)from()what()@mul(208,291)who()<?}?what()',[{mul(575,454)*&(<{how()[mul(557,489){{why(){how()@who()~mul(423,703)mul(910,916)+what()^/<-*from()'mul(746,826),-*)/+>}^from()mul(154,571)++:>,mul(601,458)why()<;how()~from(172,16)mul(333,315)?[mul(513,260) {*mul(117,759)%]mul(77,644){($%>]&~mul(238,306)~select()from();-'who()'mul(460,352); ?select()>[[(from() mul(337,294)why()how()</$<where()don't()(?]{why()%}from()mul(367,653)~mul(910,873)^why()>mul(499,785)>what()[*:#where()*what()mul(765,210)*$[]mul(461,957)##)+}when()-@:mul(198,90)what()what()how()') )mul(258,966)]+(when()mul(535,417)where()!don't()@mul(939,319)?mul(751,538))! mul(758,675)~how()[how(),@>[where()when(29,965)mul(358,39){^what();/(where()how()mul(271,786)why():mul(792,761)do()$]%mul(740,232)>who(949,378)what()[(where()who(){who()#mul(595,343)%+mul(194,296)'mul(161,747): '{where(12,567),@mul(234,39)!+do()/who()[where()&'what()when()how())mul(138,925)),#;where()>{mul(738,864){mul(605,662)*when()%when()+( /~&mul(633,935)when()];mul(263/}*<!where(),- ~when()mul(512,798)]}where())when()who()mul(933,447)where()}mul(33,935*mul(15,975)mul(574,550)+#^;'$from(280,157)$^what()mul(919,849)@mul(18,160))$&^]how()what() when()where()mul(88,657):/from())+:/when()@]mul(71,74)from()'*:@{>mul(127,821)^how()$$select()select()@^{:mul(867,979)&%/>{%^how()what(499,657)+do()%what()(~;-:*mul(438,941)<]?]mul(208,834when()&^;]from()when(613,710)^}+$mul(809,573)mul^)*:from(379,983)mul(47,786)}when()-what()how(450,632)> where()how()mul(810,597 ;;{%(select()select()&,mul(356,249)from()/!{#&^mul(23,248)(!who()]-+,mul(873,987)]{what()<  )-{^mul(591,317)/mul(382,188)mul(476,338)*why()$]mul(865,625)who()})?select():*@[)don't()/ ,mul(737,418)select(318,357);+ what()<mul(41,445)mul(236,630)$}from()]$^$,(do()-select()mul(369,197)from()]#};^mul(561,752)+&#+}?}:mul(18,235)<'& ,(*mul(645,811)why()select()who()[>where()don't()%#>!>/@what()[mul(490,823)&^( ,'@ [do()@mul(855,491)*^why()[,mul(348,679)how()$who() '&how(16,459)/!;mul(43,422)#^from()![}select()mul(976,749)-}select()-where()select()mul(223,589)%[why()mul(868,881)mul(178,790)$,{who()from()#,mul(318,399):where()?[mul(182,864)where() mul(156,690) -]mul(857,353)#'%,},>?+@mul(914,528)where()$mul(785,748)<$who()[mul(453,859)%'@ mul(84,729)/{do()(?$<}mul(820,286)?:*?}#when()(%mul(245,958when()?from(),+mul(128,335)mul(463,102);:]@-~-%mul(914,398)
+40 42 44 46 49 51`,x3="xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))",z3="xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))",k3=`?% mul(948,148)why() %how(670,744)mul(590,32);where())#}from()>how()mul(611,372)}{~^?>from()^mul(835,665)who()]#^don't()select()select())mul(724,851)[>&mul(188,482)$mul(781,111)[who()<why(),!]mul(678,13)why()$#%who()mul(620,771)<!^}@^+what()mul(281,719)(]'what()where()>&from():!mul(147,678)how(){mul(938,510)where()!$?*['mul(103,563)where())mul(4,125)$*>>^mul(126,929)]& %~mul(161,418)who()>>do()]-''?mul(416,366)~?/where()]who()mul(459,47))>what(){@[(mul(219,400)+do()when()from():who()when()]&{{%mul(804,830)-select()what()*what()%}mul(861,992)who()!',mul(159,874)#<)''<mul(460,777)?mul(909,244)how()+what()]<do()?}mul(749,87)from()(who();why()mul(430,124)/$>how()@$%mul(214,139)&how()>mul(112,835)select()*from()@why()?[{mul(209,568)/; ~)mul(630,749):mul(841,589)/;who()>[mul(778,567)+when() how()<#mul(544,851)what(){+mul(327,103)from()what()/[~-mul(995,415)/when()-mul(880,153)}:}mul(368,920)'how()mul(864,419)from()what()@mul(208,291)who()<?}?what()',[{mul(575,454)*&(<{how()[mul(557,489){{why(){how()@who()~mul(423,703)mul(910,916)+what()^/<-*from()'mul(746,826),-*)/+>}^from()mul(154,571)++:>,mul(601,458)why()<;how()~from(172,16)mul(333,315)?[mul(513,260) {*mul(117,759)%]mul(77,644){($%>]&~mul(238,306)~select()from();-'who()'mul(460,352); ?select()>[[(from() mul(337,294)why()how()</$<where()don't()(?]{why()%}from()mul(367,653)~mul(910,873)^why()>mul(499,785)>what()[*:#where()*what()mul(765,210)*$[]mul(461,957)##)+}when()-@:mul(198,90)what()what()how()') )mul(258,966)]+(when()mul(535,417)where()!don't()@mul(939,319)?mul(751,538))! mul(758,675)~how()[how(),@>[where()when(29,965)mul(358,39){^what();/(where()how()mul(271,786)why():mul(792,761)do()$]%mul(740,232)>who(949,378)what()[(where()who(){who()#mul(595,343)%+mul(194,296)'mul(161,747): '{where(12,567),@mul(234,39)!+do()/who()[where()&'what()when()how())mul(138,925)),#;where()>{mul(738,864){mul(605,662)*when()%when()+( /~&mul(633,935)when()];mul(263/}*<!where(),- ~when()mul(512,798)]}where())when()who()mul(933,447)where()}mul(33,935*mul(15,975)mul(574,550)+#^;'$from(280,157)$^what()mul(919,849)@mul(18,160))$&^]how()what() when()where()mul(88,657):/from())+:/when()@]mul(71,74)from()'*:@{>mul(127,821)^how()$$select()select()@^{:mul(867,979)&%/>{%^how()what(499,657)+do()%what()(~;-:*mul(438,941)<]?]mul(208,834when()&^;]from()when(613,710)^}+$mul(809,573)mul^)*:from(379,983)mul(47,786)}when()-what()how(450,632)> where()how()mul(810,597 ;;{%(select()select()&,mul(356,249)from()/!{#&^mul(23,248)(!who()]-+,mul(873,987)]{what()<  )-{^mul(591,317)/mul(382,188)mul(476,338)*why()$]mul(865,625)who()})?select():*@[)don't()/ ,mul(737,418)select(318,357);+ what()<mul(41,445)mul(236,630)$}from()]$^$,(do()-select()mul(369,197)from()]#};^mul(561,752)+&#+}?}:mul(18,235)<'& ,(*mul(645,811)why()select()who()[>where()don't()%#>!>/@what()[mul(490,823)&^( ,'@ [do()@mul(855,491)*^why()[,mul(348,679)how()$who() '&how(16,459)/!;mul(43,422)#^from()![}select()mul(976,749)-}select()-where()select()mul(223,589)%[why()mul(868,881)mul(178,790)$,{who()from()#,mul(318,399):where()?[mul(182,864)where() mul(156,690) -]mul(857,353)#'%,},>?+@mul(914,528)where()$mul(785,748)<$who()[mul(453,859)%'@ mul(84,729)/{do()(?$<}mul(820,286)?:*?}#when()(%mul(245,958when()?from(),+mul(128,335)mul(463,102);:]@-~-%mul(914,398)
 +mul(720,985)how(340,568)^!what()[),[mul(734,270)~')?who()]]mul(964,739)from()?who()$when() /mul(566,142)}*,?how()~mul(733,766)when()mul(319,914)when()mul(808,141)*@:&who();mul(736,736)where(){&!$when()]^mul(612,574)how()mul~]what()!!'[:mul(805,568),<^+~ #)&who()mul(810,729),[~/^<&mul(706,233)!-'{why(),(?&mul(28,746)%mul(127,170)-?} #don't()from(),[@,mul(282,734)mul(332,651)[:~mul(771,888)#who()^select(110,751)>who(){mul(655,334)why()+~&}mul(129,762)mul(597,498))*~-}who()who()~'$mul(235,859)where()^-,,@mul(661,707)[ ~,<-mul(502,445)?why(){why()from()-how()*>&mul(237,280)how()mul(669,512)#$< mul(426,417)[what()why()~select()*%,'where()mul(213,617)##>mul(148-how()&]mul(437,581)who()'<from()>%[:how()mul(985,24);mul(446,704)who(),mul(549#}%>[mul(58,502)%mul(55,502)~<where()''who()}<mul(678,579)mul(457,825)+how()from()'(*#+$$mul(266,507)mul(925,485)^why()mul(605,592)[}<>^<mul(173,922)@:<where()/-]'mul(110,899%select()why()why()>[%%;mul(63,642)>how())<*{mul(155,625)]mul(238,47)where()&@mul(630,112)who() mul(570,946)mul(299,320){({mul(307,251)%[]$%mul(621,739)^!}{^-+what())mul(350,650)!>who()what()]^,*mul(154,394)&?^mul(410,870)[-select()why()<who():+%don't()where()$]/when() how()when()mul(708from()]&?mul(589,972)*mul(167,814)[mul(807?%don't()])?'(who()mul(614,926)mul(404,930)'?+;mul(252how()^who(529,21)'who()%mul(675,37)mul(362*what(640,926)select()'?what(){'>mul(744,141)why():))from()^select()what()mul(991,854){-]+mul(64,859))~>>%>%select()#-mul(282,835)'select()'%<$!from(299,765)don't()-'mul(352,659),mul(366,409),when()mul(672,590)#@#}/(##  mul(550,937)$#/^~mul(458,447)mul#(,/<mul(538,275)}where()'?'!-)mul<^>(how(),mul(465,230)^select()$<from(595,221):mul(704,141)what()]when()^select()^)^%'mul(260,350)>how()what()#@};(from()~mul(716,318)from()+]<!?mul(625,41)#[,~ /mul(19}mul(760,4)@how()mul(508,977)@select())][[mul(261,452 $mul(11,905)how(731,838)[mul(823,988)?!?@&&'mul(929,818)(>mul(701,784)!;>do()'&)when()select()mul(945,704)mul(250,874)who()]@don't()why(51,895)-,how()*+{why()%/mul(964,293)&<^where()<select();&mul(900,32)]where()$from()&#from()who()({mul(755,539)mul(26,466)how()$when()%&$~)mul(926,673)$what()!select(),do()~select()#^mul(272,306)~%'mul(22,647)$mul(904,943)^>-from()mul(635,212)when()how()[mul(314,335)%(-  + ~mul(635,915)~[[do(){where(307,78)(who()(why()where();mul(450from()mul(903,662)>$mul(924,200),why()select()$mul(418,533)where()[where()mul(266,643):~^/#(:[from()mul(81,715),who()@:~+who()'%mul(79?who()select();# mul(436,105)#*why() #~[,where()'mulwho()[(~)[mul(119,92)]where(),select()why()?mul(639,691):+<why()why()mul(815,366)*where()-what()/?>mul(188,19)who()(select()what()mul(916,808));~mul(630,228)-)where()[~mul(586/[how()+~!>}>[how()mul(106,235)do()>why(416,339):mul(788,357)[when(442,691)what()how()where()$from()who()mul(471,832)]/*mul(837,328)<)>!mul(389,633)'from(),mul(70when()!from()select()$](when()*%mul(903,43)where(62,223)^from();@()mul(852,198)-when()?mulhow(168,455)(select()how();from()/mul(918,330)what()'how(215,263)$:{~how()*mul(136,552)from(363,441)-when()how()what()-+mul(229,899)!where()when()from(){mul(47,875)~mul(500,586)/&&where(),where()mul(571,252))%}^~when()mul(979,493)do()@!+~>^mul(568,461)]where()$who(){from();mul(743,403)@?[mul(117,954))/mul(382,589)<:what() mul(578,730)#/<,when()#)select()}mul(889,462){how(562,136)select()when()^>mul(150,815)/$from()?what()mul(842,604)**?'-^>;~'mul(622,493)
 mul(901,810)[<,^$do()<#why()<why()},,select()mul(257,221)mul(393,412)-from()&$]mul(198,284)/>;/why()mul(296,969)@mul(224,163)#<$what():,what()mul(995,485)$~)who()mul(382,831)'&~mul(146,234)mul(228,532)mul(944,430)!!who()<;'$(%do()%'{mul(588,828)~$why():where()mul(753(select()/':~$[mul(785,897)/<(#$)@mul(821,858)$what()+@/*mul(545,209)where();what()mul-why()>mul(808,588),where()];;}mul(431,815)<<;how()?@why()(^don't()select()$)!mul(832,43)what()[where()mul(935,377)from()++where()$-]@mul(793,489)*&mul(910,985)mul(340,122);from(87,683)[[]]'mul(659>from()['from()~,;@:^mul(420,510)/mul{from()$ >! -mul(508,275)!()@+{!mul(134,503)how()?mul(717,994)@}what()}[@<do()~'[??from() #&}mul(443,258)){do()^mul(894,293),@from()mul(470,736)/select()where()from()how()mul(769,763)/-'mul(436,853)from()mul(955,870);#why()how()how()mul(807,205)#do()select()<@$when()*select()>mul(899,477)who(88,557){[?-mul[how()>>@mul(113,239)&;?what(825,719)from()}@mul(717,829)when()who()%@what()when()#':mul(644,495)]^$ >[~don't()!#mul(175,323)><$>do()[[$what()/>(#~mul(976,792))what()#{how()-$?mul(534,805))what()@mul(600from()'from()mul(859,367)from()mul(852,796)?{[]/'~mul(624,853($:;^mul(522,963)+mul(143,246)[,what()#*when()',why()mul(435,720)mul(812,909)'<? /;when()}*how()do()mul(49,504)how()when()/!mul(799,134)$mul(213,950)from(182,488)];]do()mul(325,689)(@mul(485,128)who()mul(376~when()(%-what()(mul(776,635)#: from(788,757)}mul(997,619)-from(919,426)where()where()how() mul(370,735)*what(),*%$mul(408,722)}#mul(990,90)(<where()*don't()*@:(;what()%:*#mul(804,562)mul(162,269)]mul mul(267,461)%#{(};^~[mul(124,671) ~-<$<from()<from()mul(401,89)>&!!who()how()/,who()>mul(179,82))]don't()@(}<who()where()%<from()]mul(950,333) }&mul(420,707)mul(293,223)what()(/mul(131,775)>@<mul(498,349)mul(416,808)*how(676,683)select()&@mul(100,528)'&from()/[<,%>!mul(224,804'}-mul(180,723)#+@mul(144,160 +#<]where()+!from()select()(mul(614,183)mul(123,655)*+##mul(744,352):#$when()~&,what(625,950)select()'mul(468,293)*]+#mul/$why()where(623,670)%@;mul(722,469)&(%;do()) from()mul(557,124)/}:mul(928,793>]how(){?who()'<mul(74,894)%mul(312,960)'(,]%^mul(560,307<where();when()}how()%>[mul(624,959)&mul(765,13):who()<),who()& mul(639,802)&;(@:why(988,378):mul(677,987)~@-! ;!^do()mul(29,935)mul(134,862)when()+{what()when()who()}~why()mul(541,335)who()@[<mul(342what()select()who();mul(833,47)when()%@}\${why()mul(891,370)(@*@[^mul(652,523)}why()&-(?'*mul(906,962) )mul(691,622)~(!<--when(506,845)</$mul(603,406)'how(83,339)mul(44,583)<:-^/why()mul(812,857$what()<-:$]what()?mul(226,418)!>'+why();when()&mul(127,948)$mul(485,474))?$mul(278,206)select()mul(641,623){} @{*where()'?mul}>mul(792,193) [#;*%->~what()mul(876,897)/@+'mul(341,837)^)why()?;@+^^~mul(718,922)[why()when()/,{}select()who())mul(941,117)/}/who()why(293,857))mul(414,482)what()! how()who()mul(910,766)!]what(),how()*mul(6,611)~;{who()who()[--mul(720,952)why(546,471)!)from()/?mul(971,461)}&/$@'mul(452,187)#who():(mul(44,298)mul(530,770)']:who()&$from()mul(544,752)mul(375,827))&@select()^;who()where()how()mulselect()^%^,/&mul(204,187)when()&,}$(who();mul(60,317)+who()$from()(how(942,734);@mul(239,338)!?:%)}@select()(mul(284,525)select()what()where()@^#~[mul(718,185)&!*{';when()@when()mul(272,161)how()%how()?mul(66,988)@)@,::>)mul(930,190)why(),~when()%<@&where(),mul(143,136)why()-,/*-what()+mul(73,408)~ who()%*select()'+where()#!/usr/bin/perlmul(379,680)
 ;@mul(257,25)[!mul(646,635)>?who()who()from()mul(25,275(select()+why()%mul(102,254)%}/where()$mul(608,18)when()*#mul(343,951) mul(337,866)*^?#@why(805,831)-mulwhen()from()mul(854,5)when()@$why()mul(896,11)^mul(451,271)'how()?who()?)<%[}don't()who()/[{]-?from()when()?mul(198,238)])mul(750,760)+/-!what()~?#mul(880,271)%?select();where()(<^select()mul(373@from()where(),mul(700,15),mul(406,120)mul(551,206)mul(636,315);+{mul(261,201)mul,:-/&mul(267,217)/,'mul(132,410)@@;;who()when()]do()why()mul(4,121)#from()/mul(242what()how(277,558)<how()from()+:who()from()what()when()mul(27,714)who()why()what()mul(676,758)+^@*'}mul(274,109)-}]),select()*when()]why()mul(60,516)when()when(708,630)%%where():mul(34,59)from()#]how()+who()%who()*don't()select()&~(;where()/mul(548,869)&mul(439,68)]@}%)~&mul(46,712)when()+[&]where(),+mul(940,261)^who()where()mul(655,165) >'how()how(){mul(12,537)&[>}mul(322,676)[#,do()@,mul(248,663),when()-do()^what()]when()who()what()how())mul(864,73)how()?]*mul(653,55)when()from()from()how()@ }mul(94,590)]~what()mul(164,505)]from()when()]mul(218,565)(from() why()[*when()}[mul(306,447)*]][> #mul(783,715?)+^~mul(308,994):<*~)>from()why()*mul(508,139)>from()@;+~#mul(652,903)#[/?mul(407,208]how(){when(),**@*:/mul(849,965)mul(69,198<'#%[?mul(236,808)what()from()%from()why()^/,don't()select()&where()@mul(888,101) mul(332,775)who()):select()),:-mul(119,209)%how()mulfrom()select()don't(){mul(838,613)why() '({*<!mul(372,376)mul(407,117$who()[ mul(171,741)where();mul(742,142)mul(34#^+:who()mul(157,514)>~>*mul(466,106)mul(883,754->(%%who()[!mul(587,792)'((!?select()&}<mul(791,734){how()&;+<(mul(655,63):why(){!{)mul(320,950)->-'#)why()#[mul(234,162),what(497,671)why()#mul(985,797)>}~;from()select()mul(117,492)&~+from()]%>*$&mul(451,669))}'/@how()?where()why(694,295)'mul(676,756){~;select()what()}what()^}mul(963,857);%/how()?mul(944,194);select()<&^how(){->mul(195,702))?select()why()&~%}why()#mul(90,304)@%why(673,634)*/where()- <:do(){}!mul;who()]where()]-@?<mul(919,817),>when()how()how()>mul(875,604)select()%do()%mul(790,136)*$,mul(853,95)[how()>!%?mul(246,573)&!what()/#from()!mul(382,307),!#[-mul(32,733)$+[*mul(192,47)(@who()mul(304,303)@mul(167,528):select())!:how(){what()(}mul(933,177))#>$#,$:mul(81,603)<mul(40,227)mul(717,937)mul(853,848)mul(66,164)where())^<>what()?how()when()mul(206,607)<where()[$)}when()how()select()*mul(265,447)*/what())%+'[ from()mul(358,747)what()+%how()#from():,what()@mul(791,401)~where()[mul(990,778)?~[!:>!'^mul(666,852)mul(651,206)!+]}from()don't():*]#what()mul(359*%who()^)'mul(190,764)who()when()}select()~(~mul(547,102)mul(406,618)%when()>)<mul(822,907)?/[/from()mul(945,506)>![#mul(890,746)#who()$'~%]',+mul(341,395)who()--mul(285,533)}how()@<}!mul(715}>+~ select()where()$ (mul(894,62)?]}who()&when(652,875)%:}from(24,82)mul(713,250))-^{*%mul(548,903)&]]<]why(){from()when() mul(796,100)-(how()$%~mul(589,969)  :who()  @mul(271,734)<}mul(761,8)}@['- ['$mul(178,28)who()who(282,161)@$from()mul(413,253)#when()?(mul(585,394))select():$?#?>who()?mul(245,344)who()^who()where()why()~@why()don't()why()how()who(450,27)who()(!mul(951,644):select()-)%?*don't(), mul(189,841)]* why()*>'mul(758,690)what()<select()~>@>mul(728,932)how()?select()what()}mul(716,985){where()who()+who():mul(840,772)%how()>:;where()mul(139,830)$select()),mul(730,4)when(305,277);[$!,)mul(278,740)who(856,922)who()#<where()*>mul(212,541)((]mul(689,475)mul(814,611)'}&~{~~mul(716,817)who()mul(21,315))don't())(why()')$<mul(541,349)
 $)mul(257,544)+where()how()-[how()^+ mul(986,808){[<why()%!;mul(940,137)who()-+(from()**^mul{>)who()how()?%why()}!<mul(908,379)select(811,438)mul(15,196)from(623,826)-from()+!mul(38,667){>{<{mul(41,189)-<how()*%when()}what(539,203)]mul(813,528)who())why()( ]how()why()how(){mul(299,367)]{[(@^mul(131,889)?:&who())when()'why()$&mul(728,552)^}when()@~mul(842,113)from()),?{!mul(811,809)*how(15,189)#>&+from(544,351)~&mul(516,38)]?;-@?don't()@}*mul(792,426when();#~ >%why()(/$mul(755,392)*(#]where()@select(),^select()mul(630]>*who(267,517)why()-;(mul(176,492)select()from()}~:who()mul(761,226)&,((mul(750,451)@/%select()from()mul(345,75)what()/who(); ~mul(431<)&mul(693,289)?~/mul(693,335)'mul(475,545){(*+~ mul(668,535)how()don't()?,<@mul(980,251)*why()$when()*-)mul(886,969):?/':]}-who()(mul(686,683)#}+($why()mul*^*$){&-(mul(94,775)- @when()?%]{when()mul(376,100)''/,&]^<mul(853,752)when()%who(),[^@where()!do()who()when()how()when(474,246)mul(318,180)do()%~(mul(216,96) ;}]why(907,964)$+when(680,212)?mul(442,979)why()what();##select()%mul(34,342)mul(641,907)@]who()@^:^mul(648,605)how()<}]when()!mul(567,219)?where()$what()~+from(),%how()mul(549,85)$-&(mul(94,269)~how(811,581)who(596,80)-how()~mul(510,591)mul(586,482)who()?#-<[[select()*}mul(249]{%<,where()*~^mul(628,294)]+what())why()mul(312,879&,?+don't()mul(100,514)when()select()mul(621,918)@select(813,295)/{^'%+mul(239,859) ']<*)mul(868,763)where()[/when()@)#{^mul(209,999)how()do()*#}},},&>mul(70/:from(184,559)>mul(679,138))<mul(454,112)[@)-?*where()mul(573,473)[(-/mul(867,232)~]/^/!'&where()mul(391,655)[%'mul(73,32)/{->)(~mul(929,872)'%#)mul(563,750)>(mul(324,725)what()why()[@$mul(186,770)?mul(719,251)[mul(270,934)+>when()'$when()mul(647,486)how()from(947,190),!(?mul(113,517) %[select()what()^)!mul(299,591)]:@' *where(145,530)/mulwhen()mul(811,260)mul(80,605)  where(296,197))])>from()mul(324,361)select(){[/';/},mul(648,947&how(){who()/'-%*]mul(949,359){mul(288,162)&];&:^mul(188,899)select()where()]%mul(248,30)#[&+'why()'') don't()][}& mul(808,221)what()@>><;>*mul{;>what()what()+mul(646,752)select()<from()why(211,37)~~~:mul(196,842)}where(690,849)where()[$select(571,536)how()from()<mul(6,129)what()what()?]]how()mul(116,23)who(205,335)>)'where()!mul(748,585)>?<##mul(381,399)mul(597,746)) *mul(881,573)/:({why()'mul(527,57)@/what()?mul(395,551)%who()when()%'mul(713,766)[<mul(749,438)'(}^when();{mul(43,565)what()% #mul(653,209)what():!-mul(64,870)#from()select()from()mul(206,327)?(mul(678,256)^{mul(311,65)who()when()<(when()mul(552,622)*how()%?~;:;;)mul(767,192)--&$mul(512,806)['?')who()mul/({what()&/#'!mul(811,828)]select()~@!/(}$)mul(683,153)&}&~how()from()mul(815,380),?$*+mul(133,342)mul(867,908)!;&why()?(+!mul(915,100))when(895,91)&select()!({where(758,740)mul(759,261)-from()&])mul(365,436)from()&' &^mul(541,400)~from()-what()!mul(679,638)mul(107^#,%~#>[)*select()mul(313,218))when()when()mul(360,494<-select():::- [/mul(517,923)*from(),from()how()+]mul(870,559)}{*?do()>~mul(704,518)where()!)select()?from()where()&'do();mul(270,449)~[*mul(774,600)how():>why()[!when()mul(338,711){]mul(962,193)*where()#![-+mul(511,924):[who()why()}mul(252,534when())when()when()()'!why(230,750)-mul(543,358)~~ -mul(394,506){mul(176,192)who()from()%@mul(181,776)%[ don't()when()where(229,174)+}@who()where()]>mul(553,452)@{/mul(790,202)&&-]mul(783,999)'mul(123,410)<,#what()}how()when()from()$~mul(674,974)why()#>do()'[$]}when()mul(907,824)from()select(){what()mul(584,273)#<>>do()mul(767,778)how()how()from()[#<$from()how()>mul(133,565):mul(888,792)
-who()where()don't()]mul(891,277)~mul(160,638)('don't()/@/%{mul(462,975)!^:+mul(317,407){who()/from()/mul(424,628) when()select()mul(415,352)!?[where(){?how()/mul(661^, -mul(141,973)(/where()!#who()(what()#$mul(916,889)when()$ )mul(945,846)why()+#where()@how()mul(147,694)%select()mul(414,149)< when(){)what()&[how()mul(903,731)~#mul(389,694)mul(72,447)mul(490,881)?++from()>+ ^(mul(703,722)mul(622,578)from() }@^)+mul(642,732)>from()where()@>\${who()mul(526,211$why()[why()mul(349,908)who(635,389)from()what()*$*>@mul(180,150)//: ^mul(622,131);[-^~-mul(32,430)mul(306,173)~where()how() (mul(292,552)<mul(422,363)^<<!#when(304,583)who()mul(348,963)': #select(875,567)#>'where()!do() why()~] who()@^mul(20,119)?[$+/$^mul(242,536)who()'-&'from()mul(351,640){,]~mul(152,587)@select(140,751)<+mul(387,212)[where()%when())how()& >mul(916,539)~]?[when()>!when()??mul(322,151)!]!]~!;mul(27,537); ##;^}}mul(538,277)why()mul(205,526)mul(412,826)^@?where()'mul(957from(193,394)from(863,680)!@how()mul(771,563)( who()mul(377,655) ]select();who()mul(360,272)-select()$what(){mul(291,618)})from()^when(),how()where()don't()why()+&mul(462,803)^$,mul(788,584)@ %?:![:mul(439,528)mul(129,761)]!~mul(321,102)mul(41,728){&what()how()mul(93,933))[ where()^*@+mul(553,965select() '&{-mul(712,817)/<why()[:>/&mul(482,328)when()'mul(957,978)-}{[>{@what()who()mul(48,186)?]how()$what()&,)mul(33,872)#mul(125,207):;mul(143,386)how(),select()don't()}#when()%]&^@?^mul(107,59)&%?don't()mul(183,332):{}/[(#%-+mul(766,627)from()who() what()-+$^mul(41,791)who()] ;-#select()~mul(939,288)[:(</{$how()%select()mul(624,973) ]%mul(780,706)why(677,630);don't()+mul(3,844)$)$$where(),!why()[:mul(506,60)( <>@what()who()?mul(210,210)?select()why()select()where()-how()^mul(755,497)+?^(mul(860,478)^}+$from()(mul(565,649)}mul(184,450) ;/+%[why()mul(752,488)$how()mul(349,56)#'%,+mul(571,637)(mul(186,674)?how() </~@:%mul(295,276)'~where()-&%!mul(72,565);mul(140,645)%#-#*mul(258,568)!/select()why():&}from()from()don't()mul(458,777)#>,'^#!mul(577,819)mul(767,490)how()@when(359,565)mul(97,67)when()?where()>,'(-mul(267,998)%where()why()where():mul(593,317)<mul(514,327)how()~$[{mul(942,232)how()(who() 'from())mul(752,235)?/!'/*#mul(291,995){who()%!,%mul(873,542)%mul(543,144)from())'select()mul(317,658)+mul(819,545)<&what()who()$#who()how()$*mul(849,792)<;-mul(401,327)select()^}?mul(184,612))(where()what()[where()where()@}'mul(532,791)how()how()from()$*~:mul(963,569)when()%- :}why()^~$mul(520,245))^):{do()!mul(900,510)$ %who(615,822)mul(374,872)''/ mul(808,426)select()mul(268,752)&why(),</%!:!/don't()who(){when()*(where()mul(403,172)^mul(185,447)}mul(233,330)why()/&&%who()#/^mul(705,506)?%from();mul(494,15)['}]-}mul(45,474)who()@who()@why()don't()mul(174,355)?what(),@*$+#&mul(9,768);:^mul(381,691)when()&$/]?what(564,603)^how()mul(468,953)[@when()}mul(702,659) where()?where(){**mul(535,116)~where()$('}^~from()mul(926,18)&who()$when()where()>from(),mul(541,30)/why()\${[from()who()  mul(732,465)[<!{mul(794,385)mul(676,776)who()]/mul(45,904)<~+who()@-!)&where()mul(49,63))mul(710,576)+mul(279,872)&<{what()-how(),&how()~`,CA=`MMMSXXMASM
+who()where()don't()]mul(891,277)~mul(160,638)('don't()/@/%{mul(462,975)!^:+mul(317,407){who()/from()/mul(424,628) when()select()mul(415,352)!?[where(){?how()/mul(661^, -mul(141,973)(/where()!#who()(what()#$mul(916,889)when()$ )mul(945,846)why()+#where()@how()mul(147,694)%select()mul(414,149)< when(){)what()&[how()mul(903,731)~#mul(389,694)mul(72,447)mul(490,881)?++from()>+ ^(mul(703,722)mul(622,578)from() }@^)+mul(642,732)>from()where()@>\${who()mul(526,211$why()[why()mul(349,908)who(635,389)from()what()*$*>@mul(180,150)//: ^mul(622,131);[-^~-mul(32,430)mul(306,173)~where()how() (mul(292,552)<mul(422,363)^<<!#when(304,583)who()mul(348,963)': #select(875,567)#>'where()!do() why()~] who()@^mul(20,119)?[$+/$^mul(242,536)who()'-&'from()mul(351,640){,]~mul(152,587)@select(140,751)<+mul(387,212)[where()%when())how()& >mul(916,539)~]?[when()>!when()??mul(322,151)!]!]~!;mul(27,537); ##;^}}mul(538,277)why()mul(205,526)mul(412,826)^@?where()'mul(957from(193,394)from(863,680)!@how()mul(771,563)( who()mul(377,655) ]select();who()mul(360,272)-select()$what(){mul(291,618)})from()^when(),how()where()don't()why()+&mul(462,803)^$,mul(788,584)@ %?:![:mul(439,528)mul(129,761)]!~mul(321,102)mul(41,728){&what()how()mul(93,933))[ where()^*@+mul(553,965select() '&{-mul(712,817)/<why()[:>/&mul(482,328)when()'mul(957,978)-}{[>{@what()who()mul(48,186)?]how()$what()&,)mul(33,872)#mul(125,207):;mul(143,386)how(),select()don't()}#when()%]&^@?^mul(107,59)&%?don't()mul(183,332):{}/[(#%-+mul(766,627)from()who() what()-+$^mul(41,791)who()] ;-#select()~mul(939,288)[:(</{$how()%select()mul(624,973) ]%mul(780,706)why(677,630);don't()+mul(3,844)$)$$where(),!why()[:mul(506,60)( <>@what()who()?mul(210,210)?select()why()select()where()-how()^mul(755,497)+?^(mul(860,478)^}+$from()(mul(565,649)}mul(184,450) ;/+%[why()mul(752,488)$how()mul(349,56)#'%,+mul(571,637)(mul(186,674)?how() </~@:%mul(295,276)'~where()-&%!mul(72,565);mul(140,645)%#-#*mul(258,568)!/select()why():&}from()from()don't()mul(458,777)#>,'^#!mul(577,819)mul(767,490)how()@when(359,565)mul(97,67)when()?where()>,'(-mul(267,998)%where()why()where():mul(593,317)<mul(514,327)how()~$[{mul(942,232)how()(who() 'from())mul(752,235)?/!'/*#mul(291,995){who()%!,%mul(873,542)%mul(543,144)from())'select()mul(317,658)+mul(819,545)<&what()who()$#who()how()$*mul(849,792)<;-mul(401,327)select()^}?mul(184,612))(where()what()[where()where()@}'mul(532,791)how()how()from()$*~:mul(963,569)when()%- :}why()^~$mul(520,245))^):{do()!mul(900,510)$ %who(615,822)mul(374,872)''/ mul(808,426)select()mul(268,752)&why(),</%!:!/don't()who(){when()*(where()mul(403,172)^mul(185,447)}mul(233,330)why()/&&%who()#/^mul(705,506)?%from();mul(494,15)['}]-}mul(45,474)who()@who()@why()don't()mul(174,355)?what(),@*$+#&mul(9,768);:^mul(381,691)when()&$/]?what(564,603)^how()mul(468,953)[@when()}mul(702,659) where()?where(){**mul(535,116)~where()$('}^~from()mul(926,18)&who()$when()where()>from(),mul(541,30)/why()\${[from()who()  mul(732,465)[<!{mul(794,385)mul(676,776)who()]/mul(45,904)<~+who()@-!)&where()mul(49,63))mul(710,576)+mul(279,872)&<{what()-how(),&how()~`,N3=`MMMSXXMASM
 MSAMXMSMSA
 AMXSXMAAMM
 MSAMASMSMX
@@ -2031,7 +2033,7 @@ XXAMMXXAMA
 SMSMSASXSS
 SAXAMASAAA
 MAMMMXMMMM
-MXMXAXMASX`,zA=`XSXMAAXXSSMMMXMXSXMSXMXSAMXSXMASMMSSMMSASXSAAXAAMXMMAMAMXMXSMXSAMXAXSAMXSSSXMASAMXAAMXSXMASAMXXMAXXSAXAMXMMSAASMXMXMASMMAMXXXSAMMSMMSXMASXAA
+MXMXAXMASX`,L3=`XSXMAAXXSSMMMXMXSXMSXMXSAMXSXMASMMSSMMSASXSAAXAAMXMMAMAMXMXSMXSAMXAXSAMXSSSXMASAMXAAMXSXMASAMXXMAXXSAXAMXMMSAASMXMXMASMMAMXXXSAMMSMMSXMASXAA
 XXAMMSMMXMAMAASXSAMAMSAMASASMSASAAAAAXSASAMMMXSMXSAMSSMMASMSAAXXSXAMSAMXMMXMSAMXXXMSMAMMAMXMSSMMMSSMMSASMSXAMMMAASMASAMXSSXSASMSXMAMSASXMMSS
 SSSMAAXAAXAMMXSASXMAMMASAMXSAMAXMMSMMMMAMXMAXXAAASAMAAMSMSAMMMSMXMSAXASXSAAMMXSAMXMAMMSMXMAMAAMXAXAAASXMAMXMXAMSAMAXMASAXAXMAMXXAMMMMAMASAMX
 XAAMSSSSMSSXSAMAMAMXMSXMASAXMMAMXMXMMAMAMXSAMSMMMSXMMSMAAMXMMXSAAAMSSXMAMSMSAAXAXASMSAMMAXMMSSMMMSMMMXAMSMAXSXMMAMXXXXXMMMMMSMMSXMASXSSMMSXM
@@ -2170,7 +2172,7 @@ XAMMMXXXMXAMXSAMXSSMXSAMAMXSMASXAAMMASMMMMXMMMSMXMAAAXXXMXMMMMSMMMSSMMSSMSASASMM
 SASMSAMMMMMXAXAMAXAAXSMSASAMMXXMSXMMMMAXMSAASAMASMMMMMMSAMXASAMAAMAXAAXAASASASAAMAMSAXAAXXMMMSMMMMXMASMAMMXMAXAXAMASMMSAMXAXAAAMMMMXAMXAMXMM
 SAAXMXMAAASMSSSMMSMAMSASASAXSMMMMXSAMSSMAXSSMAMAAXXAAAMAAMSMSASXMSMXMAMMMMAMXSMMSAMSASXSSMXXAAAAAAXMAMMXMASMMSAMXSXMMAMMASMMMMSMMSMMMSASMSMM
 MSMXAASMSXSAAAASMXXAAMAMAMAMAAXSMASAMAAMSMMXMAMXSASMSSSSSMAASAMXXAXXSAMXAMXMAXAXSMXMAMAAMAXMSSSSSSSMASAMXAXAXMASAMAAMAMMAXAAXAAAAAAAAAAMXMAS
-AXXSSMSXMMMMMSMMSAMSSMXMSMASXSMXMASXMSSMXXMASXSXXXSAMXMAMXMMMMMXSSMXAXMASXMMMSAMXSXASMMMMMSAMXXMAXXXXSASMSXSAMXXMSAMSSSMASXMSMSMSSSMSSSXASMM`,NA=`47|53
+AXXSSMSXMMMMMSMMSAMSSMXMSMASXSMXMASXMSSMXXMASXSXXXSAMXMAMXMMMMMXSSMXAXMASXMMMSAMXSXASMMMMMSAMXXMAXXXXSASMSXSAMXXMSAMSSSMASXMSMSMSSSMSSSXASMM`,I3=`47|53
 97|13
 97|61
 97|47
@@ -2197,7 +2199,7 @@ AXXSSMSXMMMMMSMMSAMSSMXMSMASXSMXMASXMSSMXXMASXSXXXSAMXMAMXMMMMMXSSMXAXMASXMMMSAM
 75,29,13
 75,97,47,61,53
 61,13,29
-97,13,75,29,47`,LA=`39|57
+97,13,75,29,47`,B3=`39|57
 31|97
 31|75
 29|45
@@ -3587,7 +3589,7 @@ AXXSSMSXMMMMMSMMSAMSSMXMSMASXSMXMASXMSSMXXMASXSXXXSAMXMAMXMMMMMXSSMXAXMASXMMMSAM
 91,29,27,69,38,25,55
 27,84,48,75,11,76,73,69,62,16,87,59,38,23,52,25,55,21,42
 34,32,37,55,44,52,22,42,23,26,66,85,25
-65,33,93,44,68,32,66,39,97,74,78,17,57,29,36,84,54,48,45,75,11`,IA=`....#.....
+65,33,93,44,68,32,66,39,97,74,78,17,57,29,36,84,54,48,45,75,11`,D3=`....#.....
 .........#
 ..........
 ..#.......
@@ -3596,7 +3598,7 @@ AXXSSMSXMMMMMSMMSAMSSMXMSMASXSMXMASXMSSMXXMASXSXXXSAMXMAMXMMMMMXSSMXAXMASXMMMSAM
 .#..^.....
 ........#.
 #.........
-......#...`,BA=`..........##.....................................#............#........................#.....#........#...........#...............
+......#...`,U3=`..........##.....................................#............#........................#.....#........#...........#...............
 ...........#.............#.....#....................#...........#.#..............#.#......................................#.......
 .#..............#...............................#.......#.#...................#...............#...............#..#...........#....
 .#............................#.............................................................................#.#...................
@@ -3725,6 +3727,863 @@ AXXSSMSXMMMMMSMMSAMSSMXMSMASXSMXMASXMSSMXXMASXSXXXSAMXMAMXMMMMMXSSMXAXMASXMMMSAM
 ................#.......#.#.....................................................................................#.................
 ........................................#...#......#.......................................#...........#..........................
 ....#........##...............#...........#..................................................................#....................
-#....................#...................#.........#....................................................................#.........`,kA="",DA="",UA="",FA="",GA="",RA="",KA="",VA="",HA="",qA="",QA="",WA="",YA="",JA="",ZA="",Mn="",An="",nn="",Sn="",Xn="",en="",tn="",ln="",on="",un="",mn="",rn="",sn="",hn="",wn="",an="",cn="",fn="",dn="",_n="",yn="",pn="",gn="",vn=Object.assign({"../advent/day01/solution.ts":UM,"../advent/day02/solution.ts":KM,"../advent/day03/solution.ts":qM,"../advent/day04/solution.ts":JM,"../advent/day05/solution.ts":nA,"../advent/day06/solution.ts":tA,"../advent/day07/solution.ts":lA,"../advent/day08/solution.ts":oA,"../advent/day09/solution.ts":uA,"../advent/day10/solution.ts":mA,"../advent/day11/solution.ts":rA,"../advent/day12/solution.ts":sA,"../advent/day13/solution.ts":hA,"../advent/day14/solution.ts":wA,"../advent/day15/solution.ts":iA,"../advent/day16/solution.ts":aA,"../advent/day17/solution.ts":cA,"../advent/day18/solution.ts":fA,"../advent/day19/solution.ts":dA,"../advent/day20/solution.ts":_A,"../advent/day21/solution.ts":yA,"../advent/day22/solution.ts":pA,"../advent/day23/solution.ts":gA,"../advent/day24/solution.ts":vA,"../advent/day25/solution.ts":bA}),bn=Object.assign({"../advent/day01/input-test.md":$A,"../advent/day01/input.md":OA,"../advent/day02/input-test.md":jA,"../advent/day02/input.md":TA,"../advent/day03/input-test.md":EA,"../advent/day03/input-test2.md":xA,"../advent/day03/input.md":PA,"../advent/day04/input-test.md":CA,"../advent/day04/input.md":zA,"../advent/day05/input-test.md":NA,"../advent/day05/input.md":LA,"../advent/day06/input-test.md":IA,"../advent/day06/input.md":BA,"../advent/day07/input-test.md":kA,"../advent/day07/input.md":DA,"../advent/day08/input-test.md":UA,"../advent/day08/input.md":FA,"../advent/day09/input-test.md":GA,"../advent/day09/input.md":RA,"../advent/day10/input-test.md":KA,"../advent/day10/input.md":VA,"../advent/day11/input-test.md":HA,"../advent/day11/input.md":qA,"../advent/day12/input-test.md":QA,"../advent/day12/input.md":WA,"../advent/day13/input-test.md":YA,"../advent/day13/input.md":JA,"../advent/day14/input-test.md":ZA,"../advent/day14/input.md":Mn,"../advent/day15/input-test.md":An,"../advent/day15/input.md":nn,"../advent/day16/input-test.md":Sn,"../advent/day16/input.md":Xn,"../advent/day17/input-test.md":en,"../advent/day17/input.md":tn,"../advent/day18/input-test.md":ln,"../advent/day18/input.md":on,"../advent/day19/input-test.md":un,"../advent/day19/input.md":mn,"../advent/day20/input-test.md":rn,"../advent/day20/input.md":sn,"../advent/day21/input-test.md":hn,"../advent/day21/input.md":wn,"../advent/day22/input-test.md":an,"../advent/day22/input.md":cn,"../advent/day23/input-test.md":fn,"../advent/day23/input.md":dn,"../advent/day24/input-test.md":_n,"../advent/day24/input.md":yn,"../advent/day25/input-test.md":pn,"../advent/day25/input.md":gn}),$n=Object.freeze(Object.defineProperty({__proto__:null,inputMods:bn,solutionMods:vn},Symbol.toStringTag,{value:"Module"})),cM=M=>parseInt(M.split("day")[1]||"1"),On=(M,A)=>{const n=(M.match(/input-?(.+)\.md$/)||[])[1]||"Real";return{day:cM(M),name:n,raw:A}},jn=(M,A)=>{const n=!!(A.part1||A.part2),X=A.part1||(()=>"-"),e=A.part2||(()=>"-"),S=A.answers||[["",""]];return{day:cM(M),part1:X,part2:e,answers:S,hasSolution:n}},[fM,Tn]=y([]),[Q,En]=y([]),[F,dM]=y(1),[N,_M]=y(0),[yM,pM]=y(""),[xn,Pn]=y({value:"",time:0,knownGood:!1}),[Cn,zn]=y({value:"",time:0,knownGood:!1}),[gM,Nn]=y(!0),V=(M,A="",n=0,X=!1)=>{M===1&&Pn({value:A,time:n,knownGood:X}),M===2&&zn({value:A,time:n,knownGood:X})},SM=()=>[V(1),V(2)],R=()=>fM().filter(M=>M.day===F()),XM=()=>Q().find(M=>M.day===F()),Ln=()=>{Z(()=>{if(N()>=R().length)return _M(R().length-1);const M=R()[N()],A=XM();if(!M||!A)return SM();pM(M.raw)}),Z(()=>{const M=XM(),A=yM();if(!M||!A)return SM();const n=M.answers[N()]||["",""];setTimeout(eM,0,1,M.part1,A,n[0]),setTimeout(eM,5,2,M.part2,A,n[1])})},eM=(M,A,n,X)=>{const e=performance.now(),S=(()=>{if(!gM())return String(A(n));try{return String(A(n))}catch(t){return`Error: ${t}`}})(),l=performance.now();V(M,S,l-e,S===X)},In=M=>{Tn(Object.keys(M.inputMods).map(A=>On(A,M.inputMods[A])).sort((A,n)=>A.name.localeCompare(n.name))),En(Object.keys(M.solutionMods).map(A=>jn(A,M.solutionMods[A])).filter(A=>A.hasSolution).sort((A,n)=>A.day-n.day))};In($n);dM(Q().at(-1)?.day||1);var Bn=v("<div class=label><h4>Part <!>:</h4><div class=time>(<!>ms)"),kn=v("<textarea class=output disabled>");const Dn=(M="")=>{const A=M.split(`
-`).length;return Math.min(A,Math.max(A,1,10))},tM=({part:M=1})=>{const A=M===1?xn:Cn;return[(()=>{var n=Bn(),X=n.firstChild,e=X.firstChild,S=e.nextSibling;S.nextSibling;var l=X.nextSibling,t=l.firstChild,o=t.nextSibling;return o.nextSibling,c(X,M,S),c(l,()=>A().time.toFixed(0),o),n})(),(()=>{var n=kn();return g(X=>{var e=!!A().knownGood,S=Dn(A().value);return e!==X.e&&n.classList.toggle("correct-answer",X.e=e),S!==X.t&&zM(n,"rows",X.t=S),X},{e:void 0,t:void 0}),g(()=>n.value=A().value),n})()]};var Un=v("<button>");const W=M=>{const A=()=>({...M.classes,button:!0,toggled:M.isToggled});return(()=>{var n=Un();return NM(n,"click",M.onClick),c(n,()=>M.label),g(X=>LM(n,A(),X)),n})()};wM(["click"]);var Fn=v("<div class=label style=align-self:flex-start;><h4>Input:</h4><br>");const Gn=()=>{const M=()=>fM().filter(A=>A.day===F()).map((A,n)=>({label:A.name,isToggled:n===N(),onClick:()=>_M(n),classes:{"input-toggle":!0}}));return(()=>{var A=Fn(),n=A.firstChild;return n.nextSibling,c(A,()=>M().map(X=>f(W,X)),null),A})()},Rn=()=>Q().map(M=>f(W,{get label(){return M.day.toString().padStart(2,"0")},get isToggled(){return M.day===F()},onClick:()=>dM(M.day)}));var Kn=v("<textarea rows=14>");const Vn=M=>(()=>{var A=Kn();return A.$$input=n=>M.onUpdate(n.target.value),g(()=>A.value=M.value),A})(),Hn=()=>f(Vn,{get value(){return yM()},onUpdate:pM});wM(["input"]);var qn=v("<div class=catch-area>Catch errors");const Qn=()=>(()=>{var M=qn();return M.firstChild,c(M,f(W,{label:"x",classes:{"input-toggle":!0,"catch-button":!0},get isToggled(){return gM()},onClick:()=>Nn(A=>!A)}),null),M})();var Wn=v("<main><header><h2>Advent 2024</h2></header><article class=layout><div class=label><h4>Days:</h4></div><div></div><div>");const Yn=()=>(Ln(),(()=>{var M=Wn(),A=M.firstChild,n=A.nextSibling,X=n.firstChild,e=X.nextSibling,S=e.nextSibling;return c(e,f(Rn,{})),c(n,f(tM,{part:1}),S),c(n,f(tM,{part:2}),S),c(n,f(Gn,{}),S),c(n,f(Hn,{}),S),c(n,f(Qn,{}),null),M})()),Jn=document.getElementById("root");CM(Yn,Jn);
-//# sourceMappingURL=index-SlrY7GFv.js.map
+#....................#...................#.........#....................................................................#.........`,F3=`190: 10 19
+3267: 81 40 27
+83: 17 5
+156: 15 6
+7290: 6 8 6 15
+161011: 16 10 13
+192: 17 8 14
+21037: 9 7 18 13
+292: 11 6 16 20`,G3=`29833: 1 50 15 39
+458991049840: 17 598 378 2 69 40
+224381: 120 66 66 890 5 96
+5003: 852 662 973 8 3 3 2 1 1
+441496: 6 60 835 62 9 2 4 8 40
+93163572: 38 40 6 375 896 61 40
+567402848327: 28 4 23 886 813 3 77 6
+109878300: 9 306 2 66 2 5 67 5 525
+169262: 77 3 1 7 2 2 9 6 764 1 5 4
+515489: 281 771 7 7 9
+100112: 927 74 15
+150540585: 86 10 175 40 588
+56371421566: 6 565 9 503 77 8 2 8
+20411640: 506 42 10 16 2 60
+1571: 29 88 9 509 9
+337815942: 2 143 7 5 7 3 3 75 1 9 4 4
+6714: 5 8 74 4 9 8 1 1 319 6
+1114: 8 8 3 11 585
+2556260: 71 1 62 31 620
+9081072: 308 52 1 63 1 9
+11006423: 60 438 48 23 5 92 2 1
+213414366: 3 7 3 414 369
+53385783: 852 9 1 53 2 71 851 33
+119464247: 698 8 9 1 2 377 212 2 4
+735632: 13 943 725 318 92 4
+1059561: 4 9 4 6 86 9 8 3 375
+22598196635: 5 644 5 5 4 9 4 62 3 9 1
+448714: 4 48 71 4
+12876000: 58 37 80 25 3
+41576858681: 131 978 4 122 8 665
+500750682: 500 74 99 95 67 618
+418780: 504 82 548 1 1 1
+79194751192: 395 2 7 73 5 2 5 1 18 8 5
+2404852348: 1 8 79 516 9 8 515 8 50
+17581536: 2 4 67 8 3 2 866 9 9 38 6
+17966299992: 6 174 9 6 2 956 6 2 70 9
+653: 3 5 4 4 94 3
+60598364: 312 8 1 5 9 7 8 7 3 4 6 1
+120116073: 816 4 4 92 8 76
+202633925: 39 1 5 232 998 470 5
+203156491: 3 4 350 25 292 723 23
+97549292: 79 50 686 4 4 9 3 6 47
+6363055357: 5 1 50 630 55 353 2
+122461385: 7 65 9 342 92 1 4 3 3 7 1
+2550188: 3 249 2 3 32 686 6
+4577175: 255 4 6 433 3 53 43
+33759306506: 8 975 2 34 6 8 253 6 28
+1561680: 6 636 522 90 4
+30522: 16 286 85 3 227 7
+526616: 4 76 7 6 2 9 6 9 3 147 6 3
+65889600992: 40 65 37 32 530 989
+1534478: 55 7 9 9 3 3 53 6 77
+15191672: 53 450 7 2 77 7 62 8
+1210940886: 954 55 3 3 52 21 4
+13860: 6 4 4 495
+64545283: 4 9 993 5 280
+1987: 8 862 5 948 4 160
+1120117: 373 3 96 5 149
+71097: 6 5 842 7 6
+52576450: 15 35 40 29 7 447
+46339200: 4 1 7 11 45 991 18 80 5
+5238824: 3 5 10 8 1 5 2 2 5 2 810 5
+317724633833: 5 6 94 64 6 3 85 788 3 3
+31608179: 31 608 17 2 8
+20232744: 981 54 6 543 5 6 534
+220815607: 3 450 20 6 8 1 302 8 4
+11546010: 2 9 8 89 3 67 2 925 3 2 5
+3636108701235: 25 424 9 98 35 1 232
+315302: 8 285 38 8 464
+5924: 94 53 2 7 933
+849765642: 242 2 8 51 5 7 644
+826611952: 7 6 30 5 631 2 239 50
+108360853247: 393 2 6 8 892 9 19 1 45
+14207: 7 4 4 5 7
+171388095: 515 47 139 9 704
+40312641: 34 2 71 349 831
+4514720105307: 12 94 680 4 105 305
+2141175: 17 594 8 5 6 2 690 97 8
+39677923295: 2 85 805 57 2 694 2 95
+773731310: 152 509 5 46 25 2 56
+107992570: 6 32 78 928 97 60 3 70
+274256274439: 4 5 7 6 562 740 4 32 8 1
+715414749: 91 64 7 984 78
+1197417200: 532 1 5 829 97 1 9 8 2 5
+2161553468: 2 5 7 198 7 2 2 68 7 2 92
+49243431: 879 2 599 95 28
+918935325: 72 703 1 7 531 319
+33335385362: 8 81 23 8 9 1 527 69
+684178: 2 1 342 148 28
+8469183: 2 539 491 2 8 53 6 356
+122: 9 32 72 9 1
+26266280341: 18 380 6 8 1 7 78 8 343
+5970: 5 967 2 306 827
+3403360: 33 20 7 3 6 5 6 617 59
+27381127: 655 3 9 3 4 9 43 8 95
+52476534: 31 6 997 22 623 282
+4696755: 463 6 67 50 7
+62787547: 3 71 5 4 7 2 7 70 8 283 6
+5291265684: 550 13 3 5 9 74 6 3 14 4
+2121: 595 3 187 85 67
+138880: 9 459 50 4 7 711 2 56
+54817849: 394 239 866 49 2
+1563601289: 781 2 6 72 929 190 99
+140227804: 933 5 9 208 48 3 8 3 7 6
+637023080: 6 6 4 2 9 854 6 2 6 7 74 4
+12140494: 8 92 8 7 3 90 4 96
+995580: 6 30 612 460 9
+11403: 6 131 7 62 43 712 19 7
+330447882: 811 9 16 4 5 93 9 3 94
+2343762: 9 81 64 5 6 1 938 8 1 5
+391889880: 820 9 9 2 59 79
+186310: 9 72 2 8 8 131 5 9 3 8 6 7
+4933119: 65 6 376 1 2
+15179: 7 8 976 539 1
+312257399: 9 9 70 588 65
+1320813: 213 7 9 81 6 9 71
+273549927: 3 733 93 39 6 5 7 9 68 3
+12291702279714: 82 59 4 88 1 9 477 78
+2436240674: 8 2 87 7 60 4 6 76
+10785445: 9 9 3 3 7 4 99 4 6 7 9 2
+12335116: 1 30 11 5 793
+18950033: 23 6 87 54 8
+7549236817: 233 324 368 1 9
+15898468: 183 2 4 9 506 71 578 2
+60233561: 9 9 17 5 663 8
+17320: 92 184 20 367 5
+6039115: 44 6 46 7 246 2 3 6 7 4 5
+6633798094: 22 8 619 92 907 94
+107587: 95 24 9 4 87
+1797: 17 79 424 1 30
+15547949: 36 501 862 26 891
+1879637864: 84 4 715 978 13 2 4
+8274: 80 5 6 8 6 7 2 5 5 6 66 6
+3486989908: 9 2 4 795 41 731 5 4 7
+41375463: 2 575 60 6 5 922 5 46 3
+2631690387: 44 20 514 8 5 5 380 1 4
+2400: 16 14 2 25 3
+5168317: 608 4 5 425 308 9
+305764573: 804 6 27 7 9 5 146 573
+21250160: 1 5 2 3 1 6 1 6 5 576 4 92
+39682564: 4 4 7 43 11 9 1 5 6 8 4 1
+276353: 996 1 134 13 946 25
+4537378161: 5 53 3 388 820
+9954471: 99 27 7 6 167 600
+273138: 9 74 20 4 6 8 641 23 49
+94662: 834 832 87 6 9
+93397851736: 81 923 4 93 1 19 22 1 6
+9198920550: 6 5 393 7 55 7 2 5 4 3 9 5
+321566102: 2 5 5 2 6 1 974 710 5 3 2
+13685: 263 4 124 7 5
+790133: 1 8 2 14 4 29 5 3 9 5 729
+7252134456: 4 22 71 9 658 5 25 7 7 4
+8154320: 8 7 43 4 9 1 910 9 1 20 4
+18338919: 5 735 347 72 745 4
+17820: 74 4 75 8 8 21 6 134 9 6
+69483: 6 8 1 91 90
+931: 1 2 213 4 74
+1366330766: 30 809 3 13 970 7 58
+676: 1 4 4 8 648
+3133329640: 13 3 504 9 4 9 79 4 6 42
+171083286625: 891 4 2 31 4 1 1 8 3 6 28
+246966: 4 21 8 756 958 129 60
+20297648: 6 6 7 3 44 6 4 9 5 8 508 7
+5225057: 68 212 773 344 41
+14027179994: 6 4 1 5 955 16 289 459
+103990080: 8 4 727 745 6
+671302: 8 3 694 219 8
+65699608894: 733 25 456 896 321
+1105635: 6 9 4 899 504 3 7 69
+570870: 6 63 6 2 86 5
+578: 82 6 8 79
+129225002999: 3 5 7 2 687 45 5 2 5 12 2
+103359403: 96 848 50 475 4 542 3
+769845: 676 93 74 9 96
+657218: 43 90 4 19 4 8 42
+83665893: 1 929 621 9 3
+1194505835: 701 9 27 2 1 9 900 7 9 3
+108162065: 6 9 3 6 2 575 3 6 2 6 95 5
+244720: 535 1 6 9 3 2 4 5 640
+2556742499: 2 872 10 75 39 1
+655752931828: 69 4 5 282 841 9 9 25
+6498: 1 4 218 491 8 9
+99340: 87 2 2 94 7 38
+311694: 2 9 645 6 8 1 1 463 558
+475029631657: 484 23 981 1 658
+33497633: 3 72 19 9 5 30
+131459408: 34 5 4 895 4 17 6 9 890
+232750424: 6 345 8 7 899 8 5 9 2 5 5
+3223413568: 7 84 17 4 85 4 43 92 70
+23827264489857: 3 5 2 230 1 80 6 8 98 54
+31532868368: 5 4 7 4 5 55 1 7 733 3 5
+1409788800: 7 60 16 270 777
+117061444: 927 98 38 14 31 92
+37920196: 372 554 46 4 4
+1444763880: 2 86 5 666 559 5 84 1 6
+18249887: 4 11 4 3 9 22 36 4 943
+6671: 63 31 89 218 34
+13303940615: 6 1 1 85 9 81 1 4 206 9
+59444: 813 4 83 39 9 8 7 9 222
+228315: 5 58 72 4 63
+27915301332101: 858 40 4 1 271 2 6 100
+4146: 7 31 87 840
+6249600: 6 310 4 840
+1272468: 513 759 4 64 7
+116754: 26 8 49 368 95
+442633: 50 392 6 3 3
+63911286832: 638 5 4 57 2 867 2 4 7 2
+1735680960: 75 3 8 2 5 6 2 24 928 31
+7251: 9 2 47 5 25
+9478640: 2 4 722 6 2 6 14 5 218
+60044752: 3 70 544 4 14 7 27 8 6 5
+2150471689359: 3 7 64 20 892 4 8 93 60
+49985412: 555 9 3 531 2 98
+61783: 1 32 9 52 8
+645625404: 14 61 7 5 5 20 6 39 2 9 2
+832940787: 1 29 7 37 586 255 8 78
+304578945006: 4 8 5 4 3 625 36 649 6
+2922148: 374 836 5 7 69
+4196627: 4 1 96 62 8
+884701: 7 1 3 8 6 46 2 1 65 9 6 3
+1621920: 423 8 9 4 861 7 339 4 4
+36881320: 9 8 378 3 89 464 6 70
+14468935: 6 96 6 3 4 5 4 68 4 1 937
+17690: 4 9 1 6 7 4 36 9 65 3 7 1
+365512: 1 585 78 59 8
+3446721: 7 3 609 3 50 204 5 8 22
+46965674: 2 472 59 6 3 7 8 7 1 11
+79473417: 7 947 3 1 2 4 52 1 7 5
+41543073: 20 4 91 5 2 562 30 4 7 5
+527881386: 72 3 4 7 813 85
+4918082720: 48 279 901 82 720
+694983565: 63 3 5 39 540 7 28 62
+894023100: 3 9 4 2 9 4 29 4 590 90
+804741197: 41 630 4 4 6 2 604 74 8
+1368306: 3 2 73 91 102 3
+58759: 30 61 645 60 4
+5252: 7 53 6 729 5
+2946133318: 943 74 52 8 5 5 312
+19506: 127 9 9 65 16 31
+22670139: 307 8 5 8 181 92 7 6 7 8
+5038087: 3 1 3 3 7 97 813 1 79 9
+25718497: 5 3 813 72 90 320 9 88
+556: 8 66 83 399
+72912: 25 90 630 459 1
+157824203: 9 188 28 2 8 2 6 5 5 59 9
+38172933: 5 79 16 755 8 68 3 55 7
+36789690: 91 991 8 344 2 890 49
+2173205801: 1 8 429 59 7 477
+78959322: 51 9 9 16 7 1 80 9 4 34
+1432: 3 5 6 89 90 3 5 44 37 4
+1069353: 211 32 5 237 8 5 25 3
+1587962: 6 10 5 9 6 9 7 6 77 7 4
+38758381653: 758 47 39 71 5 511
+135999705: 81 29 7 7 95 6 459 87
+6306566550: 74 1 1 8 832 653 4 6 3 8
+636867401: 7 9 1 9 2 3 655 36 3 9 1 3
+285959479412: 519 1 926 32 6 2 55
+54923: 8 36 8 19 48
+1958: 5 8 15 5 3
+24264745: 3 37 72 64 8 97
+8242976: 4 7 81 3 98 751
+26307830922: 625 2 772 317 86 922
+1083: 859 2 211 4 7
+402346069: 5 4 4 5 5 8 950 8 5 6 9 1
+1185694: 210 86 413 4 42
+31620827: 1 33 95 5 265 731 93
+11777482: 8 15 9 81 4 8 6 9 7 474 4
+1276080722: 73 5 5 4 818 722
+13040: 4 3 1 11 4 1 3 723 7 5 8 2
+3843: 9 44 84 8 3
+124818575: 69 7 11 273 9 62 6 925
+8298060: 5 1 542 9 47 873 3
+333432288: 93 2 997 5 2 5 69 816
+10180: 99 51 2 82 1
+453822898666: 2 7 56 6 9 2 3 9 8 9 866 6
+80157: 80 1 57
+1791368: 43 27 96 494 9 4 6 4
+99851232: 6 1 6 984 74 9 68 231
+9428: 1 88 2 50 5
+2963: 79 4 204 6 16 821 404
+303881: 1 365 829 18 449
+21182: 18 80 232 6 2
+165488471: 1 78 435 369 21 72
+123238516: 3 17 7 7 12 40 964 759
+112534350: 8 8 9 4 3 7 74 9 96 9 8 78
+215628810: 344 5 2 1 7 179 1 5 7 2 4
+56226: 1 9 9 694 9
+30: 5 4 5 7 1
+3903698047: 85 60 4 60 586 1 44 9
+327731040: 5 8 5 18 82 2 28 61
+344484: 28 208 59 2 866
+148035889: 4 5 2 8 1 25 528 553 3 1
+851572: 9 3 9 8 9 5 45 244 4 4 3 3
+165467563: 97 5 1 2 92 7 737 5 1 5 3
+222169: 6 659 8 7 4 741
+451952: 98 499 4 94 8
+9631924: 3 321 19 2 5
+2159303: 557 6 41 65 55
+149959662: 54 9 952 4 25 96 65
+458369654: 9 502 65 696 54
+8007682481: 8 685 122 922
+5280132984: 617 383 76 7 7 6
+999672: 9 99 652 16 7
+70678080: 4 50 94 535 2 55 3
+316848391599: 5 280 8 6 391 49 6 1 3 6
+1161615051: 1 850 3 805 2 26
+10085844711: 881 53 7 4 66 36 54 4
+2878911772: 9 126 314 3 8 5 14 846
+42768993609: 86 2 7 8 443 7 5 2 1 8 2 2
+24396335828: 8 8 946 317 4 791 4 2 5
+1665: 2 1 3 8 11 2 9 37 81 4 1 9
+714237: 3 34 4 269 1 6 572 1 4 7
+18838245: 8 37 931 61 449
+232736596858: 4 66 702 68 8 431 8 4 3
+3107149347: 641 31 969 5 239 6
+548767: 74 44 4 463 578
+91616: 2 7 3 36 63 1 2 40 91 8 8
+2400557185: 4 3 7 5 432 3 2 7 1 5 247
+53910: 6 7 90 408 54
+164941432740: 8 5 48 8 961 53 55 40
+538959617: 335 7 5 7 9 61 1 5 4 2 3 5
+328142: 572 573 385
+1169035: 7 7 88 161 7 635
+110043089: 3 854 1 7 767 2 8 7 4 3 2
+3916465: 4 89 55 8 8
+331500: 73 8 5 9 145 4 4 912 85
+12804048811094: 277 72 642 8 110 9 4
+3144: 5 8 8 3 6 519 221 3 753
+267232470303: 8 64 83 6 515 30 4
+1116681984: 9 27 6 396 304
+28758659017: 732 41 3 54 44 65 91
+479159: 72 46 812 5 79
+61254284: 7 7 7 71 2 4 4 3 9 8 8 919
+9375: 1 545 17 37 76
+929495: 52 11 866 475 20
+577679969: 639 645 473 2 3 8 70
+200299662: 71 587 9 89 6
+257143040448: 542 56 6 73 5 518 224
+2166: 5 303 646 5
+62124934: 887 498 9 7 11
+289: 25 9 64
+28038: 6 84 3 46 3
+4388325866: 5 55 7 8 722 4 5 79 6 71
+11873804: 3 537 1 11 67
+139650: 5 2 6 665 5
+3357: 968 98 7 3 8 1 5 124
+142833599: 555 5 2 130 981
+198440: 9 689 4 8 8
+4536289506: 7 400 146 613 8
+8364: 7 9 8 6 9 41 37 5 5 158 1
+419862: 278 824 381
+37696: 8 29 699
+96549948: 2 8 9 7 553 1 1 2 9 4 67 9
+182740: 905 861 8 606 2
+36686601000: 2 8 7 8 529 3 43 4 90 5 4
+794803: 10 316 10 2 6 9 25 79
+2376796767: 27 44 3 9 4 5 16 5 2 6 1 5
+18373592473: 99 3 10 4 908 681
+8415488: 2 3 2 7 23 515 7 3 3 8
+1751: 901 8 51 787 4
+194616: 5 556 2 7
+13111: 6 35 24 56 7
+887627111: 74 85 851 2 41 1 8 8
+1217662897: 2 42 417 557 9 6 2 9 9
+10859940: 7 153 169 60
+15881: 74 9 62 102 2 3 87 9 35
+1097951128: 83 6 5 8 7 7 9 4 1 111 1 5
+396944: 8 5 11 27 9 6 688 7
+234367648: 3 56 25 558 7 7 4 756 5
+21211: 1 6 6 1 7 8 9 426 7 5 6 7
+4310184255: 1 27 716 474 72 2 57
+360694: 1 19 124 45 6 56
+107043843915: 4 5 92 808 8 9 73 5 4 6
+4542060: 8 32 2 7 40 9 7 4 8 4 915
+47372214: 666 2 7 94 644 216
+21933258: 7 5 578 3 527 5 807 1 2
+64801487209154: 4 914 56 492 984 134
+5371301: 53 7 1 302
+470: 38 51 3 2 5
+589298: 39 30 29 216 6
+75856: 750 8 31 22 3
+296359: 2 35 94 1 45 259
+1163647626: 5 26 5 799 465 87 6
+22673304: 9 474 51 589 377 4 8 9
+237576549: 9 18 133 796 11
+2805396096: 6 6 5 96 17 9 5 4 6 4 562
+371253119: 81 84 81 2 5 77 14 28 1
+143753291258: 2 683 39 6 22 3 14 8 57
+155: 7 81 69
+461262213147: 508 44 6 70 8 6 6 3 54
+18146520: 9 813 62 9 8 5
+7078875: 698 9 8 87 5
+4584649: 2 5 15 218 2 61 765 1
+76872668: 825 7 2 49 95
+2380657716148: 9 71 6 970 27 7 350
+1303324792: 6 4 9 960 81 3 4 79 3 1
+1460405: 1 448 1 1 3 7 398 5
+6162: 3 5 770 3
+5354101577: 53 1 75 68 745 345 23
+70159078: 26 4 1 95 955 7
+3191471037: 90 5 5 16 2 2 7 17 506 5
+3107702724: 908 870 562 12 7
+832273: 61 93 8 670 275
+982: 89 60 2 6 76
+476: 12 2 4 424 24
+2953251: 64 2 46 5 1 2
+8211110: 3 8 279 91 8
+432768580: 28 224 1 69 419 160
+453159760: 904 88 8 5 679 763
+23117061: 7 8 2 1 94 8 1 530 3 48
+6649: 44 3 9 5 3
+71397820: 841 51 4 5 2 2 8 2 9 5 4 2
+921585: 9 6 7 67 131
+20095142: 9 5 552 56 26 884
+1902730: 13 871 28 63 6 7 81
+79546: 9 5 57 1 31
+1687628: 4 2 6 1 4 8 9 6 14 40 5 28
+485832571: 432 53 82 7 5 571
+9789951: 815 7 5 8 3 3 8 4 8 1 779
+1049020059: 161 387 7 65 9
+376580: 5 7 2 7 243 8 4 80 4 4 4 1
+8682088462: 56 517 7 3 8 2 4 4 9 16
+10977511: 8 707 21 83 39 3 631 4
+3515635: 8 77 3 5 5 1 3 2 5 688 1 8
+5355467256901: 432 8 269 46 568 6 4 1
+66606466523: 1 4 5 65 785 8 9 545 20
+20712: 613 250 3 2 4
+2800704: 365 99 503 3 4
+100830939546: 283 8 5 50 6 15 8 69 34
+87151669425: 87 1 516 6 9 415 7
+15704889: 2 507 22 88 8 57
+895536: 980 6 3 2 7 664 6 3 3 2 6
+3984235528: 204 279 7 8 9 5 2 8 7 2 6
+65724939: 7 88 61 901 162 21 81
+948: 7 7 2 6 4 2 25 8 4 69 6
+1713100623320: 515 9 56 7 66 32 87 36
+170019969: 425 8 325 57 50 868
+93: 13 6 5
+67212: 2 3 17 65 2
+28473271: 536 5 32 332 458 493
+1014918744: 6 8 4 7 6 798 353 84 38
+25595: 1 9 69 7 32 92
+162166399920: 2 6 3 621 303 9 1 38 70
+701: 28 65 611
+162141: 5 6 79 64 8 1 1 41
+50852: 737 769 5 7 67 4 8 132
+1626457: 21 65 45 7 1 60 1 989 7
+102: 9 2 1 2 7
+1759: 57 6 8 5 9
+30362: 10 12 6 5
+41746898: 4 1 36 671 75 893 5 1
+6772: 47 4 36 5
+190284: 11 29 7 571 4
+69308585561: 6 15 770 8 585 558
+30670489: 2 30 70 1 832 8 1 1 8 8
+991101696: 82 2 9 807 86 4 6 832
+138642: 294 3 812 25 5 17
+9036: 372 88 3 39 2 9
+33025904352: 101 658 408 42 29
+6992002556: 72 2 3 1 1 4 22 6 9 44
+70225: 70 693 92 8 21
+297477534328: 6 1 2 766 737 382 326
+50224735355: 157 457 62 7 459 896
+3825: 2 77 73 5 4 17 768
+2851: 80 17 2 92 39 1
+262586522: 3 6 7 61 64 865 23
+13822325: 7 9 664 613 91 8
+325657: 495 6 65 1 9
+865928337: 95 808 35 13 5 696 91
+8127778: 812 7 7 71 7
+38769284588881: 7 6 7 823 24 67 181 6 1
+2131021: 3 71 10 18 1
+14857925: 5 5 98 4 4 2 255 6 389 7
+1600130081: 4 2 660 70 1 6 6 520 4
+203305584: 83 945 81 9 8 6 9 429 4
+59498459286: 5 949 845 921 7 7
+42526316: 63 750 1 46 9
+539839141: 3 3 8 1 9 2 486 363 6 56
+239360: 5 84 668 4 55
+565651373: 56 5 6 505 8 70
+1143378721: 2 3 796 798 4 8 2 4 5 9 1
+280842: 42 34 2 98 954
+10709754541: 5 8 2 6 9 5 66 5 5 2 3 898
+6422: 625 9 9 5 711 1
+11462: 1 3 186 1 60
+33372937: 3 36 2 9 99 37
+2479: 8 28 23 6 1
+7397: 11 17 3 88 5
+158451447576: 7 53 7 8 307 3 7 577
+19064999: 21 914 4 95 1 4 2 124
+413447: 1 95 9 1 79 471 9 6 557
+11285120: 53 2 916 56 4
+3246608415: 8 2 8 607 3 476 747 4 3
+2328776: 3 8 69 8 441 2 44 6 5 5 8
+382541280: 8 4 18 501 7 636 40
+8869392: 5 82 8 2 6 478 5 48 49
+1287517498: 1 6 5 916 97 1 8 7 926 7
+420466098: 6 6 9 635 9 514 34 425
+620681230: 78 583 313 7 3 1 1 2 7
+12454368: 56 8 678 21 41
+245298381: 61 9 8 7 989 688 573 8
+351018: 6 4 9 9 466 8 38 4 7 8 4 9
+4093997: 33 2 8 23 67 216 882
+534600: 88 675 9
+26508882: 4 100 1 3 3 6 72 1 86 51
+9784837: 3 8 5 595 8 5 7 7 64 8 5
+2958: 55 6 3 3 631 5 8 2 1 1 4 3
+6439: 153 9 4 477 9
+27467895: 27 4 1 666 8 2 3 1 3 252
+174337649: 12 9 7 921 5 5 2 97 4 19
+5134608: 4 3 834 99 4 527 82
+9050257575: 3 291 275 75 68 7
+5879928820: 86 4 2 8 4 171 83 7 37 6
+789693: 7 1 8 7 626 4 3 1 923 3 6
+10070069: 5 1 76 1 5 315 55 77 9
+4060932: 70 58 775 87 72
+2001586498: 68 56 977 5 538
+15898454: 167 4 238 46 8
+7488: 67 57 7 67 8 5
+723672311498: 723 6 7 23 114 1 9 1
+14043700944: 18 27 524 78 707
+33552700029: 2 8 19 5 790 35 4 3 21 7
+4876613295: 43 18 7 454 9 46 95
+25219: 76 39 79 8 814 51 6 1
+50959: 41 9 959
+16484: 4 8 9 2 675 897 3 8 43 9
+1700392: 56 6 55 73 7 2 35 25
+1782: 491 5 241 79 965
+5932765: 657 288 990 909 9 9
+6523039529: 652 303 839 50 63 6
+1578: 12 9 33 19 9 543
+155450400: 38 60 974 70
+66010180: 3 5 584 5 1 58 1 2 190
+6495610543: 6 495 603 6 1 14 41
+37446382: 7 8 48 57 96 1 36 8 540
+594950978: 2 5 539 30 8 6 8 82 97 6
+625118: 4 528 509 86 6
+21605: 6 61 5 300 5
+6330045: 419 213 87 5 8 1 1 32
+6746911: 9 4 668 8 23 1
+3087024: 6 254 4 9 9 5 4 5 329 8 9
+16535367: 31 698 5 764 7 65 43
+7149716: 6 6 4 1 8 31 871 1 1 507
+799003105: 5 5 75 91 509 23 353 2
+14185157: 4 56 9 82 890 39 34 1 7
+6575526: 2 936 7 9 523
+4304408: 1 7 491 2 6 4 9 5 421 1 4
+97419: 89 4 123 98 31 1 76
+138041695: 417 7 1 9 9 4 14 182 6 9
+285043637736: 2 97 898 93 507 68
+909: 6 14 17 3 3
+11698: 1 875 938 527 5
+2214: 517 4 8 1 1 8 4 7 4 19 94
+2097920: 51 4 596 8 8
+4897932: 7 7 20 212 7 83 5 8 9 6
+3878881777: 6 651 27 86 216
+52158: 86 7 7 80 78
+23304: 430 3 2 9 83 1
+4243659: 400 8 6 221 399 55 5
+140494108418: 570 20 11 3 31 7 96 8
+471859: 7 1 174 6 1 58 46 9 1 8 3
+340507379: 37 8 8 492 2 7 881
+17353039300: 948 78 6 919 168 91 9
+443456: 40 51 609 4 9 8
+7800578: 7 799 1 57 8
+126307883: 59 576 212 670 6 8 52
+17505960: 7 47 6 8 6 8 184 926 3 6
+295005: 3 8 57 3 7 6 979 5 670 7
+5971233880: 399 2 277 54 8 6 6 8 2
+54974592: 7 570 7 6 5 508 32 27
+297463168093: 9 2 1 7 9 4 3 8 685 4 8 93
+278598: 7 630 8 1 1 9 7 7 5 146 1
+4522732: 81 8 5 36 81 65 99
+710531: 710 529 4
+8125226: 25 1 18 81 62 652
+11972351: 2 4 5 93 4 345 8
+38021570720: 692 1 5 876 8 4 8 139 7
+5086640: 23 873 53 67 80
+10116724: 5 4 10 374 3 5 4 2
+606: 5 98 97 3 6
+52567399: 6 6 60 88 761 62 7 5 9
+41902: 3 7 9 16 120 21 1 1
+201364: 6 9 3 29 10 3 64
+49541: 688 9 2 4 5
+1790: 2 257 99 5
+1241759: 153 783 81 3 407
+7883273373: 27 85 618 1 91 70
+503: 358 1 9 78 58
+365868977: 8 4 3 271 205 5 9 2 3 72
+6887: 5 840 34 6 92 1 5 7 8 5
+918599: 528 701 9 742 3
+1843120864580: 4 8 9 185 229 721 6 7
+15912846: 10 56 20 6 6 2 6 381
+23795606629: 552 7 6 5 21 410 86 29
+8867: 42 8 5 1 7 11 5 62
+66356409: 818 2 8 900 409
+84171143: 64 777 71 14 3
+54180206992239: 3 487 6 2 3 83 59 8 4 39
+8810079608: 17 93 1 259 95 8 9
+66049863205: 16 9 8 491 6 76 87 205
+5399021: 8 6 8 2 602 63 8 8
+8506485: 50 378 7 9 1 9 7 215 9 5
+20598790155: 50 28 1 512 8 1 3 48 54
+45665: 32 846 52 1 9
+2012551695: 36 748 387 1 6 9 737
+83887148644: 792 127 834 92 644
+1524819977: 1 3 8 5 36 43 26 3 47 9
+839835367036: 981 5 78 780 5 2 7 36
+4585138: 25 7 262 1 38
+998: 17 4 12 2 488 6
+1734480: 7 6 647 73 36
+19088: 1 1 72 23 10
+49240: 38 5 104 3 40
+39100208207: 290 2 786 186 565 57
+936031626118: 3 1 3 603 1 2 4 261 5 9 2
+8928848124: 55 6 729 933 73 6 449
+422326175: 57 70 74 10 77 21 5
+12237480: 4 6 2 9 975 6 8 9 1 64 2 8
+22630070: 3 4 4 5 8 4 1 819 3 356 3
+69544973: 1 9 248 2 2 94 7 2
+656880: 1 45 5 952 1 3
+239: 1 3 8 34 7 95 39 32 6 2
+7657248674: 6 15 5 3 1 1 6 83 660 5 9
+1665: 5 64 24 1 8
+1042148517: 11 558 4 210 276 4 9
+1896138357138: 9 1 594 3 7 348 6 8 4 2 3
+16636534: 8 8 189 4 531
+1890763745: 9 2 738 5 6 9 2 2 4 50 9 5
+5542542: 3 7 227 6 5 5 3 7 7 91 1 4
+31211: 4 8 3 6 3 7 3 3 32 869 6
+122025580: 9 173 896 549 75 579
+26321360: 569 6 1 6 96 694 3 10 8
+22924: 46 497 62
+8634935898204: 6 388 998 9 155 244 1
+52363955628036: 392 632 925 27 89 6 6
+74576: 7 45 4 4 59
+19299992787: 691 754 2 93 1 3 86 3
+476016479: 4 6 28 89 9 6 47 9
+250650658926: 6 34 7 46 398 9 993
+10272872826: 19 4 9 2 1 2 6 87 282 6
+12382719: 634 15 7 2 93 80 6 613
+414849674: 52 38 8 99 74
+6356057770: 1 9 80 546 60 57 76 8
+1792217744: 8 96 2 2 114 63 4 2
+708680: 801 7 62 125 55
+86488566: 9 60 984 9 1 8
+722465: 9 111 2 8 2 9 159 190 5
+1498968: 311 43 1 7 2 97 38 8
+1834803: 278 66 4 25 3
+88279: 3 291 3 6 17 24 36 3
+69002777: 35 51 805 77 346
+16345119: 250 8 5 8 7 2 1 5 17 8 9 6
+1449: 3 6 4 8 69
+180612: 81 70 554 4 29
+2423844: 4 855 5 1 5 814 4 9 6 6 2
+29768: 5 832 35 20 453
+11188320941: 7 81 8 6 286 5 1 4 79 5 5
+71320475996: 33 72 6 7 5 2 52 759 96
+324367: 510 318 2 1 7
+9914: 9 5 708
+1278883203: 970 4 103 8 2 8 2 320 3
+1662015663: 400 37 784 7 35 693
+122683056: 8 7 815 8 2 7 32 5 6 1 6 8
+618433: 7 479 29 30 6 3 4
+26375184: 6 3 6 7 493 3 6 1 61 2 72
+16352: 424 71 16 4 8
+127253012797: 3 1 7 790 52 3 3 9 9 84
+237447056881: 905 298 90 279 940
+3510371662: 3 90 9 3 716 63
+6810091257: 9 843 68 48 55 5 57
+13160: 97 752 91 2 7
+9072: 27 9 38 899 757 3
+141048429: 5 2 89 5 239 91 2 449
+86840: 92 9 7 55 8
+2590403191: 8 536 742 5 604
+5280114601677: 41 4 383 5 333 2 1 680
+6720768237: 26 1 9 32 1 27 6 2 60 36
+142690: 55 5 82 30 4 9 9 1 9 3 10
+1350: 56 94 9
+6705005763: 32 8 4 2 5 7 7 5 456 8 3
+105818400: 355 8 276 5 27
+508269: 5 85 83 5 4 82 25 67 1 7
+81889214674: 28 9 162 5 601 6 3 1 97
+1633868160: 807 2 6 1 9 8 63 2 2 8 2 3
+1612491937: 445 6 85 7 3 7 2 5 203 7
+66097871677437: 922 7 870 28 1 8 8 160
+1868983236: 981 6 10 40 789 6 6
+33278882: 615 6 76 534 2
+1623: 5 25 314 4 782
+1236416273: 32 7 462 88 8 9 1 93 18
+87745140: 941 3 74 15 5 84
+2937158: 2 3 1 3 3 5 44 886 833
+2654: 3 9 3 3 84 1 4 956 390 1
+56114675: 7 287 44 18 77
+185087886: 7 376 4 8 7 778 2 77 30
+279563776: 5 2 168 2 644 92 16
+35161621577: 6 1 5 564 28 7 997 9 73
+5569997161: 2 3 95 8 511 971 59
+31907809880: 59 676 762 35 8
+14666927700: 13 245 307 5 8 99 3
+10224058621: 2 2 64 6 8 526 3 3 832
+209124641523: 774 5 3 5 4 3 15 7 7 9 2 4
+7627287: 11 99 3 68 7 451 7 9
+31847: 97 8 8 8 9 72 6 8 4 54 5 2
+3557400: 5 3 196 242 5
+10372128542842: 215 6 6 516 8 542 842
+161406296569: 2 3 7 405 8 4 96 55 7 11
+69429538310: 9 10 9 2 48 7 762 737 2
+7349070388: 5 9 4 8 87 3 29 702 9 9 8
+124109: 591 70 3
+275223: 1 8 25 985 27 5 1 1 2 93
+93181: 90 68 587 430 5
+9218419685: 78 924 46 2 196 86
+1043342438655: 3 87 3 8 43 46 8 6 28 8 4
+3025113: 302 405 33 1 735
+193655182003: 3 8 91 7 1 1 7 8 7 8 200 1
+328798: 6 6 721 4 18 5 94 385 8
+13952103: 8 930 9 4 78 3 5 8 5 38 4
+68085249: 5 7 474 6 9 5 4 445 83 3
+47989: 7 9 4 895 52 396 1 4 8 1
+11418200500: 763 999 35 230 805
+58: 8 45 5
+12543: 557 7 3 831 15
+1102632749: 9 122 75 388 2 1 749
+440190: 68 78 67 5 9
+244416253136: 2 9 5 7 3 8 2 48 2 5 3 137
+539203788574: 5 8 8 14 48 8 9 612 8 9 9
+3898931632: 7 913 69 12 61
+6986920: 8 54 144 13 7 3 6
+5183: 2 418 8 2 899
+71028585: 4 402 54 818 9
+55702470: 556 751 224 9 4 484 3
+1593352: 4 5 526 8 42 5 8
+16808673: 26 4 56 1 7 67 5
+418948995: 6 23 65 9 1 371 6 8 308
+42558707: 1 581 99 6 73
+1114: 90 3 8 8 304 1
+7624594: 35 41 8 9 59 360 136
+1879869419: 4 7 19 296 75 572 367
+105392107: 9 5 2 3 7 38 2 7 15 6 10
+39425: 61 1 28 6 415
+946: 58 5 3 5 5 4 1 4 63 75 3 4
+26503137: 907 195 65 5 74 4 33
+121640265997: 149 2 33 29 81 347
+1336050312157: 469 3 581 29 49 59
+196079121: 818 932 700 989 8 1
+2572786: 7 5 81 91 38 3 8 3 4 3
+6066829632: 8 75 6 673 9 96 30
+45479102449: 805 9 17 83 7 9 369 4 7
+1881087780: 3 414 2 475 76 715
+564128512: 40 3 525 757 41 32
+2062811875: 5 77 728 926 49 7 8
+33632: 155 7 31
+6069707: 2 3 70 29 130 7
+57566793: 8 1 7 8 24 739 3 788 7
+740946416: 4 32 54 941 86 8 959
+152224: 628 241 6 71 3 796
+2495: 24 78 3 3 9 2
+1133974: 78 4 292 3 8 1 8 9 165 3
+176823308: 9 61 3 63 12 93 51 6
+1194161597: 90 964 4 7 197 6 32 43
+53023851518: 6 174 7 634 85 151 5
+145124352: 91 90 72 128 87
+368188110675: 763 35 173 805 99
+15018: 1 10 69 432 5
+61075469: 3 4 6 1 187 3 2 9 7 3 1 94
+64801192912: 80 81 1 116 3 1 2 911
+4528048: 12 132 2 14 8 9 16 28
+175718418351: 21 876 5 883 8 1 835 1
+298575945: 2 98 575 9 44
+391194: 33 44 7 9 44 38 469 9 4
+66714: 66 57 8 9 55
+146426934034: 76 20 5 283 5 9 2 963
+1462: 4 1 727 2
+27980088578: 81 62 59 27 7 83 81
+168341241: 3 27 9 8 789 91 5 9 23 9
+2353029: 9 5 3 9 4 9 54 6 2 3 5 9
+5596: 80 478 4 6 8
+1759: 96 1 6 792
+13820532: 47 65 7 5 58
+3282: 78 5 2 40 93 3 390
+39641: 6 29 9 2 7
+6221202216626: 481 489 67 2 271 976
+3695923017: 307 993 580 2 1 8 6 9
+639779588830: 7 1 4 32 1 27 1 4 7 833
+460677118880: 1 921 35 423 7 76 5
+1136300244: 981 261 579 2 3
+15930: 2 3 5 88 15 6
+138736991: 60 97 839 8 494 2 2
+1215654185: 1 6 7 6 6 4 47 9 66 176 6
+163048: 113 7 41 160 5 61 6 26
+12547: 697 18 1
+106568000: 813 59 8 692 175
+42382561: 32 637 98 2 6 69 8 3
+2570994: 9 8 6 3 4 18 110 9 8 3 9 6
+945: 33 1 1 3 9
+271349811: 83 3 829 578 77 9 57
+40876: 1 751 4 700 8 11
+100195832: 4 9 77 95 6 1 84 51
+499013366: 5 284 7 50 50 7 9 8 2 5 4
+48314: 212 2 58 6 482 82 2 11
+2105198: 1 2 35 6 41 37 2 950 2
+1059993: 4 6 59 99 4
+17687160103: 91 71 99 24 795 30 72
+47880503208643: 57 840 503 208 641
+692869: 68 8 4 867 4
+7838019: 3 915 317 726 9
+663157956382: 685 1 2 5 684 378 374
+12977701: 80 63 28 521 4 717
+577084: 3 2 8 7 84 6
+44949960: 15 725 476 90 44
+18835663769: 87 202 6 83 5 4 9 8 77 3
+1587871: 5 26 3 3 870
+1097: 1 99 8 402 37 2 3
+521926131: 869 868 5 2 81 8 6
+4276474815: 555 956 806 4 13
+703290455: 966 4 220 591 455
+22985142332: 1 32 477 98 9 745 2 3 5
+1143: 1 5 3 3 9 5 5 8 6 4 3 9
+93605483394: 1 197 782 827 1 3 3 93
+5679: 7 78 28 57 9
+5197478: 3 77 8 5 819 4 2 22 221
+2740652543: 12 434 64 84 41
+26523: 332 6 7 8 5 9 6 4 4 3 87
+264220: 429 4 2 5 625 41 93 7
+331: 295 3 1 5 5 21
+1041: 5 50 5 92 3
+3080648: 3 9 9 1 5 4 16 8 62 6 42 5
+28887040: 1 78 8 5 4 32 2 13 80
+17084: 3 1 610 7 4
+44090434: 7 29 9 96 8 7 9 38 7 80
+304601158410771: 600 1 616 824 107 7 4
+54890328: 8 736 60 6 9 758 518
+102297857: 12 7 3 347 6 862 4 865
+971: 64 555 4 23 14 225 86
+29308: 3 84 6 5 399 7
+3028880328: 9 662 5 493 5 803 26 2
+13007976: 4 228 9 635 85
+20407: 2 4 4 3 55 39 1 4 35 560
+43686567836: 51 86 1 815 8 29 971 4
+1724327218: 918 8 541 434 82
+128448: 85 51 2 81 4 4 48 3
+1285: 52 251 1 4 54 15
+13726063210: 4 8 673 8 7 7 2 6 13
+3464299: 1 23 37 7 6 8 215 645 3
+45742500285: 535 475 180 28 3
+2034580: 77 3 4 793 457 4 4
+109418200850: 1 4 488 6 6 2 75 8 8 3 9 8
+1688245068: 779 97 333 65
+89633: 4 40 9 500 3 2`,R3="",K3="",V3="",H3="",W3="",q3="",Q3="",Y3="",J3="",Z3="",M2="",n2="",A2="",S2="",X2="",e2="",t2="",l2="",o2="",u2="",m2="",r2="",s2="",h2="",w2="",i2="",a2="",c2="",f2="",d2="",_2="",p2="",y2="",g2="",v2="",b2="",$2=Object.assign({"../advent/day01/solution.ts":UM,"../advent/day02/solution.ts":KM,"../advent/day03/solution.ts":WM,"../advent/day04/solution.ts":JM,"../advent/day05/solution.ts":A3,"../advent/day06/solution.ts":t3,"../advent/day07/solution.ts":m3,"../advent/day08/solution.ts":r3,"../advent/day09/solution.ts":s3,"../advent/day10/solution.ts":h3,"../advent/day11/solution.ts":w3,"../advent/day12/solution.ts":i3,"../advent/day13/solution.ts":a3,"../advent/day14/solution.ts":c3,"../advent/day15/solution.ts":f3,"../advent/day16/solution.ts":d3,"../advent/day17/solution.ts":_3,"../advent/day18/solution.ts":p3,"../advent/day19/solution.ts":y3,"../advent/day20/solution.ts":g3,"../advent/day21/solution.ts":v3,"../advent/day22/solution.ts":b3,"../advent/day23/solution.ts":$3,"../advent/day24/solution.ts":O3,"../advent/day25/solution.ts":j3}),O2=Object.assign({"../advent/day01/input-test.md":T3,"../advent/day01/input.md":E3,"../advent/day02/input-test.md":P3,"../advent/day02/input.md":C3,"../advent/day03/input-test.md":x3,"../advent/day03/input-test2.md":z3,"../advent/day03/input.md":k3,"../advent/day04/input-test.md":N3,"../advent/day04/input.md":L3,"../advent/day05/input-test.md":I3,"../advent/day05/input.md":B3,"../advent/day06/input-test.md":D3,"../advent/day06/input.md":U3,"../advent/day07/input-test.md":F3,"../advent/day07/input.md":G3,"../advent/day08/input-test.md":R3,"../advent/day08/input.md":K3,"../advent/day09/input-test.md":V3,"../advent/day09/input.md":H3,"../advent/day10/input-test.md":W3,"../advent/day10/input.md":q3,"../advent/day11/input-test.md":Q3,"../advent/day11/input.md":Y3,"../advent/day12/input-test.md":J3,"../advent/day12/input.md":Z3,"../advent/day13/input-test.md":M2,"../advent/day13/input.md":n2,"../advent/day14/input-test.md":A2,"../advent/day14/input.md":S2,"../advent/day15/input-test.md":X2,"../advent/day15/input.md":e2,"../advent/day16/input-test.md":t2,"../advent/day16/input.md":l2,"../advent/day17/input-test.md":o2,"../advent/day17/input.md":u2,"../advent/day18/input-test.md":m2,"../advent/day18/input.md":r2,"../advent/day19/input-test.md":s2,"../advent/day19/input.md":h2,"../advent/day20/input-test.md":w2,"../advent/day20/input.md":i2,"../advent/day21/input-test.md":a2,"../advent/day21/input.md":c2,"../advent/day22/input-test.md":f2,"../advent/day22/input.md":d2,"../advent/day23/input-test.md":_2,"../advent/day23/input.md":p2,"../advent/day24/input-test.md":y2,"../advent/day24/input.md":g2,"../advent/day25/input-test.md":v2,"../advent/day25/input.md":b2}),j2=Object.freeze(Object.defineProperty({__proto__:null,inputMods:O2,solutionMods:$2},Symbol.toStringTag,{value:"Module"})),cM=M=>parseInt(M.split("day")[1]||"1"),T2=(M,n)=>{const A=(M.match(/input-?(.+)\.md$/)||[])[1]||"Real";return{day:cM(M),name:A,raw:n}},E2=(M,n)=>{const A=!!(n.part1||n.part2),X=n.part1||(()=>"-"),S=n.part2||(()=>"-"),e=n.answers||[["",""]];return{day:cM(M),part1:X,part2:S,answers:e,hasSolution:A}},[fM,P2]=p([]),[q,C2]=p([]),[F,dM]=p(1),[k,_M]=p(0),[pM,yM]=p(""),[x2,z2]=p({value:"",time:0,knownGood:!1}),[k2,N2]=p({value:"",time:0,knownGood:!1}),[gM,L2]=p(!0),V=(M,n="",A=0,X=!1)=>{M===1&&z2({value:n,time:A,knownGood:X}),M===2&&N2({value:n,time:A,knownGood:X})},SM=()=>[V(1),V(2)],R=()=>fM().filter(M=>M.day===F()),XM=()=>q().find(M=>M.day===F()),I2=()=>{Z(()=>{if(k()>=R().length)return _M(R().length-1);const M=R()[k()],n=XM();if(!M||!n)return SM();yM(M.raw)}),Z(()=>{const M=XM(),n=pM();if(!M||!n)return SM();const A=M.answers[k()]||["",""];setTimeout(eM,0,1,M.part1,n,A[0]),setTimeout(eM,5,2,M.part2,n,A[1])})},eM=(M,n,A,X)=>{const S=performance.now(),e=(()=>{if(!gM())return String(n(A));try{return String(n(A))}catch(t){return`Error: ${t}`}})(),l=performance.now();V(M,e,l-S,e===X)},B2=M=>{P2(Object.keys(M.inputMods).map(n=>T2(n,M.inputMods[n])).sort((n,A)=>n.name.localeCompare(A.name))),C2(Object.keys(M.solutionMods).map(n=>E2(n,M.solutionMods[n])).filter(n=>n.hasSolution).sort((n,A)=>n.day-A.day))};B2(j2);dM(q().at(-1)?.day||1);var D2=v("<div class=label><h4>Part <!>:</h4><div class=time>(<!>ms)"),U2=v("<textarea class=output disabled>");const F2=(M="")=>{const n=M.split(`
+`).length;return Math.min(n,Math.max(n,1,10))},tM=({part:M=1})=>{const n=M===1?x2:k2;return[(()=>{var A=D2(),X=A.firstChild,S=X.firstChild,e=S.nextSibling;e.nextSibling;var l=X.nextSibling,t=l.firstChild,o=t.nextSibling;return o.nextSibling,c(X,M,e),c(l,()=>n().time.toFixed(0),o),A})(),(()=>{var A=U2();return g(X=>{var S=!!n().knownGood,e=F2(n().value);return S!==X.e&&A.classList.toggle("correct-answer",X.e=S),e!==X.t&&zM(A,"rows",X.t=e),X},{e:void 0,t:void 0}),g(()=>A.value=n().value),A})()]};var G2=v("<button>");const Q=M=>{const n=()=>({...M.classes,button:!0,toggled:M.isToggled});return(()=>{var A=G2();return kM(A,"click",M.onClick),c(A,()=>M.label),g(X=>NM(A,n(),X)),A})()};wM(["click"]);var R2=v("<div class=label style=align-self:flex-start;><h4>Input:</h4><br>");const K2=()=>{const M=()=>fM().filter(n=>n.day===F()).map((n,A)=>({label:n.name,isToggled:A===k(),onClick:()=>_M(A),classes:{"input-toggle":!0}}));return(()=>{var n=R2(),A=n.firstChild;return A.nextSibling,c(n,()=>M().map(X=>f(Q,X)),null),n})()},V2=()=>q().map(M=>f(Q,{get label(){return M.day.toString().padStart(2,"0")},get isToggled(){return M.day===F()},onClick:()=>dM(M.day)}));var H2=v("<textarea rows=14>");const W2=M=>(()=>{var n=H2();return n.$$input=A=>M.onUpdate(A.target.value),g(()=>n.value=M.value),n})(),q2=()=>f(W2,{get value(){return pM()},onUpdate:yM});wM(["input"]);var Q2=v("<div class=catch-area>Catch errors");const Y2=()=>(()=>{var M=Q2();return M.firstChild,c(M,f(Q,{label:"x",classes:{"input-toggle":!0,"catch-button":!0},get isToggled(){return gM()},onClick:()=>L2(n=>!n)}),null),M})();var J2=v("<main><header><h2>Advent 2024</h2></header><article class=layout><div class=label><h4>Days:</h4></div><div></div><div>");const Z2=()=>(I2(),(()=>{var M=J2(),n=M.firstChild,A=n.nextSibling,X=A.firstChild,S=X.nextSibling,e=S.nextSibling;return c(S,f(V2,{})),c(A,f(tM,{part:1}),e),c(A,f(tM,{part:2}),e),c(A,f(K2,{}),e),c(A,f(q2,{}),e),c(A,f(Y2,{}),null),M})()),M5=document.getElementById("root");xM(Z2,M5);
+//# sourceMappingURL=index-DTfY-XCR.js.map
