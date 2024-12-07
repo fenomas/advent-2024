@@ -6,6 +6,7 @@ import { DayButtons } from './components/DayButtons'
 import { InputArea } from './components/InputArea'
 import { createAllEffects } from './state'
 import { CatchButton } from './components/CatchButton'
+import { RunAllButton } from './components/RunAllButton'
 
 //
 
@@ -24,6 +25,8 @@ export const App = () => {
         </div>
         <div>
           <DayButtons />
+          <br />
+          <RunAllButton />
         </div>
 
         {/* Part outputs */}

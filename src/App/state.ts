@@ -51,6 +51,7 @@ export const [inputStr, setInputStr] = createSignal('')
 export const [output1, setOutput1] = createSignal({ value: '', time: 0, knownGood: false })
 export const [output2, setOutput2] = createSignal({ value: '', time: 0, knownGood: false })
 
+export const [busy, setBusy] = createSignal(false)
 export const [catchErrors, setCatchErrors] = createSignal(true)
 
 // helpers
@@ -93,18 +94,50 @@ export const createAllEffects = () => {
   })
 }
 
-const runSolution = (part: 1 | 2, sol: Solution, input: string, answer: string) => {
+const runSolution = async (part: 1 | 2, sol: Solution, input: string, answer: string) => {
+  if (busy()) return
+  setBusy(true)
+  const { output, dt } = await runOneSolution(sol, input, catchErrors())
+  setOutput(part, output, dt, output === answer)
+  setBusy(false)
+}
+
+const runOneSolution = async (solFn: Solution, input: string, shouldCatch: boolean) => {
   const t = performance.now()
-  const out = (() => {
-    if (!catchErrors()) return String(sol(input))
+  const output = (() => {
+    if (!shouldCatch) return String(solFn(input))
     try {
-      return String(sol(input))
+      return String(solFn(input))
     } catch (err) {
       return `Error: ${err}`
     }
   })()
-  const t2 = performance.now()
-  setOutput(part, out, t2 - t, out === answer)
+  return { output, dt: performance.now() - t }
+}
+
+export const runAllSolutions = async () => {
+  if (busy()) return
+  setBusy(true)
+  clearOutputs()
+
+  const outs = ['', '']
+  const dts = [0, 0]
+  const oks = [true, true]
+  for (let i = 0; i < solutions().length; i++) {
+    const sol = solutions()[i]
+    const input = inputs().filter((input) => input.day === i + 1)[0].raw
+
+    for (let part = 0; part < 2; part++) {
+      const { output, dt } = await runOneSolution(part === 0 ? sol.part1 : sol.part2, input, true)
+      dts[part] += dt
+      const ok = output === sol.answers[0][part]
+      oks[part] &&= ok
+      outs[part] += ok ? '★' : '-'
+      setOutput((part + 1) as 1 | 2, outs[part], dts[part], oks[part])
+    }
+  }
+
+  setBusy(false)
 }
 
 /**
