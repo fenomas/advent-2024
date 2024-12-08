@@ -134,6 +134,7 @@ export const runAllSolutions = async () => {
       oks[part] &&= ok
       outs[part] += ok ? '★' : '-'
       setOutput((part + 1) as 1 | 2, outs[part], dts[part], oks[part])
+      await new Promise((r) => setTimeout(r, 0))
     }
   }
 
