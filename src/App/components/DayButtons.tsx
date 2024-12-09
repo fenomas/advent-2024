@@ -1,4 +1,4 @@
-import { day, setDay, solutions } from '../state'
+import { day, runCurrentSolution, setDay, solutions } from '../state'
 import { ToggleButton } from './ToggleButton'
 
 //
@@ -8,7 +8,10 @@ export const DayButtons = () => {
     <ToggleButton
       label={solution.day.toString().padStart(2, '0')}
       isToggled={solution.day === day()}
-      onClick={() => setDay(solution.day)}
+      onClick={() => {
+        setDay(solution.day)
+        runCurrentSolution()
+      }}
     />
   ))
 }

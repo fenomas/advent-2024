@@ -7,6 +7,9 @@ export const answers = [
 //
 
 export const part1 = (input = '') => {
+  // const lines = input.split('\n').map((line) => line.split(''))
+  // const get = (i = 0, j = 0) => (lines[i] && lines[i][j]) || '-'
+
   let total = 0
 
   input.split('\n').forEach((line) => {

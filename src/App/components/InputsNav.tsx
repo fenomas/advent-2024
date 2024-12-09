@@ -1,4 +1,4 @@
-import { day, inputNum, inputs, setInputNum } from '../state'
+import { day, inputNum, inputs, runCurrentSolution, setInputNum } from '../state'
 import { ToggleButton } from './ToggleButton'
 
 //
@@ -10,7 +10,10 @@ export const InputsNav = () => {
       .map((input, i) => ({
         label: input.name,
         isToggled: i === inputNum(),
-        onClick: () => setInputNum(i),
+        onClick: () => {
+          setInputNum(i)
+          runCurrentSolution()
+        },
         classes: { 'input-toggle': true },
       }))
 

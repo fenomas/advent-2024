@@ -54,6 +54,10 @@ export const [output2, setOutput2] = createSignal({ value: '', time: 0, knownGoo
 export const [busy, setBusy] = createSignal(false)
 export const [catchErrors, setCatchErrors] = createSignal(true)
 
+// derived for today
+export const todaysInputs = () => inputs().filter((input) => input.day === day())
+export const todaysSolution = () => solutions().find((soln) => soln.day === day())
+
 // helpers
 export const setOutput = (part: 1 | 2, value = '', time = 0, knownGood = false) => {
   if (part === 1) setOutput1({ value, time, knownGood })
@@ -61,14 +65,10 @@ export const setOutput = (part: 1 | 2, value = '', time = 0, knownGood = false) 
 }
 export const clearOutputs = () => [setOutput(1), setOutput(2)]
 
-// derived for today
-export const todaysInputs = () => inputs().filter((input) => input.day === day())
-export const todaysSolution = () => solutions().find((soln) => soln.day === day())
-
 /**
  *
  *
- *    Updates / reactivity
+ *    Reactivity - recalc input text when day or inputNum changes
  */
 
 export const createAllEffects = () => {
@@ -80,18 +80,23 @@ export const createAllEffects = () => {
     if (!input || !soln) return clearOutputs()
     setInputStr(input.raw)
   })
+}
 
-  // main update bit
-  createEffect(() => {
-    const soln = todaysSolution()
-    const input = inputStr()
-    if (!soln || !input) return clearOutputs()
-    const answers = soln.answers[inputNum()] || ['', '']
+/**
+ *
+ *
+ *    solution running (manually triggered, not reactive)
+ */
 
-    // run solutions in timeout so that UI library doesn't catch errors
-    setTimeout(runSolution, 0, 1, soln.part1, input, answers[0])
-    setTimeout(runSolution, 5, 2, soln.part2, input, answers[1])
-  })
+export const runCurrentSolution = async () => {
+  const soln = todaysSolution()
+  const input = inputStr()
+  if (!soln || !input) return clearOutputs()
+  const answers = soln.answers[inputNum()] || ['', '']
+
+  // run solutions in timeout so that UI library doesn't catch errors
+  setTimeout(runSolution, 0, 1, soln.part1, input, answers[0])
+  setTimeout(runSolution, 5, 2, soln.part2, input, answers[1])
 }
 
 const runSolution = async (part: 1 | 2, sol: Solution, input: string, answer: string) => {
@@ -161,6 +166,7 @@ const onModuleImport = (mods: typeof imported) => {
       .filter((soln) => soln.hasSolution)
       .sort((a, b) => a.day - b.day)
   )
+  runCurrentSolution()
 }
 
 if (import.meta.hot) {
@@ -170,3 +176,5 @@ if (import.meta.hot) {
 // app init
 onModuleImport(imported)
 setDay(solutions().at(-1)?.day || 1)
+setTimeout(runCurrentSolution, 0)
+
