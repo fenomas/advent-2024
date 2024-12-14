@@ -1,29 +1,31 @@
-(function(){const n=document.createElement("link").relList;if(n&&n.supports&&n.supports("modulepreload"))return;for(const X of document.querySelectorAll('link[rel="modulepreload"]'))S(X);new MutationObserver(X=>{for(const t of X)if(t.type==="childList")for(const e of t.addedNodes)e.tagName==="LINK"&&e.rel==="modulepreload"&&S(e)}).observe(document,{childList:!0,subtree:!0});function A(X){const t={};return X.integrity&&(t.integrity=X.integrity),X.referrerPolicy&&(t.referrerPolicy=X.referrerPolicy),X.crossOrigin==="use-credentials"?t.credentials="include":X.crossOrigin==="anonymous"?t.credentials="omit":t.credentials="same-origin",t}function S(X){if(X.ep)return;X.ep=!0;const t=A(X);fetch(X.href,t)}})();const E1=(M,n)=>M===n,S1={equals:E1};let B1=s1;const U=1,f=2,Y1={owned:null,cleanups:null,context:null,owner:null};var C=null;let j=null,T1=null,m=null,h=null,F=null,g=0;function J1(M,n){const A=m,S=C,X=M.length===0,t=n===void 0?S:n,e=X?Y1:{owned:null,cleanups:null,context:t?t.context:null,owner:t},o=X?M:()=>M(()=>q(()=>E(e)));C=e,m=null;try{return J(o,!0)}finally{m=A,C=S}}function N(M,n){n=n?Object.assign({},S1,n):S1;const A={value:M,observers:null,observerSlots:null,comparator:n.equals||void 0},S=X=>(typeof X=="function"&&(X=X(A.value)),r1(A,X));return[V1.bind(A),S]}function c(M,n,A){const S=P1(M,n,!1,U);b(S)}function H1(M,n,A){B1=_1;const S=P1(M,n,!1,U);S.user=!0,F?F.push(S):b(S)}function q(M){if(m===null)return M();const n=m;m=null;try{return M()}finally{m=n}}function V1(){if(this.sources&&this.state)if(this.state===U)b(this);else{const M=h;h=null,J(()=>_(this),!1),h=M}if(m){const M=this.observers?this.observers.length:0;m.sources?(m.sources.push(this),m.sourceSlots.push(M)):(m.sources=[this],m.sourceSlots=[M]),this.observers?(this.observers.push(m),this.observerSlots.push(m.sources.length-1)):(this.observers=[m],this.observerSlots=[m.sources.length-1])}return this.value}function r1(M,n,A){let S=M.value;return(!M.comparator||!M.comparator(S,n))&&(M.value=n,M.observers&&M.observers.length&&J(()=>{for(let X=0;X<M.observers.length;X+=1){const t=M.observers[X],e=j&&j.running;e&&j.disposed.has(t),(e?!t.tState:!t.state)&&(t.pure?h.push(t):F.push(t),t.observers&&m1(t)),e||(t.state=U)}if(h.length>1e6)throw h=[],new Error},!1)),n}function b(M){if(!M.fn)return;E(M);const n=g;f1(M,M.value,n)}function f1(M,n,A){let S;const X=C,t=m;m=C=M;try{S=M.fn(n)}catch(e){return M.pure&&(M.state=U,M.owned&&M.owned.forEach(E),M.owned=null),M.updatedAt=A+1,i1(e)}finally{m=t,C=X}(!M.updatedAt||M.updatedAt<=A)&&(M.updatedAt!=null&&"observers"in M?r1(M,S):M.value=S,M.updatedAt=A)}function P1(M,n,A,S=U,X){const t={fn:M,state:S,updatedAt:null,owned:null,sources:null,sourceSlots:null,cleanups:null,value:n,owner:C,context:C?C.context:null,pure:A};return C===null||C!==Y1&&(C.owned?C.owned.push(t):C.owned=[t]),t}function d(M){if(M.state===0)return;if(M.state===f)return _(M);if(M.suspense&&q(M.suspense.inFallback))return M.suspense.effects.push(M);const n=[M];for(;(M=M.owner)&&(!M.updatedAt||M.updatedAt<g);)M.state&&n.push(M);for(let A=n.length-1;A>=0;A--)if(M=n[A],M.state===U)b(M);else if(M.state===f){const S=h;h=null,J(()=>_(M,n[0]),!1),h=S}}function J(M,n){if(h)return M();let A=!1;n||(h=[]),F?A=!0:F=[],g++;try{const S=M();return d1(A),S}catch(S){A||(F=null),h=null,i1(S)}}function d1(M){if(h&&(s1(h),h=null),M)return;const n=F;F=null,n.length&&J(()=>B1(n),!1)}function s1(M){for(let n=0;n<M.length;n++)d(M[n])}function _1(M){let n,A=0;for(n=0;n<M.length;n++){const S=M[n];S.user?M[A++]=S:d(S)}for(n=0;n<A;n++)d(M[n])}function _(M,n){M.state=0;for(let A=0;A<M.sources.length;A+=1){const S=M.sources[A];if(S.sources){const X=S.state;X===U?S!==n&&(!S.updatedAt||S.updatedAt<g)&&d(S):X===f&&_(S,n)}}}function m1(M){for(let n=0;n<M.observers.length;n+=1){const A=M.observers[n];A.state||(A.state=f,A.pure?h.push(A):F.push(A),A.observers&&m1(A))}}function E(M){let n;if(M.sources)for(;M.sources.length;){const A=M.sources.pop(),S=M.sourceSlots.pop(),X=A.observers;if(X&&X.length){const t=X.pop(),e=A.observerSlots.pop();S<X.length&&(t.sourceSlots[e]=S,X[S]=t,A.observerSlots[S]=e)}}if(M.tOwned){for(n=M.tOwned.length-1;n>=0;n--)E(M.tOwned[n]);delete M.tOwned}if(M.owned){for(n=M.owned.length-1;n>=0;n--)E(M.owned[n]);M.owned=null}if(M.cleanups){for(n=M.cleanups.length-1;n>=0;n--)M.cleanups[n]();M.cleanups=null}M.state=0}function L1(M){return M instanceof Error?M:new Error(typeof M=="string"?M:"Unknown error",{cause:M})}function i1(M,n=C){throw L1(M)}function R(M,n){return q(()=>M(n||{}))}function p1(M,n,A){let S=A.length,X=n.length,t=S,e=0,o=0,u=n[X-1].nextSibling,l=null;for(;e<X||o<t;){if(n[e]===A[o]){e++,o++;continue}for(;n[X-1]===A[t-1];)X--,t--;if(X===e){const B=t<S?o?A[o-1].nextSibling:A[t-o]:u;for(;o<t;)M.insertBefore(A[o++],B)}else if(t===o)for(;e<X;)(!l||!l.has(n[e]))&&n[e].remove(),e++;else if(n[e]===A[t-1]&&A[o]===n[X-1]){const B=n[--X].nextSibling;M.insertBefore(A[o++],n[e++].nextSibling),M.insertBefore(A[--t],B),n[X]=A[t]}else{if(!l){l=new Map;let Y=o;for(;Y<t;)l.set(A[Y],Y++)}const B=l.get(n[e]);if(B!=null)if(o<B&&B<t){let Y=e,r=1,P;for(;++Y<X&&Y<t&&!((P=l.get(n[Y]))==null||P!==B+r);)r++;if(r>B-o){const s=n[e];for(;o<B;)M.insertBefore(A[o++],s)}else M.replaceChild(A[o++],n[e++])}else e++;else n[e++].remove()}}}const t1="_$DX_DELEGATE";function W1(M,n,A,S={}){let X;return J1(t=>{X=t,n===document?M():G(n,M(),n.firstChild?null:void 0,A)},S.owner),()=>{X(),n.textContent=""}}function D(M,n,A){let S;const X=()=>{const e=document.createElement("template");return e.innerHTML=M,e.content.firstChild},t=()=>(S||(S=X())).cloneNode(!0);return t.cloneNode=t,t}function h1(M,n=window.document){const A=n[t1]||(n[t1]=new Set);for(let S=0,X=M.length;S<X;S++){const t=M[S];A.has(t)||(A.add(t),n.addEventListener(t,b1))}}function y1(M,n,A){A==null?M.removeAttribute(n):M.setAttribute(n,A)}function z1(M,n,A,S){Array.isArray(A)?(M[`$$${n}`]=A[0],M[`$$${n}Data`]=A[1]):M[`$$${n}`]=A}function g1(M,n,A={}){const S=Object.keys(n||{}),X=Object.keys(A);let t,e;for(t=0,e=X.length;t<e;t++){const o=X[t];!o||o==="undefined"||n[o]||(e1(M,o,!1),delete A[o])}for(t=0,e=S.length;t<e;t++){const o=S[t],u=!!n[o];!o||o==="undefined"||A[o]===u||!u||(e1(M,o,!0),A[o]=u)}return A}function G(M,n,A,S){if(A!==void 0&&!S&&(S=[]),typeof n!="function")return L(M,n,S,A);c(X=>L(M,n(),X,A),S)}function e1(M,n,A){const S=n.trim().split(/\s+/);for(let X=0,t=S.length;X<t;X++)M.classList.toggle(S[X],A)}function b1(M){let n=M.target;const A=`$$${M.type}`,S=M.target,X=M.currentTarget,t=u=>Object.defineProperty(M,"target",{configurable:!0,value:u}),e=()=>{const u=n[A];if(u&&!n.disabled){const l=n[`${A}Data`];if(l!==void 0?u.call(n,l,M):u.call(n,M),M.cancelBubble)return}return n.host&&typeof n.host!="string"&&!n.host._$host&&n.contains(M.target)&&t(n.host),!0},o=()=>{for(;e()&&(n=n._$host||n.parentNode||n.host););};if(Object.defineProperty(M,"currentTarget",{configurable:!0,get(){return n||document}}),M.composedPath){const u=M.composedPath();t(u[0]);for(let l=0;l<u.length-2&&(n=u[l],!!e());l++){if(n._$host){n=n._$host,o();break}if(n.parentNode===X)break}}else o();t(S)}function L(M,n,A,S,X){for(;typeof A=="function";)A=A();if(n===A)return A;const t=typeof n,e=S!==void 0;if(M=e&&A[0]&&A[0].parentNode||M,t==="string"||t==="number"){if(t==="number"&&(n=n.toString(),n===A))return A;if(e){let o=A[0];o&&o.nodeType===3?o.data!==n&&(o.data=n):o=document.createTextNode(n),A=K(M,A,S,o)}else A!==""&&typeof A=="string"?A=M.firstChild.data=n:A=M.textContent=n}else if(n==null||t==="boolean")A=K(M,A,S);else{if(t==="function")return c(()=>{let o=n();for(;typeof o=="function";)o=o();A=L(M,o,A,S)}),()=>A;if(Array.isArray(n)){const o=[],u=A&&Array.isArray(A);if(k(o,n,A,X))return c(()=>A=L(M,o,A,S,!0)),()=>A;if(o.length===0){if(A=K(M,A,S),e)return A}else u?A.length===0?o1(M,o,S):p1(M,A,o):(A&&K(M),o1(M,o));A=o}else if(n.nodeType){if(Array.isArray(A)){if(e)return A=K(M,A,S,n);K(M,A,null,n)}else A==null||A===""||!M.firstChild?M.appendChild(n):M.replaceChild(n,M.firstChild);A=n}}return A}function k(M,n,A,S){let X=!1;for(let t=0,e=n.length;t<e;t++){let o=n[t],u=A&&A[M.length],l;if(!(o==null||o===!0||o===!1))if((l=typeof o)=="object"&&o.nodeType)M.push(o);else if(Array.isArray(o))X=k(M,o,u)||X;else if(l==="function")if(S){for(;typeof o=="function";)o=o();X=k(M,Array.isArray(o)?o:[o],Array.isArray(u)?u:[u])||X}else M.push(o),X=!0;else{const B=String(o);u&&u.nodeType===3&&u.data===B?M.push(u):M.push(document.createTextNode(B))}}return X}function o1(M,n,A=null){for(let S=0,X=n.length;S<X;S++)M.insertBefore(n[S],A)}function K(M,n,A,S){if(A===void 0)return M.textContent="";const X=S||document.createTextNode("");if(n.length){let t=!1;for(let e=n.length-1;e>=0;e--){const o=n[e];if(X!==o){const u=o.parentNode===M;!t&&!e?u?M.replaceChild(X,o):M.insertBefore(X,A):u&&o.remove()}else t=!0}}else M.insertBefore(X,A);return[X]}const $1=[["1580061","23046913"],["11","31"]],v1=(M="")=>{const n=M.split(`
-`).map(X=>X.split(/\s+/)),A=n.map(([X])=>+X).sort(),S=n.map(([,X])=>+X).sort();return A.reduce((X,t,e)=>X+Math.abs(t-S[e]),0)},j1=(M="")=>{const n=M.split(`
-`).map(t=>t.split(/\s+/)),A=n.map(([t])=>+t),S=n.map(([,t])=>+t),X={...[0]};return S.forEach(t=>X[t]=(X[t]||0)+1),A.reduce((t,e)=>t+e*(X[e]||0),0)},x1=Object.freeze(Object.defineProperty({__proto__:null,answers:$1,part1:v1,part2:j1},Symbol.toStringTag,{value:"Module"})),k1=[["341","404"],["2","4"]],q1=(M="")=>M.split(`
-`).reduce((n,A)=>{const S=A.split(/ +/).map(o=>+o),X=(S.at(-1)||0)>S[0]?1:-1,t=[1,2,3].map(o=>o*X);return S.every((o,u,l)=>u===0?!0:t.includes(o-l[u-1]))?n+1:n},0),n3=(M="")=>{const n=(A,S)=>A.every((X,t,e)=>t===0?!0:S.includes(X-e[t-1]));return M.split(`
-`).reduce((A,S)=>{const X=S.split(/ +/).map(u=>+u),t=(X.at(-1)||0)>X[0]?1:-1,e=[1,2,3].map(u=>u*t);return n(X,e)||X.find((u,l,B)=>{const Y=[...B];return Y.splice(l,1),n(Y,e)})?A+1:A},0)},M3=Object.freeze(Object.defineProperty({__proto__:null,answers:k1,part1:q1,part2:n3},Symbol.toStringTag,{value:"Module"})),A3=[["187833789","94455185"],["161","161"],["161","48"]],C1=(M="")=>{let n=0;return M.matchAll(/mul\((\d{1,3},\d{1,3})\)/g)?.forEach(([,A])=>{const[S,X]=A.split(",").map(t=>+t);n+=S*X}),n},X3=(M="")=>{let n=0;return M="do()"+M,M.split("don't()").forEach(A=>{const[,...S]=A.split("do()");n+=C1(S.join(""))}),n},S3=Object.freeze(Object.defineProperty({__proto__:null,answers:A3,part1:C1,part2:X3},Symbol.toStringTag,{value:"Module"})),t3=[["2575","2041"],["18","9"]],e3=(M="")=>{const n=M.split(`
-`).map(t=>t.split("")),A=(t=0,e=0)=>n[t]&&n[t][e]||"-",S=[[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];let X=0;return n.forEach((t,e)=>{t.forEach((o,u)=>{o==="X"&&S.forEach(([l,B])=>{"XMAS".split("").every((r,P)=>A(e+P*l,u+P*B)===r)&&X++})})}),X},o3=(M="")=>{const n=M.split(`
-`).map(t=>t.split("")),A=(t=0,e=0)=>n[t]&&n[t][e]||"-",S=[[1,1],[-1,-1],[1,-1],[-1,1]];let X=0;return n.forEach((t,e)=>{t.forEach((o,u)=>{if(o!=="A")return;const l=S.map(([B,Y])=>A(e+B,u+Y));l[0]!==l[1]&&l.sort().join("")==="MMSS"&&X++})}),X},u3=Object.freeze(Object.defineProperty({__proto__:null,answers:t3,part1:e3,part2:o3},Symbol.toStringTag,{value:"Module"})),l3=[["5964","4719"],["143","123"]],B3=(M="")=>n1(M).total,n1=(M="")=>{const[n,A]=M.split(`
+(function(){const n=document.createElement("link").relList;if(n&&n.supports&&n.supports("modulepreload"))return;for(const e of document.querySelectorAll('link[rel="modulepreload"]'))o(e);new MutationObserver(e=>{for(const t of e)if(t.type==="childList")for(const X of t.addedNodes)X.tagName==="LINK"&&X.rel==="modulepreload"&&o(X)}).observe(document,{childList:!0,subtree:!0});function A(e){const t={};return e.integrity&&(t.integrity=e.integrity),e.referrerPolicy&&(t.referrerPolicy=e.referrerPolicy),e.crossOrigin==="use-credentials"?t.credentials="include":e.crossOrigin==="anonymous"?t.credentials="omit":t.credentials="same-origin",t}function o(e){if(e.ep)return;e.ep=!0;const t=A(e);fetch(e.href,t)}})();const K1=(M,n)=>M===n,S1={equals:K1};let B1=s1;const Z=1,H=2,Y1={owned:null,cleanups:null,context:null,owner:null};var C=null;let j=null,O1=null,m=null,h=null,F=null,z=0;function E1(M,n){const A=m,o=C,e=M.length===0,t=n===void 0?o:n,X=e?Y1:{owned:null,cleanups:null,context:t?t.context:null,owner:t},S=e?M:()=>M(()=>q(()=>K(X)));C=X,m=null;try{return E(S,!0)}finally{m=A,C=o}}function N(M,n){n=n?Object.assign({},S1,n):S1;const A={value:M,observers:null,observerSlots:null,comparator:n.equals||void 0},o=e=>(typeof e=="function"&&(e=e(A.value)),r1(A,e));return[J1.bind(A),o]}function U(M,n,A){const o=P1(M,n,!1,Z);g(o)}function T1(M,n,A){B1=f1;const o=P1(M,n,!1,Z);o.user=!0,F?F.push(o):g(o)}function q(M){if(m===null)return M();const n=m;m=null;try{return M()}finally{m=n}}function J1(){if(this.sources&&this.state)if(this.state===Z)g(this);else{const M=h;h=null,E(()=>f(this),!1),h=M}if(m){const M=this.observers?this.observers.length:0;m.sources?(m.sources.push(this),m.sourceSlots.push(M)):(m.sources=[this],m.sourceSlots=[M]),this.observers?(this.observers.push(m),this.observerSlots.push(m.sources.length-1)):(this.observers=[m],this.observerSlots=[m.sources.length-1])}return this.value}function r1(M,n,A){let o=M.value;return(!M.comparator||!M.comparator(o,n))&&(M.value=n,M.observers&&M.observers.length&&E(()=>{for(let e=0;e<M.observers.length;e+=1){const t=M.observers[e],X=j&&j.running;X&&j.disposed.has(t),(X?!t.tState:!t.state)&&(t.pure?h.push(t):F.push(t),t.observers&&m1(t)),X||(t.state=Z)}if(h.length>1e6)throw h=[],new Error},!1)),n}function g(M){if(!M.fn)return;K(M);const n=z;H1(M,M.value,n)}function H1(M,n,A){let o;const e=C,t=m;m=C=M;try{o=M.fn(n)}catch(X){return M.pure&&(M.state=Z,M.owned&&M.owned.forEach(K),M.owned=null),M.updatedAt=A+1,i1(X)}finally{m=t,C=e}(!M.updatedAt||M.updatedAt<=A)&&(M.updatedAt!=null&&"observers"in M?r1(M,o):M.value=o,M.updatedAt=A)}function P1(M,n,A,o=Z,e){const t={fn:M,state:o,updatedAt:null,owned:null,sources:null,sourceSlots:null,cleanups:null,value:n,owner:C,context:C?C.context:null,pure:A};return C===null||C!==Y1&&(C.owned?C.owned.push(t):C.owned=[t]),t}function V(M){if(M.state===0)return;if(M.state===H)return f(M);if(M.suspense&&q(M.suspense.inFallback))return M.suspense.effects.push(M);const n=[M];for(;(M=M.owner)&&(!M.updatedAt||M.updatedAt<z);)M.state&&n.push(M);for(let A=n.length-1;A>=0;A--)if(M=n[A],M.state===Z)g(M);else if(M.state===H){const o=h;h=null,E(()=>f(M,n[0]),!1),h=o}}function E(M,n){if(h)return M();let A=!1;n||(h=[]),F?A=!0:F=[],z++;try{const o=M();return V1(A),o}catch(o){A||(F=null),h=null,i1(o)}}function V1(M){if(h&&(s1(h),h=null),M)return;const n=F;F=null,n.length&&E(()=>B1(n),!1)}function s1(M){for(let n=0;n<M.length;n++)V(M[n])}function f1(M){let n,A=0;for(n=0;n<M.length;n++){const o=M[n];o.user?M[A++]=o:V(o)}for(n=0;n<A;n++)V(M[n])}function f(M,n){M.state=0;for(let A=0;A<M.sources.length;A+=1){const o=M.sources[A];if(o.sources){const e=o.state;e===Z?o!==n&&(!o.updatedAt||o.updatedAt<z)&&V(o):e===H&&f(o,n)}}}function m1(M){for(let n=0;n<M.observers.length;n+=1){const A=M.observers[n];A.state||(A.state=H,A.pure?h.push(A):F.push(A),A.observers&&m1(A))}}function K(M){let n;if(M.sources)for(;M.sources.length;){const A=M.sources.pop(),o=M.sourceSlots.pop(),e=A.observers;if(e&&e.length){const t=e.pop(),X=A.observerSlots.pop();o<e.length&&(t.sourceSlots[X]=o,e[o]=t,A.observerSlots[o]=X)}}if(M.tOwned){for(n=M.tOwned.length-1;n>=0;n--)K(M.tOwned[n]);delete M.tOwned}if(M.owned){for(n=M.owned.length-1;n>=0;n--)K(M.owned[n]);M.owned=null}if(M.cleanups){for(n=M.cleanups.length-1;n>=0;n--)M.cleanups[n]();M.cleanups=null}M.state=0}function d1(M){return M instanceof Error?M:new Error(typeof M=="string"?M:"Unknown error",{cause:M})}function i1(M,n=C){throw d1(M)}function R(M,n){return q(()=>M(n||{}))}function _1(M,n,A){let o=A.length,e=n.length,t=o,X=0,S=0,u=n[e-1].nextSibling,l=null;for(;X<e||S<t;){if(n[X]===A[S]){X++,S++;continue}for(;n[e-1]===A[t-1];)e--,t--;if(e===X){const B=t<o?S?A[S-1].nextSibling:A[t-S]:u;for(;S<t;)M.insertBefore(A[S++],B)}else if(t===S)for(;X<e;)(!l||!l.has(n[X]))&&n[X].remove(),X++;else if(n[X]===A[t-1]&&A[S]===n[e-1]){const B=n[--e].nextSibling;M.insertBefore(A[S++],n[X++].nextSibling),M.insertBefore(A[--t],B),n[e]=A[t]}else{if(!l){l=new Map;let Y=S;for(;Y<t;)l.set(A[Y],Y++)}const B=l.get(n[X]);if(B!=null)if(S<B&&B<t){let Y=X,r=1,P;for(;++Y<e&&Y<t&&!((P=l.get(n[Y]))==null||P!==B+r);)r++;if(r>B-S){const s=n[X];for(;S<B;)M.insertBefore(A[S++],s)}else M.replaceChild(A[S++],n[X++])}else X++;else n[X++].remove()}}}const t1="_$DX_DELEGATE";function L1(M,n,A,o={}){let e;return E1(t=>{e=t,n===document?M():p(n,M(),n.firstChild?null:void 0,A)},o.owner),()=>{e(),n.textContent=""}}function Q(M,n,A){let o;const e=()=>{const X=document.createElement("template");return X.innerHTML=M,X.content.firstChild},t=()=>(o||(o=e())).cloneNode(!0);return t.cloneNode=t,t}function h1(M,n=window.document){const A=n[t1]||(n[t1]=new Set);for(let o=0,e=M.length;o<e;o++){const t=M[o];A.has(t)||(A.add(t),n.addEventListener(t,g1))}}function W1(M,n,A){A==null?M.removeAttribute(n):M.setAttribute(n,A)}function y1(M,n,A,o){Array.isArray(A)?(M[`$$${n}`]=A[0],M[`$$${n}Data`]=A[1]):M[`$$${n}`]=A}function z1(M,n,A={}){const o=Object.keys(n||{}),e=Object.keys(A);let t,X;for(t=0,X=e.length;t<X;t++){const S=e[t];!S||S==="undefined"||n[S]||(e1(M,S,!1),delete A[S])}for(t=0,X=o.length;t<X;t++){const S=o[t],u=!!n[S];!S||S==="undefined"||A[S]===u||!u||(e1(M,S,!0),A[S]=u)}return A}function p(M,n,A,o){if(A!==void 0&&!o&&(o=[]),typeof n!="function")return d(M,n,o,A);U(e=>d(M,n(),e,A),o)}function e1(M,n,A){const o=n.trim().split(/\s+/);for(let e=0,t=o.length;e<t;e++)M.classList.toggle(o[e],A)}function g1(M){let n=M.target;const A=`$$${M.type}`,o=M.target,e=M.currentTarget,t=u=>Object.defineProperty(M,"target",{configurable:!0,value:u}),X=()=>{const u=n[A];if(u&&!n.disabled){const l=n[`${A}Data`];if(l!==void 0?u.call(n,l,M):u.call(n,M),M.cancelBubble)return}return n.host&&typeof n.host!="string"&&!n.host._$host&&n.contains(M.target)&&t(n.host),!0},S=()=>{for(;X()&&(n=n._$host||n.parentNode||n.host););};if(Object.defineProperty(M,"currentTarget",{configurable:!0,get(){return n||document}}),M.composedPath){const u=M.composedPath();t(u[0]);for(let l=0;l<u.length-2&&(n=u[l],!!X());l++){if(n._$host){n=n._$host,S();break}if(n.parentNode===e)break}}else S();t(o)}function d(M,n,A,o,e){for(;typeof A=="function";)A=A();if(n===A)return A;const t=typeof n,X=o!==void 0;if(M=X&&A[0]&&A[0].parentNode||M,t==="string"||t==="number"){if(t==="number"&&(n=n.toString(),n===A))return A;if(X){let S=A[0];S&&S.nodeType===3?S.data!==n&&(S.data=n):S=document.createTextNode(n),A=D(M,A,o,S)}else A!==""&&typeof A=="string"?A=M.firstChild.data=n:A=M.textContent=n}else if(n==null||t==="boolean")A=D(M,A,o);else{if(t==="function")return U(()=>{let S=n();for(;typeof S=="function";)S=S();A=d(M,S,A,o)}),()=>A;if(Array.isArray(n)){const S=[],u=A&&Array.isArray(A);if(k(S,n,A,e))return U(()=>A=d(M,S,A,o,!0)),()=>A;if(S.length===0){if(A=D(M,A,o),X)return A}else u?A.length===0?o1(M,S,o):_1(M,A,S):(A&&D(M),o1(M,S));A=S}else if(n.nodeType){if(Array.isArray(A)){if(X)return A=D(M,A,o,n);D(M,A,null,n)}else A==null||A===""||!M.firstChild?M.appendChild(n):M.replaceChild(n,M.firstChild);A=n}}return A}function k(M,n,A,o){let e=!1;for(let t=0,X=n.length;t<X;t++){let S=n[t],u=A&&A[M.length],l;if(!(S==null||S===!0||S===!1))if((l=typeof S)=="object"&&S.nodeType)M.push(S);else if(Array.isArray(S))e=k(M,S,u)||e;else if(l==="function")if(o){for(;typeof S=="function";)S=S();e=k(M,Array.isArray(S)?S:[S],Array.isArray(u)?u:[u])||e}else M.push(S),e=!0;else{const B=String(S);u&&u.nodeType===3&&u.data===B?M.push(u):M.push(document.createTextNode(B))}}return e}function o1(M,n,A=null){for(let o=0,e=n.length;o<e;o++)M.insertBefore(n[o],A)}function D(M,n,A,o){if(A===void 0)return M.textContent="";const e=o||document.createTextNode("");if(n.length){let t=!1;for(let X=n.length-1;X>=0;X--){const S=n[X];if(e!==S){const u=S.parentNode===M;!t&&!X?u?M.replaceChild(e,S):M.insertBefore(e,A):u&&S.remove()}else t=!0}}else M.insertBefore(e,A);return[e]}const b1=[["1580061","23046913"],["11","31"]],$1=(M="")=>{const n=M.split(`
+`).map(e=>e.split(/\s+/)),A=n.map(([e])=>+e).sort(),o=n.map(([,e])=>+e).sort();return A.reduce((e,t,X)=>e+Math.abs(t-o[X]),0)},j1=(M="")=>{const n=M.split(`
+`).map(t=>t.split(/\s+/)),A=n.map(([t])=>+t),o=n.map(([,t])=>+t),e={...[0]};return o.forEach(t=>e[t]=(e[t]||0)+1),A.reduce((t,X)=>t+X*(e[X]||0),0)},x1=Object.freeze(Object.defineProperty({__proto__:null,answers:b1,part1:$1,part2:j1},Symbol.toStringTag,{value:"Module"})),k1=[["341","404"],["2","4"]],q1=(M="")=>M.split(`
+`).reduce((n,A)=>{const o=A.split(/ +/).map(S=>+S),e=(o.at(-1)||0)>o[0]?1:-1,t=[1,2,3].map(S=>S*e);return o.every((S,u,l)=>u===0?!0:t.includes(S-l[u-1]))?n+1:n},0),n3=(M="")=>{const n=(A,o)=>A.every((e,t,X)=>t===0?!0:o.includes(e-X[t-1]));return M.split(`
+`).reduce((A,o)=>{const e=o.split(/ +/).map(u=>+u),t=(e.at(-1)||0)>e[0]?1:-1,X=[1,2,3].map(u=>u*t);return n(e,X)||e.find((u,l,B)=>{const Y=[...B];return Y.splice(l,1),n(Y,X)})?A+1:A},0)},M3=Object.freeze(Object.defineProperty({__proto__:null,answers:k1,part1:q1,part2:n3},Symbol.toStringTag,{value:"Module"})),A3=[["187833789","94455185"],["161","161"],["161","48"]],C1=(M="")=>{let n=0;return M.matchAll(/mul\((\d{1,3},\d{1,3})\)/g)?.forEach(([,A])=>{const[o,e]=A.split(",").map(t=>+t);n+=o*e}),n},X3=(M="")=>{let n=0;return M="do()"+M,M.split("don't()").forEach(A=>{const[,...o]=A.split("do()");n+=C1(o.join(""))}),n},S3=Object.freeze(Object.defineProperty({__proto__:null,answers:A3,part1:C1,part2:X3},Symbol.toStringTag,{value:"Module"})),t3=[["2575","2041"],["18","9"]],e3=(M="")=>{const n=M.split(`
+`).map(t=>t.split("")),A=(t=0,X=0)=>n[t]&&n[t][X]||"-",o=[[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];let e=0;return n.forEach((t,X)=>{t.forEach((S,u)=>{S==="X"&&o.forEach(([l,B])=>{"XMAS".split("").every((r,P)=>A(X+P*l,u+P*B)===r)&&e++})})}),e},o3=(M="")=>{const n=M.split(`
+`).map(t=>t.split("")),A=(t=0,X=0)=>n[t]&&n[t][X]||"-",o=[[1,1],[-1,-1],[1,-1],[-1,1]];let e=0;return n.forEach((t,X)=>{t.forEach((S,u)=>{if(S!=="A")return;const l=o.map(([B,Y])=>A(X+B,u+Y));l[0]!==l[1]&&l.sort().join("")==="MMSS"&&e++})}),e},u3=Object.freeze(Object.defineProperty({__proto__:null,answers:t3,part1:e3,part2:o3},Symbol.toStringTag,{value:"Module"})),l3=[["5964","4719"],["143","123"]],B3=(M="")=>n1(M).total,n1=(M="")=>{const[n,A]=M.split(`
 
-`),S=new Map;n.split(`
-`).forEach(e=>{const[o,u]=e.split("|");S.has(o)||S.set(o,[]),S.get(o).push(u)});let X=0;const t=A.split(`
-`).map(e=>e.split(",").reverse()).filter(e=>{const o=new Set,u=e.every(l=>o.has(l)?!1:((S.get(l)||[]).forEach((B="")=>o.add(B)),!0));return u&&(X+=+e[e.length>>1]),!u});return{total:X,wrongSets:t,follows:S}},Y3=(M="")=>{const{wrongSets:n,follows:A}=n1(M);return n.reduce((S,X)=>(X.sort((t,e)=>A.has(t)&&A.get(t).includes(e)?-1:1),S+ +X[X.length>>1]),0)},r3=Object.freeze(Object.defineProperty({__proto__:null,answers:l3,part1:B3,part1_impl:n1,part2:Y3},Symbol.toStringTag,{value:"Module"})),P3=[["4789","1304"],["41","6"]],V=[[-1,0],[0,1],[1,0],[0,-1]],G1=(M="")=>{const n=M.split(`
-`).map(l=>l.split("")),A=(l=0,B=0)=>n[l]&&n[l][B]||"-";let S=[0,0];n.find((l,B)=>l.find((Y,r)=>Y==="^"&&(S=[B,r])));const X=new Set,t=[];let e=0,[o,u]=S;for(;;){const[l,B]=V[e],Y=o*n.length+u;X.has(Y)||t.push([o,u]),X.add(Y);const r=A(o+l,u+B);if(r==="-")break;r==="#"?e=(e+1)%4:[o,u]=[o+l,u+B]}return{visited:t,lines:n,start:S}},s3=(M="")=>G1(M).visited.length,m3=(M="")=>{const{visited:n,lines:A,start:S}=G1(M),X=[Array.from({length:A.length},()=>[]),Array.from({length:A.length},()=>[])],t=(B,Y)=>{X[0][B].push(Y),X[1][Y].push(B)},e=(B,Y)=>{X[0][B]=X[0][B].filter(r=>r!==Y),X[1][Y]=X[1][Y].filter(r=>r!==B)},o=(B,Y,r)=>{const[P,s]=V[r],i=P?1:0,[Z,w]=i===0?[B,Y]:[Y,B],I=X[i][Z],a=Math.sign(P||s)>0?I.reduce((O,Q)=>Q>w&&Q<O?Q:O,1/0):I.reduce((O,Q)=>Q<w&&Q>O?Q:O,-1/0);return isFinite(a)?Math.abs(a-w)-1:-1};A.forEach((B,Y)=>{B.forEach((r,P)=>{r==="#"&&t(Y,P)})});const u=()=>{let[B,Y]=S,r=0;const P=V.map(()=>new Set);for(;;){const[s,i]=V[r],Z=P[r],w=B*A.length+Y;if(Z.has(w))return!0;Z.add(w);const I=o(B,Y,r);if(I===-1)return!1;[B,Y]=[B+s*I,Y+i*I],r=(r+1)%4}};let l=0;return u()&&l++,n.shift(),n.forEach(([B,Y])=>{t(B,Y),u()&&l++,e(B,Y)}),l},i3=Object.freeze(Object.defineProperty({__proto__:null,answers:P3,part1:s3,part2:m3},Symbol.toStringTag,{value:"Module"})),h3=[["1298103531759","140575048428831"],["3749","11387"]],C3=(M="")=>{const n=(A=0,S=[0],X=0)=>X===0?A===S[0]:A<0||A!==Math.floor(A)?!1:n(A-S[X],S,X-1)||n(A/S[X],S,X-1);return M.split(`
-`).reduce((A,S)=>{const[X,t]=S.split(":").map(u=>u.trim()),e=t.split(/ +/).map(u=>+u);return n(+X,e,e.length-1)?A+ +X:A},0)},G3=(M="")=>{const n=(A=0,S=[0],X=0)=>{if(X===0)return A===S[0];if(A<0||A!==Math.floor(A))return!1;const[t,e]=[""+A,""+S[X]];return t.endsWith(e)&&n(+t.slice(0,-e.length),S,X-1)?!0:n(A-S[X],S,X-1)||n(A/S[X],S,X-1)};return M.split(`
-`).reduce((A,S)=>{const[X,t]=S.split(":").map(u=>u.trim()),e=t.split(/ +/).map(u=>+u);return n(+X,e,e.length-1)?A+ +X:A},0)},I3=Object.freeze(Object.defineProperty({__proto__:null,answers:h3,part1:C3,part2:G3},Symbol.toStringTag,{value:"Module"})),R3=[["249","905"],["14","34"]],I1=M=>{const n=new Map;let[A,S]=[0,0];return M.split(`
-`).forEach((X,t)=>{X.trim().split("").forEach((e,o)=>{A=Math.max(A,t+1),S=Math.max(S,o+1),e!=="."&&(n.has(e)||n.set(e,[]),n.get(e).push([t,o]))})}),{nodes:n,si:A,sj:S}},w3=(M="")=>{const{nodes:n,si:A,sj:S}=I1(M),X=new Set,t=(e=0,o=0,u=0,l=0)=>{const[B,Y]=[u-e,l-o],[r,P]=[e-B,o-Y];r<0||r>=A||P<0||P>=S||X.add(`${r},${P}`)};return n.entries().forEach(([,e])=>{e.forEach(([o,u],l=0)=>{e.forEach(([B,Y],r=0)=>{l!==r&&(t(o,u,B,Y),t(B,Y,o,u))})})}),X.size},a3=(M="")=>{const{nodes:n,si:A,sj:S}=I1(M),X=new Set,t=(e=0,o=0,u=0,l=0,B=1)=>{const[Y,r]=[u-e,l-o];for(let P=1;;P++){const[s,i]=[e-Y*B*P,o-r*B*P];if(s<0||s>=A||i<0||i>=S)return;X.add(`${s},${i}`)}};return n.entries().forEach(([,e])=>{e.forEach(([o,u],l=0)=>{e.forEach(([B,Y],r=0)=>{l!==r&&(t(o,u,B,Y,1),t(B,Y,o,u,1),t(o,u,B,Y,-1),t(B,Y,o,u,-1))})})}),X.size},F3=Object.freeze(Object.defineProperty({__proto__:null,answers:R3,part1:w3,part2:a3},Symbol.toStringTag,{value:"Module"})),N3=[["6370402949053","6398096697992"],["1928","2858"]],Z3=(M="")=>{const n=[],A=[];M.trim().split("").forEach((u,l)=>(l%2?A:n).push(+u));let S=0,X=0,t=n.length-1,e=n.length-1,o=0;for(let u=0;u<n.length;u++){let l=n[u];for(;l-- >0;)S+=X*o++;X++;let B=A[u]||0;for(;B-- >0;){for(;n[t]===0;)t--,e--;if(t<=u)break;S+=e*o,o++,n[t]--}}return S},U3=(M="")=>{const n=[],A=[];M.trim().split("").forEach((e,o)=>(o%2?A:n).push(+e));const S=n.map((e,o)=>o);for(let e=n.length-1;e>0;e--){const o=n[e];if(o===0)continue;const u=S[e];let l=0;for(;l<e&&!(A[l]>=o);l++);l>=e||(A[l]-=o,n[e]=0,S[e]=0,A[e]+=o,n.splice(l+1,0,o),S.splice(l+1,0,u),A.splice(l,0,0),e++)}let X=0,t=0;return n.forEach((e,o)=>{for(;e-- >0;)X+=S[o]*t,t++;t+=A[o]}),X},Q3=Object.freeze(Object.defineProperty({__proto__:null,answers:N3,part1:Z3,part2:U3},Symbol.toStringTag,{value:"Module"})),c3=[["557","1062"],["36","81"]],R1=[[1,0],[-1,0],[0,1],[0,-1]],D3=(M="")=>{const n=new Set,A=M.split(`
-`).map((X,t)=>X.split("").map((e,o)=>(e==="9"&&n.add([t,o].join(",")),e))),S=(X=0,t=0)=>A[X]&&A[X][t]||"-";return n.keys().reduce((X,t)=>{let e=new Set;e.add(t);for(let o=9;o>0;o--){const u=new Set;e.keys().forEach(l=>{const[B,Y]=l.split(",").map(Number);R1.forEach(([r,P])=>{S(B+r,Y+P)===String(o-1)&&u.add([B+r,Y+P].join(","))})}),e=u}return X+e.size},0)},K3=(M="")=>{const n=new Map,A=M.split(`
-`).map((t,e)=>t.split("").map((o,u)=>(o==="9"&&n.set([e,u].join(","),1),o))),S=(t=0,e=0)=>A[t]&&A[t][e]||"-";let X=n;for(let t=9;t>0;t--){const e=new Map;X.entries().forEach(([o,u])=>{const[l,B]=o.split(",").map(Number);R1.forEach(([Y,r])=>{if(S(l+Y,B+r)===String(t-1)){const s=[l+Y,B+r].join(","),i=e.get(s)||0;e.set(s,u+i)}})}),X=e}return X.values().reduce((t,e)=>t+e)},O3=Object.freeze(Object.defineProperty({__proto__:null,answers:c3,part1:D3,part2:K3},Symbol.toStringTag,{value:"Module"})),E3=[["222461","264350935776416"],["55312","65601038650482"]],w1=(M="",n=1)=>{const A=e=>{if(e==="0")return["1",""];if(e.length%2)return[String(+e*2024),""];{const o=e.slice(0,e.length/2),u=e.slice(e.length/2);return[+o,+u].map(String)}},S=new Map,X=e=>{S.has(e)&&S.get(e);const o=A(e);return S.set(e,o),o};let t=new Map;M.split(/ +/).forEach(e=>{t.set(e,(t.get(e)||0)+1)});for(let e=0;e<n;e++){const o=new Map;t.entries().forEach(([u,l])=>{const[B,Y]=X(u);o.set(B,(o.get(B)||0)+l),Y&&o.set(Y,(o.get(Y)||0)+l)}),t=o}return t.values().reduce((e,o)=>e+o,0)},T3=(M="")=>w1(M,25),J3=(M="")=>w1(M,75),H3=Object.freeze(Object.defineProperty({__proto__:null,answers:E3,part1:T3,part2:J3},Symbol.toStringTag,{value:"Module"})),V3=[["1550156","946084"],["140","80"]],p=[[0,1],[0,-1],[1,0],[-1,0]],f3=(M="")=>{const n=M.split(`
-`).map(o=>o.split("")),A=(o=0,u=0)=>n[o]&&n[o][u]||"-",S=n.map(o=>o.map(()=>!1)),X=(o=0,u=0,l="",B)=>{A(o,u)===l&&(S[o][u]||(S[o][u]=!0,B(o,u),p.forEach(([Y,r])=>X(o+Y,u+r,l,B))))},t=(o,u)=>{let l=0;return u.forEach(([B,Y])=>{p.forEach(([r,P])=>{A(B+r,Y+P)!==o&&l++})}),l};let e=0;return n.forEach((o,u)=>{o.forEach((l,B)=>{if(S[u][B])return;const Y=[];X(u,B,l,(P,s)=>Y.push([P,s]));const r=t(l,Y);e+=r*Y.length})}),e},d3=(M="")=>{const n=M.split(`
-`).map(o=>o.split("")),A=(o=0,u=0)=>n[o]&&n[o][u]||"-",S=n.map(o=>o.map(()=>!1)),X=(o=0,u=0,l="",B)=>{A(o,u)===l&&(S[o][u]||(S[o][u]=!0,B(o,u),p.forEach(([Y,r])=>X(o+Y,u+r,l,B))))},t=(o,u)=>{let l=0;const B=new Set;return u.sort(([Y,r],[P,s])=>Y-P||r-s),u.forEach(([Y,r])=>{p.forEach(([P,s],i)=>{if(A(Y+P,r+s)!==o){const Z=[i,Y,r].join(","),w=[i,Y+s,r+P].join(","),I=[i,Y-s,r-P].join(",");!B.has(w)&&!B.has(I)&&l++,B.add(Z)}})}),l};let e=0;return n.forEach((o,u)=>{o.forEach((l,B)=>{if(S[u][B])return;const Y=[];X(u,B,l,(P,s)=>Y.push([P,s]));const r=t(l,Y);e+=r*Y.length})}),e},_3=Object.freeze(Object.defineProperty({__proto__:null,answers:V3,part1:f3,part2:d3},Symbol.toStringTag,{value:"Module"})),L3=[["29023","96787395375634"],["480","875318608908"]],a1=(M="",n=0)=>{let A=0;return M.split(`
+`),o=new Map;n.split(`
+`).forEach(X=>{const[S,u]=X.split("|");o.has(S)||o.set(S,[]),o.get(S).push(u)});let e=0;const t=A.split(`
+`).map(X=>X.split(",").reverse()).filter(X=>{const S=new Set,u=X.every(l=>S.has(l)?!1:((o.get(l)||[]).forEach((B="")=>S.add(B)),!0));return u&&(e+=+X[X.length>>1]),!u});return{total:e,wrongSets:t,follows:o}},Y3=(M="")=>{const{wrongSets:n,follows:A}=n1(M);return n.reduce((o,e)=>(e.sort((t,X)=>A.has(t)&&A.get(t).includes(X)?-1:1),o+ +e[e.length>>1]),0)},r3=Object.freeze(Object.defineProperty({__proto__:null,answers:l3,part1:B3,part1_impl:n1,part2:Y3},Symbol.toStringTag,{value:"Module"})),P3=[["4789","1304"],["41","6"]],J=[[-1,0],[0,1],[1,0],[0,-1]],G1=(M="")=>{const n=M.split(`
+`).map(l=>l.split("")),A=(l=0,B=0)=>n[l]&&n[l][B]||"-";let o=[0,0];n.find((l,B)=>l.find((Y,r)=>Y==="^"&&(o=[B,r])));const e=new Set,t=[];let X=0,[S,u]=o;for(;;){const[l,B]=J[X],Y=S*n.length+u;e.has(Y)||t.push([S,u]),e.add(Y);const r=A(S+l,u+B);if(r==="-")break;r==="#"?X=(X+1)%4:[S,u]=[S+l,u+B]}return{visited:t,lines:n,start:o}},s3=(M="")=>G1(M).visited.length,m3=(M="")=>{const{visited:n,lines:A,start:o}=G1(M),e=[Array.from({length:A.length},()=>[]),Array.from({length:A.length},()=>[])],t=(B,Y)=>{e[0][B].push(Y),e[1][Y].push(B)},X=(B,Y)=>{e[0][B]=e[0][B].filter(r=>r!==Y),e[1][Y]=e[1][Y].filter(r=>r!==B)},S=(B,Y,r)=>{const[P,s]=J[r],i=P?1:0,[w,G]=i===0?[B,Y]:[Y,B],I=e[i][w],a=Math.sign(P||s)>0?I.reduce((v,c)=>c>G&&c<v?c:v,1/0):I.reduce((v,c)=>c<G&&c>v?c:v,-1/0);return isFinite(a)?Math.abs(a-G)-1:-1};A.forEach((B,Y)=>{B.forEach((r,P)=>{r==="#"&&t(Y,P)})});const u=()=>{let[B,Y]=o,r=0;const P=J.map(()=>new Set);for(;;){const[s,i]=J[r],w=P[r],G=B*A.length+Y;if(w.has(G))return!0;w.add(G);const I=S(B,Y,r);if(I===-1)return!1;[B,Y]=[B+s*I,Y+i*I],r=(r+1)%4}};let l=0;return u()&&l++,n.shift(),n.forEach(([B,Y])=>{t(B,Y),u()&&l++,X(B,Y)}),l},i3=Object.freeze(Object.defineProperty({__proto__:null,answers:P3,part1:s3,part2:m3},Symbol.toStringTag,{value:"Module"})),h3=[["1298103531759","140575048428831"],["3749","11387"]],C3=(M="")=>{const n=(A=0,o=[0],e=0)=>e===0?A===o[0]:A<0||A!==Math.floor(A)?!1:n(A-o[e],o,e-1)||n(A/o[e],o,e-1);return M.split(`
+`).reduce((A,o)=>{const[e,t]=o.split(":").map(u=>u.trim()),X=t.split(/ +/).map(u=>+u);return n(+e,X,X.length-1)?A+ +e:A},0)},G3=(M="")=>{const n=(A=0,o=[0],e=0)=>{if(e===0)return A===o[0];if(A<0||A!==Math.floor(A))return!1;const[t,X]=[""+A,""+o[e]];return t.endsWith(X)&&n(+t.slice(0,-X.length),o,e-1)?!0:n(A-o[e],o,e-1)||n(A/o[e],o,e-1)};return M.split(`
+`).reduce((A,o)=>{const[e,t]=o.split(":").map(u=>u.trim()),X=t.split(/ +/).map(u=>+u);return n(+e,X,X.length-1)?A+ +e:A},0)},p3=Object.freeze(Object.defineProperty({__proto__:null,answers:h3,part1:C3,part2:G3},Symbol.toStringTag,{value:"Module"})),I3=[["249","905"],["14","34"]],p1=M=>{const n=new Map;let[A,o]=[0,0];return M.split(`
+`).forEach((e,t)=>{e.trim().split("").forEach((X,S)=>{A=Math.max(A,t+1),o=Math.max(o,S+1),X!=="."&&(n.has(X)||n.set(X,[]),n.get(X).push([t,S]))})}),{nodes:n,si:A,sj:o}},R3=(M="")=>{const{nodes:n,si:A,sj:o}=p1(M),e=new Set,t=(X=0,S=0,u=0,l=0)=>{const[B,Y]=[u-X,l-S],[r,P]=[X-B,S-Y];r<0||r>=A||P<0||P>=o||e.add(`${r},${P}`)};return n.entries().forEach(([,X])=>{X.forEach(([S,u],l=0)=>{X.forEach(([B,Y],r=0)=>{l!==r&&(t(S,u,B,Y),t(B,Y,S,u))})})}),e.size},w3=(M="")=>{const{nodes:n,si:A,sj:o}=p1(M),e=new Set,t=(X=0,S=0,u=0,l=0,B=1)=>{const[Y,r]=[u-X,l-S];for(let P=1;;P++){const[s,i]=[X-Y*B*P,S-r*B*P];if(s<0||s>=A||i<0||i>=o)return;e.add(`${s},${i}`)}};return n.entries().forEach(([,X])=>{X.forEach(([S,u],l=0)=>{X.forEach(([B,Y],r=0)=>{l!==r&&(t(S,u,B,Y,1),t(B,Y,S,u,1),t(S,u,B,Y,-1),t(B,Y,S,u,-1))})})}),e.size},a3=Object.freeze(Object.defineProperty({__proto__:null,answers:I3,part1:R3,part2:w3},Symbol.toStringTag,{value:"Module"})),F3=[["6370402949053","6398096697992"],["1928","2858"]],N3=(M="")=>{const n=[],A=[];M.trim().split("").forEach((u,l)=>(l%2?A:n).push(+u));let o=0,e=0,t=n.length-1,X=n.length-1,S=0;for(let u=0;u<n.length;u++){let l=n[u];for(;l-- >0;)o+=e*S++;e++;let B=A[u]||0;for(;B-- >0;){for(;n[t]===0;)t--,X--;if(t<=u)break;o+=X*S,S++,n[t]--}}return o},Z3=(M="")=>{const n=[],A=[];M.trim().split("").forEach((X,S)=>(S%2?A:n).push(+X));const o=n.map((X,S)=>S);for(let X=n.length-1;X>0;X--){const S=n[X];if(S===0)continue;const u=o[X];let l=0;for(;l<X&&!(A[l]>=S);l++);l>=X||(A[l]-=S,n[X]=0,o[X]=0,A[X]+=S,n.splice(l+1,0,S),o.splice(l+1,0,u),A.splice(l,0,0),X++)}let e=0,t=0;return n.forEach((X,S)=>{for(;X-- >0;)e+=o[S]*t,t++;t+=A[S]}),e},c3=Object.freeze(Object.defineProperty({__proto__:null,answers:F3,part1:N3,part2:Z3},Symbol.toStringTag,{value:"Module"})),U3=[["557","1062"],["36","81"]],I1=[[1,0],[-1,0],[0,1],[0,-1]],Q3=(M="")=>{const n=new Set,A=M.split(`
+`).map((e,t)=>e.split("").map((X,S)=>(X==="9"&&n.add([t,S].join(",")),X))),o=(e=0,t=0)=>A[e]&&A[e][t]||"-";return n.keys().reduce((e,t)=>{let X=new Set;X.add(t);for(let S=9;S>0;S--){const u=new Set;X.keys().forEach(l=>{const[B,Y]=l.split(",").map(Number);I1.forEach(([r,P])=>{o(B+r,Y+P)===String(S-1)&&u.add([B+r,Y+P].join(","))})}),X=u}return e+X.size},0)},D3=(M="")=>{const n=new Map,A=M.split(`
+`).map((t,X)=>t.split("").map((S,u)=>(S==="9"&&n.set([X,u].join(","),1),S))),o=(t=0,X=0)=>A[t]&&A[t][X]||"-";let e=n;for(let t=9;t>0;t--){const X=new Map;e.entries().forEach(([S,u])=>{const[l,B]=S.split(",").map(Number);I1.forEach(([Y,r])=>{if(o(l+Y,B+r)===String(t-1)){const s=[l+Y,B+r].join(","),i=X.get(s)||0;X.set(s,u+i)}})}),e=X}return e.values().reduce((t,X)=>t+X)},v3=Object.freeze(Object.defineProperty({__proto__:null,answers:U3,part1:Q3,part2:D3},Symbol.toStringTag,{value:"Module"})),K3=[["222461","264350935776416"],["55312","65601038650482"]],R1=(M="",n=1)=>{const A=X=>{if(X==="0")return["1",""];if(X.length%2)return[String(+X*2024),""];{const S=X.slice(0,X.length/2),u=X.slice(X.length/2);return[+S,+u].map(String)}},o=new Map,e=X=>{o.has(X)&&o.get(X);const S=A(X);return o.set(X,S),S};let t=new Map;M.split(/ +/).forEach(X=>{t.set(X,(t.get(X)||0)+1)});for(let X=0;X<n;X++){const S=new Map;t.entries().forEach(([u,l])=>{const[B,Y]=e(u);S.set(B,(S.get(B)||0)+l),Y&&S.set(Y,(S.get(Y)||0)+l)}),t=S}return t.values().reduce((X,S)=>X+S,0)},O3=(M="")=>R1(M,25),E3=(M="")=>R1(M,75),T3=Object.freeze(Object.defineProperty({__proto__:null,answers:K3,part1:O3,part2:E3},Symbol.toStringTag,{value:"Module"})),J3=[["1550156","946084"],["140","80"]],_=[[0,1],[0,-1],[1,0],[-1,0]],H3=(M="")=>{const n=M.split(`
+`).map(S=>S.split("")),A=(S=0,u=0)=>n[S]&&n[S][u]||"-",o=n.map(S=>S.map(()=>!1)),e=(S=0,u=0,l="",B)=>{A(S,u)===l&&(o[S][u]||(o[S][u]=!0,B(S,u),_.forEach(([Y,r])=>e(S+Y,u+r,l,B))))},t=(S,u)=>{let l=0;return u.forEach(([B,Y])=>{_.forEach(([r,P])=>{A(B+r,Y+P)!==S&&l++})}),l};let X=0;return n.forEach((S,u)=>{S.forEach((l,B)=>{if(o[u][B])return;const Y=[];e(u,B,l,(P,s)=>Y.push([P,s]));const r=t(l,Y);X+=r*Y.length})}),X},V3=(M="")=>{const n=M.split(`
+`).map(S=>S.split("")),A=(S=0,u=0)=>n[S]&&n[S][u]||"-",o=n.map(S=>S.map(()=>!1)),e=(S=0,u=0,l="",B)=>{A(S,u)===l&&(o[S][u]||(o[S][u]=!0,B(S,u),_.forEach(([Y,r])=>e(S+Y,u+r,l,B))))},t=(S,u)=>{let l=0;const B=new Set;return u.sort(([Y,r],[P,s])=>Y-P||r-s),u.forEach(([Y,r])=>{_.forEach(([P,s],i)=>{if(A(Y+P,r+s)!==S){const w=[i,Y,r].join(","),G=[i,Y+s,r+P].join(","),I=[i,Y-s,r-P].join(",");!B.has(G)&&!B.has(I)&&l++,B.add(w)}})}),l};let X=0;return n.forEach((S,u)=>{S.forEach((l,B)=>{if(o[u][B])return;const Y=[];e(u,B,l,(P,s)=>Y.push([P,s]));const r=t(l,Y);X+=r*Y.length})}),X},f3=Object.freeze(Object.defineProperty({__proto__:null,answers:J3,part1:H3,part2:V3},Symbol.toStringTag,{value:"Module"})),d3=[["29023","96787395375634"],["480","875318608908"]],w1=(M="",n=0)=>{let A=0;return M.split(`
 
-`).forEach(S=>{const[X,t,e]=S.split(/\n/).map(a=>a.split(":")[1]),[o,u]=X.split(",").map(a=>Number(a.split("+")[1])),[l,B]=t.split(",").map(a=>Number(a.split("+")[1])),[Y,r]=e.split(",").map(a=>Number(a.split("=")[1])+n),[P,s]=[u/o,0],[i,Z]=[B/l,r-Y*B/l],w=(Z-s)/(P-i),I=w/o,X1=(Y-w)/l;Math.abs(I-Math.round(I))>1e-4||(A+=I*3+X1)}),A},p3=(M="")=>a1(M,1e13),W3=Object.freeze(Object.defineProperty({__proto__:null,answers:L3,part1:a1,part2:p3},Symbol.toStringTag,{value:"Module"})),y3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),z3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),g3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),b3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),$3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),v3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),j3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),x3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),k3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),q3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),n2=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),M2=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),A2=`3   4
+`).forEach(o=>{const[e,t,X]=o.split(/\n/).map(a=>a.split(":")[1]),[S,u]=e.split(",").map(a=>Number(a.split("+")[1])),[l,B]=t.split(",").map(a=>Number(a.split("+")[1])),[Y,r]=X.split(",").map(a=>Number(a.split("=")[1])+n),[P,s]=[u/S,0],[i,w]=[B/l,r-Y*B/l],G=(w-s)/(P-i),I=G/S,X1=(Y-G)/l;Math.abs(I-Math.round(I))>1e-4||(A+=I*3+X1)}),A},_3=(M="")=>w1(M,1e13),L3=Object.freeze(Object.defineProperty({__proto__:null,answers:d3,part1:w1,part2:_3},Symbol.toStringTag,{value:"Module"})),W3=[["221655456","7858"],["12","-1"]],y3=(M="")=>{const[n,A]=M.length>500?[101,103]:[11,7],o=100,e=[0,0,0,0],t=(X,S)=>(X%S+S)%S;return M.split(`
+`).forEach(X=>{const[S,u]=X.split(" ").map(G=>G.split("=")[1]),[l,B]=S.split(",").map(Number),[Y,r]=u.split(",").map(Number),[P,s]=[t(l+Y*o,n),t(B+r*o,A)];if(P===(n-1)/2||s===(A-1)/2)return;const i=P<n/2?0:1,w=s<A/2?0:2;e[i+w]++}),e.reduce((X,S)=>X*S,1)},z3=(M="")=>{const[n,A]=M.length>100?[101,103]:[11,7],o=(X,S)=>(X%S+S)%S,e=M.split(`
+`).map(X=>{const[S,u]=X.split(" ").map(Y=>Y.split("=")[1]),l=S.split(",").map(Number),B=u.split(",").map(Number);return{pos:l,vel:B}}),t=Array.from(Array(n+A));for(let X=7e3;X<8e3;X++)if(t.fill(0),e.forEach(({pos:u,vel:l})=>{const B=o(u[0]+l[0]*X,n),Y=o(u[1]+l[1]*X,A);t[B]++,t[n+Y]++}),!(t.reduce((u,l)=>l<15?u:u+1,0)<20))return X;return-1},g3=Object.freeze(Object.defineProperty({__proto__:null,answers:W3,part1:y3,part2:z3},Symbol.toStringTag,{value:"Module"})),b3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),$3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),j3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),x3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),k3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),q3=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),n2=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),M2=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),A2=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),X2=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),S2=Object.freeze(Object.defineProperty({__proto__:null},Symbol.toStringTag,{value:"Module"})),t2=`3   4
 4   3
 2   5
 1   3
 3   9
-3   3`,X2=`77221   93653
+3   3`,e2=`77221   93653
 61169   27995
 49546   69782
 11688   41563
@@ -1022,12 +1024,12 @@
 62591   16739
 53735   79935
 14454   69804
-19976   46609`,S2=`7 6 4 2 1
+19976   46609`,o2=`7 6 4 2 1
 1 2 7 8 9
 9 7 6 2 1
 1 3 2 4 5
 8 6 4 4 1
-1 3 6 7 9`,t2=`66 67 68 71 72 69
+1 3 6 7 9`,u2=`66 67 68 71 72 69
 72 75 78 79 79
 38 40 41 42 44 47 48 52
 86 87 88 91 96
@@ -2026,12 +2028,12 @@
 48 46 45 43 42
 95 92 91 88 86 84 83 80
 48 51 52 55 58
-40 42 44 46 49 51`,e2="xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))",o2="xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))",u2=`?% mul(948,148)why() %how(670,744)mul(590,32);where())#}from()>how()mul(611,372)}{~^?>from()^mul(835,665)who()]#^don't()select()select())mul(724,851)[>&mul(188,482)$mul(781,111)[who()<why(),!]mul(678,13)why()$#%who()mul(620,771)<!^}@^+what()mul(281,719)(]'what()where()>&from():!mul(147,678)how(){mul(938,510)where()!$?*['mul(103,563)where())mul(4,125)$*>>^mul(126,929)]& %~mul(161,418)who()>>do()]-''?mul(416,366)~?/where()]who()mul(459,47))>what(){@[(mul(219,400)+do()when()from():who()when()]&{{%mul(804,830)-select()what()*what()%}mul(861,992)who()!',mul(159,874)#<)''<mul(460,777)?mul(909,244)how()+what()]<do()?}mul(749,87)from()(who();why()mul(430,124)/$>how()@$%mul(214,139)&how()>mul(112,835)select()*from()@why()?[{mul(209,568)/; ~)mul(630,749):mul(841,589)/;who()>[mul(778,567)+when() how()<#mul(544,851)what(){+mul(327,103)from()what()/[~-mul(995,415)/when()-mul(880,153)}:}mul(368,920)'how()mul(864,419)from()what()@mul(208,291)who()<?}?what()',[{mul(575,454)*&(<{how()[mul(557,489){{why(){how()@who()~mul(423,703)mul(910,916)+what()^/<-*from()'mul(746,826),-*)/+>}^from()mul(154,571)++:>,mul(601,458)why()<;how()~from(172,16)mul(333,315)?[mul(513,260) {*mul(117,759)%]mul(77,644){($%>]&~mul(238,306)~select()from();-'who()'mul(460,352); ?select()>[[(from() mul(337,294)why()how()</$<where()don't()(?]{why()%}from()mul(367,653)~mul(910,873)^why()>mul(499,785)>what()[*:#where()*what()mul(765,210)*$[]mul(461,957)##)+}when()-@:mul(198,90)what()what()how()') )mul(258,966)]+(when()mul(535,417)where()!don't()@mul(939,319)?mul(751,538))! mul(758,675)~how()[how(),@>[where()when(29,965)mul(358,39){^what();/(where()how()mul(271,786)why():mul(792,761)do()$]%mul(740,232)>who(949,378)what()[(where()who(){who()#mul(595,343)%+mul(194,296)'mul(161,747): '{where(12,567),@mul(234,39)!+do()/who()[where()&'what()when()how())mul(138,925)),#;where()>{mul(738,864){mul(605,662)*when()%when()+( /~&mul(633,935)when()];mul(263/}*<!where(),- ~when()mul(512,798)]}where())when()who()mul(933,447)where()}mul(33,935*mul(15,975)mul(574,550)+#^;'$from(280,157)$^what()mul(919,849)@mul(18,160))$&^]how()what() when()where()mul(88,657):/from())+:/when()@]mul(71,74)from()'*:@{>mul(127,821)^how()$$select()select()@^{:mul(867,979)&%/>{%^how()what(499,657)+do()%what()(~;-:*mul(438,941)<]?]mul(208,834when()&^;]from()when(613,710)^}+$mul(809,573)mul^)*:from(379,983)mul(47,786)}when()-what()how(450,632)> where()how()mul(810,597 ;;{%(select()select()&,mul(356,249)from()/!{#&^mul(23,248)(!who()]-+,mul(873,987)]{what()<  )-{^mul(591,317)/mul(382,188)mul(476,338)*why()$]mul(865,625)who()})?select():*@[)don't()/ ,mul(737,418)select(318,357);+ what()<mul(41,445)mul(236,630)$}from()]$^$,(do()-select()mul(369,197)from()]#};^mul(561,752)+&#+}?}:mul(18,235)<'& ,(*mul(645,811)why()select()who()[>where()don't()%#>!>/@what()[mul(490,823)&^( ,'@ [do()@mul(855,491)*^why()[,mul(348,679)how()$who() '&how(16,459)/!;mul(43,422)#^from()![}select()mul(976,749)-}select()-where()select()mul(223,589)%[why()mul(868,881)mul(178,790)$,{who()from()#,mul(318,399):where()?[mul(182,864)where() mul(156,690) -]mul(857,353)#'%,},>?+@mul(914,528)where()$mul(785,748)<$who()[mul(453,859)%'@ mul(84,729)/{do()(?$<}mul(820,286)?:*?}#when()(%mul(245,958when()?from(),+mul(128,335)mul(463,102);:]@-~-%mul(914,398)
+40 42 44 46 49 51`,l2="xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))",B2="xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))",Y2=`?% mul(948,148)why() %how(670,744)mul(590,32);where())#}from()>how()mul(611,372)}{~^?>from()^mul(835,665)who()]#^don't()select()select())mul(724,851)[>&mul(188,482)$mul(781,111)[who()<why(),!]mul(678,13)why()$#%who()mul(620,771)<!^}@^+what()mul(281,719)(]'what()where()>&from():!mul(147,678)how(){mul(938,510)where()!$?*['mul(103,563)where())mul(4,125)$*>>^mul(126,929)]& %~mul(161,418)who()>>do()]-''?mul(416,366)~?/where()]who()mul(459,47))>what(){@[(mul(219,400)+do()when()from():who()when()]&{{%mul(804,830)-select()what()*what()%}mul(861,992)who()!',mul(159,874)#<)''<mul(460,777)?mul(909,244)how()+what()]<do()?}mul(749,87)from()(who();why()mul(430,124)/$>how()@$%mul(214,139)&how()>mul(112,835)select()*from()@why()?[{mul(209,568)/; ~)mul(630,749):mul(841,589)/;who()>[mul(778,567)+when() how()<#mul(544,851)what(){+mul(327,103)from()what()/[~-mul(995,415)/when()-mul(880,153)}:}mul(368,920)'how()mul(864,419)from()what()@mul(208,291)who()<?}?what()',[{mul(575,454)*&(<{how()[mul(557,489){{why(){how()@who()~mul(423,703)mul(910,916)+what()^/<-*from()'mul(746,826),-*)/+>}^from()mul(154,571)++:>,mul(601,458)why()<;how()~from(172,16)mul(333,315)?[mul(513,260) {*mul(117,759)%]mul(77,644){($%>]&~mul(238,306)~select()from();-'who()'mul(460,352); ?select()>[[(from() mul(337,294)why()how()</$<where()don't()(?]{why()%}from()mul(367,653)~mul(910,873)^why()>mul(499,785)>what()[*:#where()*what()mul(765,210)*$[]mul(461,957)##)+}when()-@:mul(198,90)what()what()how()') )mul(258,966)]+(when()mul(535,417)where()!don't()@mul(939,319)?mul(751,538))! mul(758,675)~how()[how(),@>[where()when(29,965)mul(358,39){^what();/(where()how()mul(271,786)why():mul(792,761)do()$]%mul(740,232)>who(949,378)what()[(where()who(){who()#mul(595,343)%+mul(194,296)'mul(161,747): '{where(12,567),@mul(234,39)!+do()/who()[where()&'what()when()how())mul(138,925)),#;where()>{mul(738,864){mul(605,662)*when()%when()+( /~&mul(633,935)when()];mul(263/}*<!where(),- ~when()mul(512,798)]}where())when()who()mul(933,447)where()}mul(33,935*mul(15,975)mul(574,550)+#^;'$from(280,157)$^what()mul(919,849)@mul(18,160))$&^]how()what() when()where()mul(88,657):/from())+:/when()@]mul(71,74)from()'*:@{>mul(127,821)^how()$$select()select()@^{:mul(867,979)&%/>{%^how()what(499,657)+do()%what()(~;-:*mul(438,941)<]?]mul(208,834when()&^;]from()when(613,710)^}+$mul(809,573)mul^)*:from(379,983)mul(47,786)}when()-what()how(450,632)> where()how()mul(810,597 ;;{%(select()select()&,mul(356,249)from()/!{#&^mul(23,248)(!who()]-+,mul(873,987)]{what()<  )-{^mul(591,317)/mul(382,188)mul(476,338)*why()$]mul(865,625)who()})?select():*@[)don't()/ ,mul(737,418)select(318,357);+ what()<mul(41,445)mul(236,630)$}from()]$^$,(do()-select()mul(369,197)from()]#};^mul(561,752)+&#+}?}:mul(18,235)<'& ,(*mul(645,811)why()select()who()[>where()don't()%#>!>/@what()[mul(490,823)&^( ,'@ [do()@mul(855,491)*^why()[,mul(348,679)how()$who() '&how(16,459)/!;mul(43,422)#^from()![}select()mul(976,749)-}select()-where()select()mul(223,589)%[why()mul(868,881)mul(178,790)$,{who()from()#,mul(318,399):where()?[mul(182,864)where() mul(156,690) -]mul(857,353)#'%,},>?+@mul(914,528)where()$mul(785,748)<$who()[mul(453,859)%'@ mul(84,729)/{do()(?$<}mul(820,286)?:*?}#when()(%mul(245,958when()?from(),+mul(128,335)mul(463,102);:]@-~-%mul(914,398)
 +mul(720,985)how(340,568)^!what()[),[mul(734,270)~')?who()]]mul(964,739)from()?who()$when() /mul(566,142)}*,?how()~mul(733,766)when()mul(319,914)when()mul(808,141)*@:&who();mul(736,736)where(){&!$when()]^mul(612,574)how()mul~]what()!!'[:mul(805,568),<^+~ #)&who()mul(810,729),[~/^<&mul(706,233)!-'{why(),(?&mul(28,746)%mul(127,170)-?} #don't()from(),[@,mul(282,734)mul(332,651)[:~mul(771,888)#who()^select(110,751)>who(){mul(655,334)why()+~&}mul(129,762)mul(597,498))*~-}who()who()~'$mul(235,859)where()^-,,@mul(661,707)[ ~,<-mul(502,445)?why(){why()from()-how()*>&mul(237,280)how()mul(669,512)#$< mul(426,417)[what()why()~select()*%,'where()mul(213,617)##>mul(148-how()&]mul(437,581)who()'<from()>%[:how()mul(985,24);mul(446,704)who(),mul(549#}%>[mul(58,502)%mul(55,502)~<where()''who()}<mul(678,579)mul(457,825)+how()from()'(*#+$$mul(266,507)mul(925,485)^why()mul(605,592)[}<>^<mul(173,922)@:<where()/-]'mul(110,899%select()why()why()>[%%;mul(63,642)>how())<*{mul(155,625)]mul(238,47)where()&@mul(630,112)who() mul(570,946)mul(299,320){({mul(307,251)%[]$%mul(621,739)^!}{^-+what())mul(350,650)!>who()what()]^,*mul(154,394)&?^mul(410,870)[-select()why()<who():+%don't()where()$]/when() how()when()mul(708from()]&?mul(589,972)*mul(167,814)[mul(807?%don't()])?'(who()mul(614,926)mul(404,930)'?+;mul(252how()^who(529,21)'who()%mul(675,37)mul(362*what(640,926)select()'?what(){'>mul(744,141)why():))from()^select()what()mul(991,854){-]+mul(64,859))~>>%>%select()#-mul(282,835)'select()'%<$!from(299,765)don't()-'mul(352,659),mul(366,409),when()mul(672,590)#@#}/(##  mul(550,937)$#/^~mul(458,447)mul#(,/<mul(538,275)}where()'?'!-)mul<^>(how(),mul(465,230)^select()$<from(595,221):mul(704,141)what()]when()^select()^)^%'mul(260,350)>how()what()#@};(from()~mul(716,318)from()+]<!?mul(625,41)#[,~ /mul(19}mul(760,4)@how()mul(508,977)@select())][[mul(261,452 $mul(11,905)how(731,838)[mul(823,988)?!?@&&'mul(929,818)(>mul(701,784)!;>do()'&)when()select()mul(945,704)mul(250,874)who()]@don't()why(51,895)-,how()*+{why()%/mul(964,293)&<^where()<select();&mul(900,32)]where()$from()&#from()who()({mul(755,539)mul(26,466)how()$when()%&$~)mul(926,673)$what()!select(),do()~select()#^mul(272,306)~%'mul(22,647)$mul(904,943)^>-from()mul(635,212)when()how()[mul(314,335)%(-  + ~mul(635,915)~[[do(){where(307,78)(who()(why()where();mul(450from()mul(903,662)>$mul(924,200),why()select()$mul(418,533)where()[where()mul(266,643):~^/#(:[from()mul(81,715),who()@:~+who()'%mul(79?who()select();# mul(436,105)#*why() #~[,where()'mulwho()[(~)[mul(119,92)]where(),select()why()?mul(639,691):+<why()why()mul(815,366)*where()-what()/?>mul(188,19)who()(select()what()mul(916,808));~mul(630,228)-)where()[~mul(586/[how()+~!>}>[how()mul(106,235)do()>why(416,339):mul(788,357)[when(442,691)what()how()where()$from()who()mul(471,832)]/*mul(837,328)<)>!mul(389,633)'from(),mul(70when()!from()select()$](when()*%mul(903,43)where(62,223)^from();@()mul(852,198)-when()?mulhow(168,455)(select()how();from()/mul(918,330)what()'how(215,263)$:{~how()*mul(136,552)from(363,441)-when()how()what()-+mul(229,899)!where()when()from(){mul(47,875)~mul(500,586)/&&where(),where()mul(571,252))%}^~when()mul(979,493)do()@!+~>^mul(568,461)]where()$who(){from();mul(743,403)@?[mul(117,954))/mul(382,589)<:what() mul(578,730)#/<,when()#)select()}mul(889,462){how(562,136)select()when()^>mul(150,815)/$from()?what()mul(842,604)**?'-^>;~'mul(622,493)
 mul(901,810)[<,^$do()<#why()<why()},,select()mul(257,221)mul(393,412)-from()&$]mul(198,284)/>;/why()mul(296,969)@mul(224,163)#<$what():,what()mul(995,485)$~)who()mul(382,831)'&~mul(146,234)mul(228,532)mul(944,430)!!who()<;'$(%do()%'{mul(588,828)~$why():where()mul(753(select()/':~$[mul(785,897)/<(#$)@mul(821,858)$what()+@/*mul(545,209)where();what()mul-why()>mul(808,588),where()];;}mul(431,815)<<;how()?@why()(^don't()select()$)!mul(832,43)what()[where()mul(935,377)from()++where()$-]@mul(793,489)*&mul(910,985)mul(340,122);from(87,683)[[]]'mul(659>from()['from()~,;@:^mul(420,510)/mul{from()$ >! -mul(508,275)!()@+{!mul(134,503)how()?mul(717,994)@}what()}[@<do()~'[??from() #&}mul(443,258)){do()^mul(894,293),@from()mul(470,736)/select()where()from()how()mul(769,763)/-'mul(436,853)from()mul(955,870);#why()how()how()mul(807,205)#do()select()<@$when()*select()>mul(899,477)who(88,557){[?-mul[how()>>@mul(113,239)&;?what(825,719)from()}@mul(717,829)when()who()%@what()when()#':mul(644,495)]^$ >[~don't()!#mul(175,323)><$>do()[[$what()/>(#~mul(976,792))what()#{how()-$?mul(534,805))what()@mul(600from()'from()mul(859,367)from()mul(852,796)?{[]/'~mul(624,853($:;^mul(522,963)+mul(143,246)[,what()#*when()',why()mul(435,720)mul(812,909)'<? /;when()}*how()do()mul(49,504)how()when()/!mul(799,134)$mul(213,950)from(182,488)];]do()mul(325,689)(@mul(485,128)who()mul(376~when()(%-what()(mul(776,635)#: from(788,757)}mul(997,619)-from(919,426)where()where()how() mul(370,735)*what(),*%$mul(408,722)}#mul(990,90)(<where()*don't()*@:(;what()%:*#mul(804,562)mul(162,269)]mul mul(267,461)%#{(};^~[mul(124,671) ~-<$<from()<from()mul(401,89)>&!!who()how()/,who()>mul(179,82))]don't()@(}<who()where()%<from()]mul(950,333) }&mul(420,707)mul(293,223)what()(/mul(131,775)>@<mul(498,349)mul(416,808)*how(676,683)select()&@mul(100,528)'&from()/[<,%>!mul(224,804'}-mul(180,723)#+@mul(144,160 +#<]where()+!from()select()(mul(614,183)mul(123,655)*+##mul(744,352):#$when()~&,what(625,950)select()'mul(468,293)*]+#mul/$why()where(623,670)%@;mul(722,469)&(%;do()) from()mul(557,124)/}:mul(928,793>]how(){?who()'<mul(74,894)%mul(312,960)'(,]%^mul(560,307<where();when()}how()%>[mul(624,959)&mul(765,13):who()<),who()& mul(639,802)&;(@:why(988,378):mul(677,987)~@-! ;!^do()mul(29,935)mul(134,862)when()+{what()when()who()}~why()mul(541,335)who()@[<mul(342what()select()who();mul(833,47)when()%@}\${why()mul(891,370)(@*@[^mul(652,523)}why()&-(?'*mul(906,962) )mul(691,622)~(!<--when(506,845)</$mul(603,406)'how(83,339)mul(44,583)<:-^/why()mul(812,857$what()<-:$]what()?mul(226,418)!>'+why();when()&mul(127,948)$mul(485,474))?$mul(278,206)select()mul(641,623){} @{*where()'?mul}>mul(792,193) [#;*%->~what()mul(876,897)/@+'mul(341,837)^)why()?;@+^^~mul(718,922)[why()when()/,{}select()who())mul(941,117)/}/who()why(293,857))mul(414,482)what()! how()who()mul(910,766)!]what(),how()*mul(6,611)~;{who()who()[--mul(720,952)why(546,471)!)from()/?mul(971,461)}&/$@'mul(452,187)#who():(mul(44,298)mul(530,770)']:who()&$from()mul(544,752)mul(375,827))&@select()^;who()where()how()mulselect()^%^,/&mul(204,187)when()&,}$(who();mul(60,317)+who()$from()(how(942,734);@mul(239,338)!?:%)}@select()(mul(284,525)select()what()where()@^#~[mul(718,185)&!*{';when()@when()mul(272,161)how()%how()?mul(66,988)@)@,::>)mul(930,190)why(),~when()%<@&where(),mul(143,136)why()-,/*-what()+mul(73,408)~ who()%*select()'+where()#!/usr/bin/perlmul(379,680)
 ;@mul(257,25)[!mul(646,635)>?who()who()from()mul(25,275(select()+why()%mul(102,254)%}/where()$mul(608,18)when()*#mul(343,951) mul(337,866)*^?#@why(805,831)-mulwhen()from()mul(854,5)when()@$why()mul(896,11)^mul(451,271)'how()?who()?)<%[}don't()who()/[{]-?from()when()?mul(198,238)])mul(750,760)+/-!what()~?#mul(880,271)%?select();where()(<^select()mul(373@from()where(),mul(700,15),mul(406,120)mul(551,206)mul(636,315);+{mul(261,201)mul,:-/&mul(267,217)/,'mul(132,410)@@;;who()when()]do()why()mul(4,121)#from()/mul(242what()how(277,558)<how()from()+:who()from()what()when()mul(27,714)who()why()what()mul(676,758)+^@*'}mul(274,109)-}]),select()*when()]why()mul(60,516)when()when(708,630)%%where():mul(34,59)from()#]how()+who()%who()*don't()select()&~(;where()/mul(548,869)&mul(439,68)]@}%)~&mul(46,712)when()+[&]where(),+mul(940,261)^who()where()mul(655,165) >'how()how(){mul(12,537)&[>}mul(322,676)[#,do()@,mul(248,663),when()-do()^what()]when()who()what()how())mul(864,73)how()?]*mul(653,55)when()from()from()how()@ }mul(94,590)]~what()mul(164,505)]from()when()]mul(218,565)(from() why()[*when()}[mul(306,447)*]][> #mul(783,715?)+^~mul(308,994):<*~)>from()why()*mul(508,139)>from()@;+~#mul(652,903)#[/?mul(407,208]how(){when(),**@*:/mul(849,965)mul(69,198<'#%[?mul(236,808)what()from()%from()why()^/,don't()select()&where()@mul(888,101) mul(332,775)who()):select()),:-mul(119,209)%how()mulfrom()select()don't(){mul(838,613)why() '({*<!mul(372,376)mul(407,117$who()[ mul(171,741)where();mul(742,142)mul(34#^+:who()mul(157,514)>~>*mul(466,106)mul(883,754->(%%who()[!mul(587,792)'((!?select()&}<mul(791,734){how()&;+<(mul(655,63):why(){!{)mul(320,950)->-'#)why()#[mul(234,162),what(497,671)why()#mul(985,797)>}~;from()select()mul(117,492)&~+from()]%>*$&mul(451,669))}'/@how()?where()why(694,295)'mul(676,756){~;select()what()}what()^}mul(963,857);%/how()?mul(944,194);select()<&^how(){->mul(195,702))?select()why()&~%}why()#mul(90,304)@%why(673,634)*/where()- <:do(){}!mul;who()]where()]-@?<mul(919,817),>when()how()how()>mul(875,604)select()%do()%mul(790,136)*$,mul(853,95)[how()>!%?mul(246,573)&!what()/#from()!mul(382,307),!#[-mul(32,733)$+[*mul(192,47)(@who()mul(304,303)@mul(167,528):select())!:how(){what()(}mul(933,177))#>$#,$:mul(81,603)<mul(40,227)mul(717,937)mul(853,848)mul(66,164)where())^<>what()?how()when()mul(206,607)<where()[$)}when()how()select()*mul(265,447)*/what())%+'[ from()mul(358,747)what()+%how()#from():,what()@mul(791,401)~where()[mul(990,778)?~[!:>!'^mul(666,852)mul(651,206)!+]}from()don't():*]#what()mul(359*%who()^)'mul(190,764)who()when()}select()~(~mul(547,102)mul(406,618)%when()>)<mul(822,907)?/[/from()mul(945,506)>![#mul(890,746)#who()$'~%]',+mul(341,395)who()--mul(285,533)}how()@<}!mul(715}>+~ select()where()$ (mul(894,62)?]}who()&when(652,875)%:}from(24,82)mul(713,250))-^{*%mul(548,903)&]]<]why(){from()when() mul(796,100)-(how()$%~mul(589,969)  :who()  @mul(271,734)<}mul(761,8)}@['- ['$mul(178,28)who()who(282,161)@$from()mul(413,253)#when()?(mul(585,394))select():$?#?>who()?mul(245,344)who()^who()where()why()~@why()don't()why()how()who(450,27)who()(!mul(951,644):select()-)%?*don't(), mul(189,841)]* why()*>'mul(758,690)what()<select()~>@>mul(728,932)how()?select()what()}mul(716,985){where()who()+who():mul(840,772)%how()>:;where()mul(139,830)$select()),mul(730,4)when(305,277);[$!,)mul(278,740)who(856,922)who()#<where()*>mul(212,541)((]mul(689,475)mul(814,611)'}&~{~~mul(716,817)who()mul(21,315))don't())(why()')$<mul(541,349)
 $)mul(257,544)+where()how()-[how()^+ mul(986,808){[<why()%!;mul(940,137)who()-+(from()**^mul{>)who()how()?%why()}!<mul(908,379)select(811,438)mul(15,196)from(623,826)-from()+!mul(38,667){>{<{mul(41,189)-<how()*%when()}what(539,203)]mul(813,528)who())why()( ]how()why()how(){mul(299,367)]{[(@^mul(131,889)?:&who())when()'why()$&mul(728,552)^}when()@~mul(842,113)from()),?{!mul(811,809)*how(15,189)#>&+from(544,351)~&mul(516,38)]?;-@?don't()@}*mul(792,426when();#~ >%why()(/$mul(755,392)*(#]where()@select(),^select()mul(630]>*who(267,517)why()-;(mul(176,492)select()from()}~:who()mul(761,226)&,((mul(750,451)@/%select()from()mul(345,75)what()/who(); ~mul(431<)&mul(693,289)?~/mul(693,335)'mul(475,545){(*+~ mul(668,535)how()don't()?,<@mul(980,251)*why()$when()*-)mul(886,969):?/':]}-who()(mul(686,683)#}+($why()mul*^*$){&-(mul(94,775)- @when()?%]{when()mul(376,100)''/,&]^<mul(853,752)when()%who(),[^@where()!do()who()when()how()when(474,246)mul(318,180)do()%~(mul(216,96) ;}]why(907,964)$+when(680,212)?mul(442,979)why()what();##select()%mul(34,342)mul(641,907)@]who()@^:^mul(648,605)how()<}]when()!mul(567,219)?where()$what()~+from(),%how()mul(549,85)$-&(mul(94,269)~how(811,581)who(596,80)-how()~mul(510,591)mul(586,482)who()?#-<[[select()*}mul(249]{%<,where()*~^mul(628,294)]+what())why()mul(312,879&,?+don't()mul(100,514)when()select()mul(621,918)@select(813,295)/{^'%+mul(239,859) ']<*)mul(868,763)where()[/when()@)#{^mul(209,999)how()do()*#}},},&>mul(70/:from(184,559)>mul(679,138))<mul(454,112)[@)-?*where()mul(573,473)[(-/mul(867,232)~]/^/!'&where()mul(391,655)[%'mul(73,32)/{->)(~mul(929,872)'%#)mul(563,750)>(mul(324,725)what()why()[@$mul(186,770)?mul(719,251)[mul(270,934)+>when()'$when()mul(647,486)how()from(947,190),!(?mul(113,517) %[select()what()^)!mul(299,591)]:@' *where(145,530)/mulwhen()mul(811,260)mul(80,605)  where(296,197))])>from()mul(324,361)select(){[/';/},mul(648,947&how(){who()/'-%*]mul(949,359){mul(288,162)&];&:^mul(188,899)select()where()]%mul(248,30)#[&+'why()'') don't()][}& mul(808,221)what()@>><;>*mul{;>what()what()+mul(646,752)select()<from()why(211,37)~~~:mul(196,842)}where(690,849)where()[$select(571,536)how()from()<mul(6,129)what()what()?]]how()mul(116,23)who(205,335)>)'where()!mul(748,585)>?<##mul(381,399)mul(597,746)) *mul(881,573)/:({why()'mul(527,57)@/what()?mul(395,551)%who()when()%'mul(713,766)[<mul(749,438)'(}^when();{mul(43,565)what()% #mul(653,209)what():!-mul(64,870)#from()select()from()mul(206,327)?(mul(678,256)^{mul(311,65)who()when()<(when()mul(552,622)*how()%?~;:;;)mul(767,192)--&$mul(512,806)['?')who()mul/({what()&/#'!mul(811,828)]select()~@!/(}$)mul(683,153)&}&~how()from()mul(815,380),?$*+mul(133,342)mul(867,908)!;&why()?(+!mul(915,100))when(895,91)&select()!({where(758,740)mul(759,261)-from()&])mul(365,436)from()&' &^mul(541,400)~from()-what()!mul(679,638)mul(107^#,%~#>[)*select()mul(313,218))when()when()mul(360,494<-select():::- [/mul(517,923)*from(),from()how()+]mul(870,559)}{*?do()>~mul(704,518)where()!)select()?from()where()&'do();mul(270,449)~[*mul(774,600)how():>why()[!when()mul(338,711){]mul(962,193)*where()#![-+mul(511,924):[who()why()}mul(252,534when())when()when()()'!why(230,750)-mul(543,358)~~ -mul(394,506){mul(176,192)who()from()%@mul(181,776)%[ don't()when()where(229,174)+}@who()where()]>mul(553,452)@{/mul(790,202)&&-]mul(783,999)'mul(123,410)<,#what()}how()when()from()$~mul(674,974)why()#>do()'[$]}when()mul(907,824)from()select(){what()mul(584,273)#<>>do()mul(767,778)how()how()from()[#<$from()how()>mul(133,565):mul(888,792)
-who()where()don't()]mul(891,277)~mul(160,638)('don't()/@/%{mul(462,975)!^:+mul(317,407){who()/from()/mul(424,628) when()select()mul(415,352)!?[where(){?how()/mul(661^, -mul(141,973)(/where()!#who()(what()#$mul(916,889)when()$ )mul(945,846)why()+#where()@how()mul(147,694)%select()mul(414,149)< when(){)what()&[how()mul(903,731)~#mul(389,694)mul(72,447)mul(490,881)?++from()>+ ^(mul(703,722)mul(622,578)from() }@^)+mul(642,732)>from()where()@>\${who()mul(526,211$why()[why()mul(349,908)who(635,389)from()what()*$*>@mul(180,150)//: ^mul(622,131);[-^~-mul(32,430)mul(306,173)~where()how() (mul(292,552)<mul(422,363)^<<!#when(304,583)who()mul(348,963)': #select(875,567)#>'where()!do() why()~] who()@^mul(20,119)?[$+/$^mul(242,536)who()'-&'from()mul(351,640){,]~mul(152,587)@select(140,751)<+mul(387,212)[where()%when())how()& >mul(916,539)~]?[when()>!when()??mul(322,151)!]!]~!;mul(27,537); ##;^}}mul(538,277)why()mul(205,526)mul(412,826)^@?where()'mul(957from(193,394)from(863,680)!@how()mul(771,563)( who()mul(377,655) ]select();who()mul(360,272)-select()$what(){mul(291,618)})from()^when(),how()where()don't()why()+&mul(462,803)^$,mul(788,584)@ %?:![:mul(439,528)mul(129,761)]!~mul(321,102)mul(41,728){&what()how()mul(93,933))[ where()^*@+mul(553,965select() '&{-mul(712,817)/<why()[:>/&mul(482,328)when()'mul(957,978)-}{[>{@what()who()mul(48,186)?]how()$what()&,)mul(33,872)#mul(125,207):;mul(143,386)how(),select()don't()}#when()%]&^@?^mul(107,59)&%?don't()mul(183,332):{}/[(#%-+mul(766,627)from()who() what()-+$^mul(41,791)who()] ;-#select()~mul(939,288)[:(</{$how()%select()mul(624,973) ]%mul(780,706)why(677,630);don't()+mul(3,844)$)$$where(),!why()[:mul(506,60)( <>@what()who()?mul(210,210)?select()why()select()where()-how()^mul(755,497)+?^(mul(860,478)^}+$from()(mul(565,649)}mul(184,450) ;/+%[why()mul(752,488)$how()mul(349,56)#'%,+mul(571,637)(mul(186,674)?how() </~@:%mul(295,276)'~where()-&%!mul(72,565);mul(140,645)%#-#*mul(258,568)!/select()why():&}from()from()don't()mul(458,777)#>,'^#!mul(577,819)mul(767,490)how()@when(359,565)mul(97,67)when()?where()>,'(-mul(267,998)%where()why()where():mul(593,317)<mul(514,327)how()~$[{mul(942,232)how()(who() 'from())mul(752,235)?/!'/*#mul(291,995){who()%!,%mul(873,542)%mul(543,144)from())'select()mul(317,658)+mul(819,545)<&what()who()$#who()how()$*mul(849,792)<;-mul(401,327)select()^}?mul(184,612))(where()what()[where()where()@}'mul(532,791)how()how()from()$*~:mul(963,569)when()%- :}why()^~$mul(520,245))^):{do()!mul(900,510)$ %who(615,822)mul(374,872)''/ mul(808,426)select()mul(268,752)&why(),</%!:!/don't()who(){when()*(where()mul(403,172)^mul(185,447)}mul(233,330)why()/&&%who()#/^mul(705,506)?%from();mul(494,15)['}]-}mul(45,474)who()@who()@why()don't()mul(174,355)?what(),@*$+#&mul(9,768);:^mul(381,691)when()&$/]?what(564,603)^how()mul(468,953)[@when()}mul(702,659) where()?where(){**mul(535,116)~where()$('}^~from()mul(926,18)&who()$when()where()>from(),mul(541,30)/why()\${[from()who()  mul(732,465)[<!{mul(794,385)mul(676,776)who()]/mul(45,904)<~+who()@-!)&where()mul(49,63))mul(710,576)+mul(279,872)&<{what()-how(),&how()~`,l2=`MMMSXXMASM
+who()where()don't()]mul(891,277)~mul(160,638)('don't()/@/%{mul(462,975)!^:+mul(317,407){who()/from()/mul(424,628) when()select()mul(415,352)!?[where(){?how()/mul(661^, -mul(141,973)(/where()!#who()(what()#$mul(916,889)when()$ )mul(945,846)why()+#where()@how()mul(147,694)%select()mul(414,149)< when(){)what()&[how()mul(903,731)~#mul(389,694)mul(72,447)mul(490,881)?++from()>+ ^(mul(703,722)mul(622,578)from() }@^)+mul(642,732)>from()where()@>\${who()mul(526,211$why()[why()mul(349,908)who(635,389)from()what()*$*>@mul(180,150)//: ^mul(622,131);[-^~-mul(32,430)mul(306,173)~where()how() (mul(292,552)<mul(422,363)^<<!#when(304,583)who()mul(348,963)': #select(875,567)#>'where()!do() why()~] who()@^mul(20,119)?[$+/$^mul(242,536)who()'-&'from()mul(351,640){,]~mul(152,587)@select(140,751)<+mul(387,212)[where()%when())how()& >mul(916,539)~]?[when()>!when()??mul(322,151)!]!]~!;mul(27,537); ##;^}}mul(538,277)why()mul(205,526)mul(412,826)^@?where()'mul(957from(193,394)from(863,680)!@how()mul(771,563)( who()mul(377,655) ]select();who()mul(360,272)-select()$what(){mul(291,618)})from()^when(),how()where()don't()why()+&mul(462,803)^$,mul(788,584)@ %?:![:mul(439,528)mul(129,761)]!~mul(321,102)mul(41,728){&what()how()mul(93,933))[ where()^*@+mul(553,965select() '&{-mul(712,817)/<why()[:>/&mul(482,328)when()'mul(957,978)-}{[>{@what()who()mul(48,186)?]how()$what()&,)mul(33,872)#mul(125,207):;mul(143,386)how(),select()don't()}#when()%]&^@?^mul(107,59)&%?don't()mul(183,332):{}/[(#%-+mul(766,627)from()who() what()-+$^mul(41,791)who()] ;-#select()~mul(939,288)[:(</{$how()%select()mul(624,973) ]%mul(780,706)why(677,630);don't()+mul(3,844)$)$$where(),!why()[:mul(506,60)( <>@what()who()?mul(210,210)?select()why()select()where()-how()^mul(755,497)+?^(mul(860,478)^}+$from()(mul(565,649)}mul(184,450) ;/+%[why()mul(752,488)$how()mul(349,56)#'%,+mul(571,637)(mul(186,674)?how() </~@:%mul(295,276)'~where()-&%!mul(72,565);mul(140,645)%#-#*mul(258,568)!/select()why():&}from()from()don't()mul(458,777)#>,'^#!mul(577,819)mul(767,490)how()@when(359,565)mul(97,67)when()?where()>,'(-mul(267,998)%where()why()where():mul(593,317)<mul(514,327)how()~$[{mul(942,232)how()(who() 'from())mul(752,235)?/!'/*#mul(291,995){who()%!,%mul(873,542)%mul(543,144)from())'select()mul(317,658)+mul(819,545)<&what()who()$#who()how()$*mul(849,792)<;-mul(401,327)select()^}?mul(184,612))(where()what()[where()where()@}'mul(532,791)how()how()from()$*~:mul(963,569)when()%- :}why()^~$mul(520,245))^):{do()!mul(900,510)$ %who(615,822)mul(374,872)''/ mul(808,426)select()mul(268,752)&why(),</%!:!/don't()who(){when()*(where()mul(403,172)^mul(185,447)}mul(233,330)why()/&&%who()#/^mul(705,506)?%from();mul(494,15)['}]-}mul(45,474)who()@who()@why()don't()mul(174,355)?what(),@*$+#&mul(9,768);:^mul(381,691)when()&$/]?what(564,603)^how()mul(468,953)[@when()}mul(702,659) where()?where(){**mul(535,116)~where()$('}^~from()mul(926,18)&who()$when()where()>from(),mul(541,30)/why()\${[from()who()  mul(732,465)[<!{mul(794,385)mul(676,776)who()]/mul(45,904)<~+who()@-!)&where()mul(49,63))mul(710,576)+mul(279,872)&<{what()-how(),&how()~`,r2=`MMMSXXMASM
 MSAMXMSMSA
 AMXSXMAAMM
 MSAMASMSMX
@@ -2040,7 +2042,7 @@ XXAMMXXAMA
 SMSMSASXSS
 SAXAMASAAA
 MAMMMXMMMM
-MXMXAXMASX`,B2=`XSXMAAXXSSMMMXMXSXMSXMXSAMXSXMASMMSSMMSASXSAAXAAMXMMAMAMXMXSMXSAMXAXSAMXSSSXMASAMXAAMXSXMASAMXXMAXXSAXAMXMMSAASMXMXMASMMAMXXXSAMMSMMSXMASXAA
+MXMXAXMASX`,P2=`XSXMAAXXSSMMMXMXSXMSXMXSAMXSXMASMMSSMMSASXSAAXAAMXMMAMAMXMXSMXSAMXAXSAMXSSSXMASAMXAAMXSXMASAMXXMAXXSAXAMXMMSAASMXMXMASMMAMXXXSAMMSMMSXMASXAA
 XXAMMSMMXMAMAASXSAMAMSAMASASMSASAAAAAXSASAMMMXSMXSAMSSMMASMSAAXXSXAMSAMXMMXMSAMXXXMSMAMMAMXMSSMMMSSMMSASMSXAMMMAASMASAMXSSXSASMSXMAMSASXMMSS
 SSSMAAXAAXAMMXSASXMAMMASAMXSAMAXMMSMMMMAMXMAXXAAASAMAAMSMSAMMMSMXMSAXASXSAAMMXSAMXMAMMSMXMAMAAMXAXAAASXMAMXMXAMSAMAXMASAXAXMAMXXAMMMMAMASAMX
 XAAMSSSSMSSXSAMAMAMXMSXMASAXMMAMXMXMMAMAMXSAMSMMMSXMMSMAAMXMMXSAAAMSSXMAMSMSAAXAXASMSAMMAXMMSSMMMSMMMXAMSMAXSXMMAMXXXXXMMMMMSMMSXMASXSSMMSXM
@@ -2179,7 +2181,7 @@ XAMMMXXXMXAMXSAMXSSMXSAMAMXSMASXAAMMASMMMMXMMMSMXMAAAXXXMXMMMMSMMMSSMMSSMSASASMM
 SASMSAMMMMMXAXAMAXAAXSMSASAMMXXMSXMMMMAXMSAASAMASMMMMMMSAMXASAMAAMAXAAXAASASASAAMAMSAXAAXXMMMSMMMMXMASMAMMXMAXAXAMASMMSAMXAXAAAMMMMXAMXAMXMM
 SAAXMXMAAASMSSSMMSMAMSASASAXSMMMMXSAMSSMAXSSMAMAAXXAAAMAAMSMSASXMSMXMAMMMMAMXSMMSAMSASXSSMXXAAAAAAXMAMMXMASMMSAMXSXMMAMMASMMMMSMMSMMMSASMSMM
 MSMXAASMSXSAAAASMXXAAMAMAMAMAAXSMASAMAAMSMMXMAMXSASMSSSSSMAASAMXXAXXSAMXAMXMAXAXSMXMAMAAMAXMSSSSSSSMASAMXAXAXMASAMAAMAMMAXAAXAAAAAAAAAAMXMAS
-AXXSSMSXMMMMMSMMSAMSSMXMSMASXSMXMASXMSSMXXMASXSXXXSAMXMAMXMMMMMXSSMXAXMASXMMMSAMXSXASMMMMMSAMXXMAXXXXSASMSXSAMXXMSAMSSSMASXMSMSMSSSMSSSXASMM`,Y2=`47|53
+AXXSSMSXMMMMMSMMSAMSSMXMSMASXSMXMASXMSSMXXMASXSXXXSAMXMAMXMMMMMXSSMXAXMASXMMMSAMXSXASMMMMMSAMXXMAXXXXSASMSXSAMXXMSAMSSSMASXMSMSMSSSMSSSXASMM`,s2=`47|53
 97|13
 97|61
 97|47
@@ -2206,7 +2208,7 @@ AXXSSMSXMMMMMSMMSAMSSMXMSMASXSMXMASXMSSMXXMASXSXXXSAMXMAMXMMMMMXSSMXAXMASXMMMSAM
 75,29,13
 75,97,47,61,53
 61,13,29
-97,13,75,29,47`,r2=`39|57
+97,13,75,29,47`,m2=`39|57
 31|97
 31|75
 29|45
@@ -3596,7 +3598,7 @@ AXXSSMSXMMMMMSMMSAMSSMXMSMASXSMXMASXMSSMXXMASXSXXXSAMXMAMXMMMMMXSSMXAXMASXMMMSAM
 91,29,27,69,38,25,55
 27,84,48,75,11,76,73,69,62,16,87,59,38,23,52,25,55,21,42
 34,32,37,55,44,52,22,42,23,26,66,85,25
-65,33,93,44,68,32,66,39,97,74,78,17,57,29,36,84,54,48,45,75,11`,P2=`....#.....
+65,33,93,44,68,32,66,39,97,74,78,17,57,29,36,84,54,48,45,75,11`,i2=`....#.....
 .........#
 ..........
 ..#.......
@@ -3605,7 +3607,7 @@ AXXSSMSXMMMMMSMMSAMSSMXMSMASXSMXMASXMSSMXXMASXSXXXSAMXMAMXMMMMMXSSMXAXMASXMMMSAM
 .#..^.....
 ........#.
 #.........
-......#...`,s2=`..........##.....................................#............#........................#.....#........#...........#...............
+......#...`,h2=`..........##.....................................#............#........................#.....#........#...........#...............
 ...........#.............#.....#....................#...........#.#..............#.#......................................#.......
 .#..............#...............................#.......#.#...................#...............#...............#..#...........#....
 .#............................#.............................................................................#.#...................
@@ -3734,7 +3736,7 @@ AXXSSMSXMMMMMSMMSAMSSMXMSMASXSMXMASXMSSMXXMASXSXXXSAMXMAMXMMMMMXSSMXAXMASXMMMSAM
 ................#.......#.#.....................................................................................#.................
 ........................................#...#......#.......................................#...........#..........................
 ....#........##...............#...........#..................................................................#....................
-#....................#...................#.........#....................................................................#.........`,m2=`190: 10 19
+#....................#...................#.........#....................................................................#.........`,C2=`190: 10 19
 3267: 81 40 27
 83: 17 5
 156: 15 6
@@ -3742,7 +3744,7 @@ AXXSSMSXMMMMMSMMSAMSSMXMSMASXSMXMASXMSSMXXMASXSXXXSAMXMAMXMMMMMXSSMXAXMASXMMMSAM
 161011: 16 10 13
 192: 17 8 14
 21037: 9 7 18 13
-292: 11 6 16 20`,i2=`29833: 1 50 15 39
+292: 11 6 16 20`,G2=`29833: 1 50 15 39
 458991049840: 17 598 378 2 69 40
 224381: 120 66 66 890 5 96
 5003: 852 662 973 8 3 3 2 1 1
@@ -4591,7 +4593,7 @@ AXXSSMSXMMMMMSMMSAMSSMXMSMASXSMXMASXMSSMXXMASXSXXXSAMXMAMXMMMMMXSSMXAXMASXMMMSAM
 2034580: 77 3 4 793 457 4 4
 109418200850: 1 4 488 6 6 2 75 8 8 3 9 8
 1688245068: 779 97 333 65
-89633: 4 40 9 500 3 2`,h2=`............
+89633: 4 40 9 500 3 2`,p2=`............
 ........0...
 .....0......
 .......0....
@@ -4602,7 +4604,7 @@ AXXSSMSXMMMMMSMMSAMSSMXMSMASXSMXMASXMSSMXXMASXSXXXSAMXMAMXMMMMMXSSMXAXMASXMMMSAM
 ........A...
 .........A..
 ............
-............`,C2=`..................................................
+............`,I2=`..................................................
 ................2.................................
 ......6.........x.0..G............................
 ..............x5......0..................S........
@@ -4651,14 +4653,14 @@ AXXSSMSXMMMMMSMMSAMSSMXMSMASXSMXMASXMSSMXXMASXSXXXSAMXMAMXMMMMMXSSMXAXMASXMMMSAM
 .............z...........D........................
 ..............J....................Dj.............
 ....................................D.............
-....................7.......1.....................`,G2="2333133121414131402",I2="1234649462611144453037831447782650154199904444418754393298142370965884849434468499632063186430373758261212246131269638862289982851199328376799168279795582765623726611801673866318448765341351918267349387295549369963783564627765549860288311622270652081331623303731394493363460181979845515387736964680867096758640946958543414346463705165538262546526685849633195972999203924932643729445403458944247195584523184579232961688214927991948214243724569175730583448284484356119292376162160636186866757817916638763541026228667687927489441312075616548246159384499118447986765804592228974577999418391558734571116287259842867478993963973808062272431173355709666156660615438628445554337897396311549911271914241808044129428431013727079642843477779848864247460711054698795421574452859693757769492604050285036418375879396146592482886487267502614288379508991976559251137771025201035238469498254706163746249664583352686888394389962528661423479377440882368727364852965181763743977304890783444241225367841815365615725373765909460767574983268599041248598298646246882925390333193758336614690606376229859977310952436193516243080142820736246797310504828128333142361961778395099418618769953521649497664886644853689964663439758873464151691988132858144867284958978962955808961183763417212216914927661207061698591644829513170478583448638771115917064791335345120696018156487311920831393667218862462828326378011177233463334414662167970933057637415104521428620171316583459805679855062302436487679508343616574352086477239525111898869755286883051481119247467698574572384843757198728737986321228982587952472519175188921187624567951396763394457786070692212852723244718893056488771519282915396222383964626402733754319192066624738216044945259379798266586195364878622624637701638932230139050603997272731932497316870102557444918199992601683572281921124755356293933564519462473215475729757934498602638582772881959496297271881909070486577451021976055772858475453196515216251924813398442755457684812611981656263259174656792437636372376213499942632258249978296218071178526497765836854834048629598968832652544893314561390614249526577284538916319273787723790619949495473517758716258234618353889749029227213746556982318987250869548462666124998253324231131502429378227848470323268162811262919415565497828579972282462311275737630184921206640284613845450135558338253976668476684759514421262733714843476976079144082858834376275451589896419311023486017685922427499385958861011112529695496899583601313766434263574866514284834451578432730477057327451819973418921194417879030654879945977556395855647794984824077896084248144248377475978169279597945104535933033538345154065962932153364492141267067547293921419856646889639117928768380492089575936888766423618211820459759164944608498513354769993392527363490525813214742786249129029618420443873127481937287728561146178342324935038274511517041666114561752702689702258497859619910792945773477433871324444431521732849908619134635748068931595575724763542359229429510973368217447511092804395326177727365989459398173125426738416694452553389206023877841571785555892491949632144373168895386557753619517684745967678725180291655383735568247954317411776264289229657393810344351517189194088589393165750472861165386595047291071456764214881794485175713274627283234523582343884305732478110125711297241746282361427905787166647974194156695297917744728986072776562623066144375358240927772158817551847216892308073898678128626418245344982127369572315531224268810964066259571984851415346908437426038381612816794929316252687267789263777858038875766339015559812293973867935504325429648571562995816605275619999957092856836307059515983613710179075979569868795191350653132838120722312976542663628482917108631329073222562457791926868149698254426946935451238694223453931387896798751239881935395854748492239272034854919384814888057947717382132434020691221934751479277277488381924725915627532635491417639815780893778169064391249299295961391242973897059321222431952669398107359364749247066963899412458493588475851618149811481738570622410741172283240882535228433612290827311518950568654755622818774595613899438405828503591817580378564226643395995909667539714934279146798901976844041843757348894968491751966983325803548156339127051266777943213196946443685147924101736771537126616867472648750915937969376713819404443987456834538499725447029553244467479941638276481321773611758618017954012345236262287882629661651184360217037388620264740406945544570961969439324827723389371576177441792524882783425205310642840393449536313181829908155322642906538923327183337566748261638651153339081288688754570832098771166148667195983395217796366324354117432877437946495139245484548619623121939221279817485372067452674324453976887546435631418382763557184396342836454571423905055892587918887749615509794173638669092345511447263956156414193204688831184714665889259451439259332311845368943513782263123753777696231694194205495704959922723863880432298413636168381616078573062891598315112918219446554845576533892998692325370594474488539426448814429319426521784182769355925546782632073126961818820906590487395948846166059333927649267297696564965543543947669578590562797409937638871106839913865254341245622412121471859998754578132908841667541892012245858521478756969929316422343942158112797752033183928934658142924752050331176202193334788576912574998658539251115539850283720677650854320576562811551173174578775833328416399162054304788347188291756761439376174388945361219433952335731331821396862218232571525612441251632111848598489974740278692731094122916338949484827142750121531675742965367664641411215414977764115388531647726882037293924637143339974272693733161329484435818123411792184988060974583376955921262599899798211923411428461503498359139894628353480323514903211371414868338889037113959618044305359691573337691109965243588528174194180469092705227532616895293628795765668614773534262141057283252953280472752816169227820629710137797844689886847471636687470336478161230636994287399152051504784202946479867156397644210979880186022878788359828251638383974102549761783143734946341195567965634439759146574513251144937969611361249537917121372414247972591798856129814212926346780449724205525637578952290971474136849879738496771728812252071152898776643786732575294105085665738568074607091191283124971896828783299216714398933508987444845687236538244919298383420637051455094528433138730494627177864361713888977647594843636863317479195475629241971697915947726187830636564114098823729843453743461176752844733713545946539141275604894958278308574593424912829229060391133968790787239888747321781532263733749869585143690721342984578234314138614219443741964162918192511776832307690816985214682826410429113433787575317177081795481623259194420753679905138459037544569162935785886994669122850597696389272946729461351613281911162944812417039904767335394611377936922968695541632214837766439787678309195835518662020544561175329341966194572391843719670973031909794252461657162466559118389525946683914729646204585238287215015856124793234672117822717976787185988389052378159892627129540797921702264906257978611257662924043538394716288231727801998187187227545435152579280644629885225697915598946894373494552184543586517474216755926346294581650628813909257673552914519272495581035816539773930958365491741897244555191289966856363614457944142104028159215274555547615795612282959706667958517156783288251367492826848161218955073602427427613866547424122779329827650419258475355528732104767154285734878232072113972557231629537666041754763208932564176315965371571383181346549876030691828952495268968552072988533919895554730738974972372786236634325509460741682123451746919691525537131894351712995427360325069963468615981429463369178879194958216319775496929998671128072275162382737436456495646683993224992449941366156151414324975676576872522428391202716503172565829321488954682824062501920887040764724758196973087523652269198535721157255732641526649609085347729336341408962914068474252322526895938397461729641429980421181955991429017225932178199739658878987489079502213396990782166303645391029191076297572799271438728949662124867565670859790248322321236718646925336247691113181901650314485848572184556276915306733817135286642638378951375485373189842268454101510974096511347766786745747794875723724881223172731475438554113499294969230499896345364273670256198206361788627735155643452404863439889102496402539898169831597788727256514363910936734802416426149697927797183906033235567413213114286602774426463944329826735551766127960729197555261383539342258852893509229687442528542892468292876505980844924717071681184235250353062141872606939592119818063699734998822637498327818971632322191142252765521191882302148619947798440996859987270864334885820529015606841758773115545802669996133895872649425269641769212338078713611157794446098135242912651414750938184643032408516186418218310825119971251884154566626451040465935791155267664965212982379967351582094996554946459503559976317356932677133292693914278258419209666809193139471362474128491715612842727186119275974722714538464947322932735687149316356125722776428705977516372408861301634138532147866826450181780358498121536279382774438451183535084522947251888472178724244728889782974787079372974867189866494314499638174957259498495953236455076783826294773845029255446696373885569187688314133635866751826572757791714719332648826835032975434899567438180539277412871625177258362716798569982193080853747635666229795587060815759883462799662999279281879889544447846998895121317163697327374623366365494312795131669887078122750964953833171135613156691477326906946915144503239794448344065795016443772969723225530602183164373388284243658719982359081337784544756152882542982248296171996642513454369528658681478664696491045608030172999575312369037303249921484625747173199419882954733117690704926834630584514198542204474193666742247122171655737153171159027681876466734656327278732217893868563149033231793843566344620958028773480981963599535348195704851936829898797882956834618671828864326738830352590847228572746184857143063699191381176809359302352278667589233728977142373127065492574875940238282782968328121455963321288107435401882629725448916276575713760423065787750889229626255811896697863305261308256591062193592365073177790111316928237336250615778303925497222349815447666623691882856521963422160416526905590205654818379481079832676895893516482919098764532765884754140636867697828879918743336295180363016636236554343569157783196458934494242767416427230112632265114358942258939467212335456246142915087939322721885507959525338944694102064423525345877641263544618974894262130974888835426839893144845124061466953249766799754867161993468646637226936342238463268159027531420438573125422181067839858894584651032483726128792645244444587857165471714164430522077509558906410145557497776706768664945661987284613938937966858361365958432955693463573964610831827659182288944736688257279732159219389395343654886953252935763528931501753883851419288867394324422949986212483187026529690533244118174472897696529444842312748845940393277102367571891231253993883793538532382138160465617573716926448591122659290612496583451943215966591536875995057382768169219819846513334183940952663237176554280561472164358123554759949165632443698949857299892249787861662462741789978508818568295126549621593912961256298688249657995496325177665344470129177795561631322891270958612808375683533445653922751355556527997399410403045505310227740132655461049557455757716918371662021522040264347781289236560314910729567774042917294466026232041338426268356414666696685618831128947696830192726342727659063167573358598463282853362891416137852368249578331165749498863177755377179271688145726904738738775913328718248907524647034611183528360986383988789146143131221465233244463795429165699288721628353225078899212116263685478256572762427535699363946563736571660761916816356501740772287761381648478644521443563953891156320236488296157463385186992589615191765352938737714735186567044283819446960576428733969595551489270233391965248743919826934397334724083291232757360766811988674258762595131309434533034173773362060107866462021178362333612636665775088122528546161939944881556513613185432793742955868622916704261788240453061539847774927648113792187652621182946526129438440793058323497149197348339101668237436337863854262345870426293999529441396908147223135289276646634234359848169247211307221485513834587612520118381491989233378338592493584912437519388862098874538247876102371134692177497956989315568485873834869526884729692873984257737156350396433321469694823324639117237895583489785306476695336677490871019704876455928998481724442655661912947346891752622133978196185707040762820189760556431461318739674241357759961726398635792176215833577217385765520798268513850858528855617541178359118456771205355446886836279396677368214701968834319616520362811555127225924941878204865772895662856835950307483968248842148769435637545271491339887999517271334113166313630674335913788856855806171113579143711281382672434113294853827828534435910284883729080247711887487164672196612413356974530834818796014636870735431338419854590689778431376714961729462727565822830141467898762247348731220354284508736114448419919898655912358313893774883851156663629482347537228236931837184806621583425239473677899963370735839439569395381139294651014735147997144635199955631313270823235651767588848987632989334499857191126888656516492237592582872312229976650429432298789223289912459172578827517519949514979974990467568877685375264826470636664785878951492886848357043172833183081404537626279577045938921671219761557124310816435418856762936577210623382746676916878247231224034871663999696886967133780556811351178734157535963948558179225146834193780497919211074392022992876615823299183601156314748926642563679601270186612718133977063984198876161315871835940178889765872903751747680959637952696449848408760317099583025516486831191451168144625261697663322682335545386919314146736213874669877626689672687273398416466542662555252404142422160213942856844858580167073876174381893288268555398628470281294357633363187567269267741511370722017779859164720978515401819733127882032321824145143839353597274937062166718657982399622995777799946162620655525845835197711708389815790283178956622318615846329219011269748755869174665584877361468845834785872181772722488938288369952865678982321607894811523912426637732991352455290436411158642467661306110494589431756694615451643558055307742745264394064339637876076514161588480401656364618803990367995924896802765811954757273416269443881528439391962809838452561613433259520658643544884283962148841216423188095878698479572984182929124606971252436494493396324826828328050125535707665152524608649662257923840701526101567644743698244788177168514294855721356454441862763105515877483483047109253312650946425686237743272179936476617735219747363125154506771613181226797935789744560603274682072817876849196714014175430916017449393256028246734647851749047737216923496449459375198966656459629518666541152411522299519399950714755453072653978469616276763553231567998525816523439933397942562407253535193488181371756865421388568738590619895473958886776651694198087245641962766149747113729378614667877332429678760529138617060528470136948299577573791442662428859329450301916191415387879356227407914897057246745598788784385925091691662603624309916752343244843559870136826526668709967119934242745313312996195717019405045451143494133406924893827683741484553653797274527782614751561694783748066621491723567734015325941863235113821774975135398589041732918744425248956671348739984473456229660894661881180798487492442355224141669948823541914702862519339491198616420589411819762854248287363651523474376125238955392374548799765606877969272371236322373997923823733791374477793866565616131966191464879546239796264141136829092733784333977364344637220715568406513561667195051693879729250583313941694556527355741388164249844335018789312968081845692312278666363129769793243809226722986756136245657467888688174748239951587781910662791286030658070255984926769297632545321994756844250993032504883929095248719454066973246632247191651758056286838496854479287678743257811504685112084706647292338754337277680831295332166431256422450944365476747722688973461594552702226236026606656645682856850201670227472185119594651653039334072279791545032432442351386167834705255839913681383944649128446253871558915957727591054771714429050591119862444847144362618963436523325168690619540925395437220113839909267461254147882567147495696433972571075698856348171649160267532445889259123177293832393457959444257683031256147654256656319999192467120772791396339541923417072721412166830345334572675829561584978563176125119801296341430105963462968121971903755649119986743184826135571503559785329318654244354868842882628121353689619967775868242723455733042354311234886555272833251834878259138306481282664453636599536641947672611306039465257701732513637334057746218481224225575591791938846519474145560263562211251345395753813104593753282302225127062694692527091751575213316922254709813155548514460916072991862183496644915781565588693502995942547263746493876994058836364328369575937417513166234467243711695702034205977161553984134802280667098478659311989577538605085118499415692211878286962769624317639352398144786248593466090852322834689443045892664171598547527783987649511662934577942818534687091202090359081719620963651506483374545518162837725229791862632524088968372667333562269349522312751614283506136241330364855821169676038876343979972326989399865659027983985393452167011342295653565549087271335991189247939792418731983974292157558956887904184441770216671569549842986576116978341732428589216369240805626466573946728211644993198416290771279369198655412325548492213891558463834766515199316919680464312436863779818668765831657404628165417407488879422677445221764626620152366489926501837422884676961579595264455921977389268881777436934918110956012142067327319194011563863181694547988634690532986515073523693159657627859683458126049267778746099212990832262965836716163395489859529833597948521986876251471734834175423287055888814796138158981792198951645445140381591639696609396437054191460468872676287319598179428831762801673211385146530472217582533116182306925195029539390372767348531207741644991545568122282447059506581387748959919127355448017203477176552781834608249783580505952197197415440687665185943141831304030584890958268335753231655409471827570622932162266653333407188899611899021309334637063475630428739644086751585889065724775945232505762671574393131994911251964739814483282775834452797226935877529985177977655572849159871359626277732611224281416445422365460497683264160674370872225557331794518124964761787661393608339113973908420773046324686855742755747794982882252828141758130627448798492994445769050464366794320751254802993871032344188855770809649997897252845501528345195724088863511426847118247292264265740106190425237835622891865463565339999994281924835644165897688643958408437921896223212698819508186521292973772585522214355435313583922932368928767844054433317909321136593809767661759682612287462563774535580649180212950906248877326588097774848588450421294158155127055586345779028878816387336185921401484348858359515596935904860944621418269664529631782115289702183387751497943252993129558258450985384536396924869422058637542397685159314406765458578114631466690651932803740611233515540878886189987522582256441768965748425342040203013904454151669383948159867478248704761905329621586482058868473929398631291319013217947907082668362507280667291236434236614849557846356519821111338216849343330376961644273161037126785468422663714478098599769907158821060567740465450519324187775693753119867101221482354416753919174538341786852251013787167195433238619794149653913533268176678826064573386119072352243313435124941352796298520228411189814179052975270304327429018455813733818285211471177834814613063927063383878719949689196594491532718936418786563983423611085975595449375746289644245878540886557332155594235123711585466313388811282119241513091103492947917864765599815754752635525978359199966328540327360697172656186873575401867895472239956286383729518302830767224688143148210767093333761312077897",R2=`89010123
+....................7.......1.....................`,R2="2333133121414131402",w2="1234649462611144453037831447782650154199904444418754393298142370965884849434468499632063186430373758261212246131269638862289982851199328376799168279795582765623726611801673866318448765341351918267349387295549369963783564627765549860288311622270652081331623303731394493363460181979845515387736964680867096758640946958543414346463705165538262546526685849633195972999203924932643729445403458944247195584523184579232961688214927991948214243724569175730583448284484356119292376162160636186866757817916638763541026228667687927489441312075616548246159384499118447986765804592228974577999418391558734571116287259842867478993963973808062272431173355709666156660615438628445554337897396311549911271914241808044129428431013727079642843477779848864247460711054698795421574452859693757769492604050285036418375879396146592482886487267502614288379508991976559251137771025201035238469498254706163746249664583352686888394389962528661423479377440882368727364852965181763743977304890783444241225367841815365615725373765909460767574983268599041248598298646246882925390333193758336614690606376229859977310952436193516243080142820736246797310504828128333142361961778395099418618769953521649497664886644853689964663439758873464151691988132858144867284958978962955808961183763417212216914927661207061698591644829513170478583448638771115917064791335345120696018156487311920831393667218862462828326378011177233463334414662167970933057637415104521428620171316583459805679855062302436487679508343616574352086477239525111898869755286883051481119247467698574572384843757198728737986321228982587952472519175188921187624567951396763394457786070692212852723244718893056488771519282915396222383964626402733754319192066624738216044945259379798266586195364878622624637701638932230139050603997272731932497316870102557444918199992601683572281921124755356293933564519462473215475729757934498602638582772881959496297271881909070486577451021976055772858475453196515216251924813398442755457684812611981656263259174656792437636372376213499942632258249978296218071178526497765836854834048629598968832652544893314561390614249526577284538916319273787723790619949495473517758716258234618353889749029227213746556982318987250869548462666124998253324231131502429378227848470323268162811262919415565497828579972282462311275737630184921206640284613845450135558338253976668476684759514421262733714843476976079144082858834376275451589896419311023486017685922427499385958861011112529695496899583601313766434263574866514284834451578432730477057327451819973418921194417879030654879945977556395855647794984824077896084248144248377475978169279597945104535933033538345154065962932153364492141267067547293921419856646889639117928768380492089575936888766423618211820459759164944608498513354769993392527363490525813214742786249129029618420443873127481937287728561146178342324935038274511517041666114561752702689702258497859619910792945773477433871324444431521732849908619134635748068931595575724763542359229429510973368217447511092804395326177727365989459398173125426738416694452553389206023877841571785555892491949632144373168895386557753619517684745967678725180291655383735568247954317411776264289229657393810344351517189194088589393165750472861165386595047291071456764214881794485175713274627283234523582343884305732478110125711297241746282361427905787166647974194156695297917744728986072776562623066144375358240927772158817551847216892308073898678128626418245344982127369572315531224268810964066259571984851415346908437426038381612816794929316252687267789263777858038875766339015559812293973867935504325429648571562995816605275619999957092856836307059515983613710179075979569868795191350653132838120722312976542663628482917108631329073222562457791926868149698254426946935451238694223453931387896798751239881935395854748492239272034854919384814888057947717382132434020691221934751479277277488381924725915627532635491417639815780893778169064391249299295961391242973897059321222431952669398107359364749247066963899412458493588475851618149811481738570622410741172283240882535228433612290827311518950568654755622818774595613899438405828503591817580378564226643395995909667539714934279146798901976844041843757348894968491751966983325803548156339127051266777943213196946443685147924101736771537126616867472648750915937969376713819404443987456834538499725447029553244467479941638276481321773611758618017954012345236262287882629661651184360217037388620264740406945544570961969439324827723389371576177441792524882783425205310642840393449536313181829908155322642906538923327183337566748261638651153339081288688754570832098771166148667195983395217796366324354117432877437946495139245484548619623121939221279817485372067452674324453976887546435631418382763557184396342836454571423905055892587918887749615509794173638669092345511447263956156414193204688831184714665889259451439259332311845368943513782263123753777696231694194205495704959922723863880432298413636168381616078573062891598315112918219446554845576533892998692325370594474488539426448814429319426521784182769355925546782632073126961818820906590487395948846166059333927649267297696564965543543947669578590562797409937638871106839913865254341245622412121471859998754578132908841667541892012245858521478756969929316422343942158112797752033183928934658142924752050331176202193334788576912574998658539251115539850283720677650854320576562811551173174578775833328416399162054304788347188291756761439376174388945361219433952335731331821396862218232571525612441251632111848598489974740278692731094122916338949484827142750121531675742965367664641411215414977764115388531647726882037293924637143339974272693733161329484435818123411792184988060974583376955921262599899798211923411428461503498359139894628353480323514903211371414868338889037113959618044305359691573337691109965243588528174194180469092705227532616895293628795765668614773534262141057283252953280472752816169227820629710137797844689886847471636687470336478161230636994287399152051504784202946479867156397644210979880186022878788359828251638383974102549761783143734946341195567965634439759146574513251144937969611361249537917121372414247972591798856129814212926346780449724205525637578952290971474136849879738496771728812252071152898776643786732575294105085665738568074607091191283124971896828783299216714398933508987444845687236538244919298383420637051455094528433138730494627177864361713888977647594843636863317479195475629241971697915947726187830636564114098823729843453743461176752844733713545946539141275604894958278308574593424912829229060391133968790787239888747321781532263733749869585143690721342984578234314138614219443741964162918192511776832307690816985214682826410429113433787575317177081795481623259194420753679905138459037544569162935785886994669122850597696389272946729461351613281911162944812417039904767335394611377936922968695541632214837766439787678309195835518662020544561175329341966194572391843719670973031909794252461657162466559118389525946683914729646204585238287215015856124793234672117822717976787185988389052378159892627129540797921702264906257978611257662924043538394716288231727801998187187227545435152579280644629885225697915598946894373494552184543586517474216755926346294581650628813909257673552914519272495581035816539773930958365491741897244555191289966856363614457944142104028159215274555547615795612282959706667958517156783288251367492826848161218955073602427427613866547424122779329827650419258475355528732104767154285734878232072113972557231629537666041754763208932564176315965371571383181346549876030691828952495268968552072988533919895554730738974972372786236634325509460741682123451746919691525537131894351712995427360325069963468615981429463369178879194958216319775496929998671128072275162382737436456495646683993224992449941366156151414324975676576872522428391202716503172565829321488954682824062501920887040764724758196973087523652269198535721157255732641526649609085347729336341408962914068474252322526895938397461729641429980421181955991429017225932178199739658878987489079502213396990782166303645391029191076297572799271438728949662124867565670859790248322321236718646925336247691113181901650314485848572184556276915306733817135286642638378951375485373189842268454101510974096511347766786745747794875723724881223172731475438554113499294969230499896345364273670256198206361788627735155643452404863439889102496402539898169831597788727256514363910936734802416426149697927797183906033235567413213114286602774426463944329826735551766127960729197555261383539342258852893509229687442528542892468292876505980844924717071681184235250353062141872606939592119818063699734998822637498327818971632322191142252765521191882302148619947798440996859987270864334885820529015606841758773115545802669996133895872649425269641769212338078713611157794446098135242912651414750938184643032408516186418218310825119971251884154566626451040465935791155267664965212982379967351582094996554946459503559976317356932677133292693914278258419209666809193139471362474128491715612842727186119275974722714538464947322932735687149316356125722776428705977516372408861301634138532147866826450181780358498121536279382774438451183535084522947251888472178724244728889782974787079372974867189866494314499638174957259498495953236455076783826294773845029255446696373885569187688314133635866751826572757791714719332648826835032975434899567438180539277412871625177258362716798569982193080853747635666229795587060815759883462799662999279281879889544447846998895121317163697327374623366365494312795131669887078122750964953833171135613156691477326906946915144503239794448344065795016443772969723225530602183164373388284243658719982359081337784544756152882542982248296171996642513454369528658681478664696491045608030172999575312369037303249921484625747173199419882954733117690704926834630584514198542204474193666742247122171655737153171159027681876466734656327278732217893868563149033231793843566344620958028773480981963599535348195704851936829898797882956834618671828864326738830352590847228572746184857143063699191381176809359302352278667589233728977142373127065492574875940238282782968328121455963321288107435401882629725448916276575713760423065787750889229626255811896697863305261308256591062193592365073177790111316928237336250615778303925497222349815447666623691882856521963422160416526905590205654818379481079832676895893516482919098764532765884754140636867697828879918743336295180363016636236554343569157783196458934494242767416427230112632265114358942258939467212335456246142915087939322721885507959525338944694102064423525345877641263544618974894262130974888835426839893144845124061466953249766799754867161993468646637226936342238463268159027531420438573125422181067839858894584651032483726128792645244444587857165471714164430522077509558906410145557497776706768664945661987284613938937966858361365958432955693463573964610831827659182288944736688257279732159219389395343654886953252935763528931501753883851419288867394324422949986212483187026529690533244118174472897696529444842312748845940393277102367571891231253993883793538532382138160465617573716926448591122659290612496583451943215966591536875995057382768169219819846513334183940952663237176554280561472164358123554759949165632443698949857299892249787861662462741789978508818568295126549621593912961256298688249657995496325177665344470129177795561631322891270958612808375683533445653922751355556527997399410403045505310227740132655461049557455757716918371662021522040264347781289236560314910729567774042917294466026232041338426268356414666696685618831128947696830192726342727659063167573358598463282853362891416137852368249578331165749498863177755377179271688145726904738738775913328718248907524647034611183528360986383988789146143131221465233244463795429165699288721628353225078899212116263685478256572762427535699363946563736571660761916816356501740772287761381648478644521443563953891156320236488296157463385186992589615191765352938737714735186567044283819446960576428733969595551489270233391965248743919826934397334724083291232757360766811988674258762595131309434533034173773362060107866462021178362333612636665775088122528546161939944881556513613185432793742955868622916704261788240453061539847774927648113792187652621182946526129438440793058323497149197348339101668237436337863854262345870426293999529441396908147223135289276646634234359848169247211307221485513834587612520118381491989233378338592493584912437519388862098874538247876102371134692177497956989315568485873834869526884729692873984257737156350396433321469694823324639117237895583489785306476695336677490871019704876455928998481724442655661912947346891752622133978196185707040762820189760556431461318739674241357759961726398635792176215833577217385765520798268513850858528855617541178359118456771205355446886836279396677368214701968834319616520362811555127225924941878204865772895662856835950307483968248842148769435637545271491339887999517271334113166313630674335913788856855806171113579143711281382672434113294853827828534435910284883729080247711887487164672196612413356974530834818796014636870735431338419854590689778431376714961729462727565822830141467898762247348731220354284508736114448419919898655912358313893774883851156663629482347537228236931837184806621583425239473677899963370735839439569395381139294651014735147997144635199955631313270823235651767588848987632989334499857191126888656516492237592582872312229976650429432298789223289912459172578827517519949514979974990467568877685375264826470636664785878951492886848357043172833183081404537626279577045938921671219761557124310816435418856762936577210623382746676916878247231224034871663999696886967133780556811351178734157535963948558179225146834193780497919211074392022992876615823299183601156314748926642563679601270186612718133977063984198876161315871835940178889765872903751747680959637952696449848408760317099583025516486831191451168144625261697663322682335545386919314146736213874669877626689672687273398416466542662555252404142422160213942856844858580167073876174381893288268555398628470281294357633363187567269267741511370722017779859164720978515401819733127882032321824145143839353597274937062166718657982399622995777799946162620655525845835197711708389815790283178956622318615846329219011269748755869174665584877361468845834785872181772722488938288369952865678982321607894811523912426637732991352455290436411158642467661306110494589431756694615451643558055307742745264394064339637876076514161588480401656364618803990367995924896802765811954757273416269443881528439391962809838452561613433259520658643544884283962148841216423188095878698479572984182929124606971252436494493396324826828328050125535707665152524608649662257923840701526101567644743698244788177168514294855721356454441862763105515877483483047109253312650946425686237743272179936476617735219747363125154506771613181226797935789744560603274682072817876849196714014175430916017449393256028246734647851749047737216923496449459375198966656459629518666541152411522299519399950714755453072653978469616276763553231567998525816523439933397942562407253535193488181371756865421388568738590619895473958886776651694198087245641962766149747113729378614667877332429678760529138617060528470136948299577573791442662428859329450301916191415387879356227407914897057246745598788784385925091691662603624309916752343244843559870136826526668709967119934242745313312996195717019405045451143494133406924893827683741484553653797274527782614751561694783748066621491723567734015325941863235113821774975135398589041732918744425248956671348739984473456229660894661881180798487492442355224141669948823541914702862519339491198616420589411819762854248287363651523474376125238955392374548799765606877969272371236322373997923823733791374477793866565616131966191464879546239796264141136829092733784333977364344637220715568406513561667195051693879729250583313941694556527355741388164249844335018789312968081845692312278666363129769793243809226722986756136245657467888688174748239951587781910662791286030658070255984926769297632545321994756844250993032504883929095248719454066973246632247191651758056286838496854479287678743257811504685112084706647292338754337277680831295332166431256422450944365476747722688973461594552702226236026606656645682856850201670227472185119594651653039334072279791545032432442351386167834705255839913681383944649128446253871558915957727591054771714429050591119862444847144362618963436523325168690619540925395437220113839909267461254147882567147495696433972571075698856348171649160267532445889259123177293832393457959444257683031256147654256656319999192467120772791396339541923417072721412166830345334572675829561584978563176125119801296341430105963462968121971903755649119986743184826135571503559785329318654244354868842882628121353689619967775868242723455733042354311234886555272833251834878259138306481282664453636599536641947672611306039465257701732513637334057746218481224225575591791938846519474145560263562211251345395753813104593753282302225127062694692527091751575213316922254709813155548514460916072991862183496644915781565588693502995942547263746493876994058836364328369575937417513166234467243711695702034205977161553984134802280667098478659311989577538605085118499415692211878286962769624317639352398144786248593466090852322834689443045892664171598547527783987649511662934577942818534687091202090359081719620963651506483374545518162837725229791862632524088968372667333562269349522312751614283506136241330364855821169676038876343979972326989399865659027983985393452167011342295653565549087271335991189247939792418731983974292157558956887904184441770216671569549842986576116978341732428589216369240805626466573946728211644993198416290771279369198655412325548492213891558463834766515199316919680464312436863779818668765831657404628165417407488879422677445221764626620152366489926501837422884676961579595264455921977389268881777436934918110956012142067327319194011563863181694547988634690532986515073523693159657627859683458126049267778746099212990832262965836716163395489859529833597948521986876251471734834175423287055888814796138158981792198951645445140381591639696609396437054191460468872676287319598179428831762801673211385146530472217582533116182306925195029539390372767348531207741644991545568122282447059506581387748959919127355448017203477176552781834608249783580505952197197415440687665185943141831304030584890958268335753231655409471827570622932162266653333407188899611899021309334637063475630428739644086751585889065724775945232505762671574393131994911251964739814483282775834452797226935877529985177977655572849159871359626277732611224281416445422365460497683264160674370872225557331794518124964761787661393608339113973908420773046324686855742755747794982882252828141758130627448798492994445769050464366794320751254802993871032344188855770809649997897252845501528345195724088863511426847118247292264265740106190425237835622891865463565339999994281924835644165897688643958408437921896223212698819508186521292973772585522214355435313583922932368928767844054433317909321136593809767661759682612287462563774535580649180212950906248877326588097774848588450421294158155127055586345779028878816387336185921401484348858359515596935904860944621418269664529631782115289702183387751497943252993129558258450985384536396924869422058637542397685159314406765458578114631466690651932803740611233515540878886189987522582256441768965748425342040203013904454151669383948159867478248704761905329621586482058868473929398631291319013217947907082668362507280667291236434236614849557846356519821111338216849343330376961644273161037126785468422663714478098599769907158821060567740465450519324187775693753119867101221482354416753919174538341786852251013787167195433238619794149653913533268176678826064573386119072352243313435124941352796298520228411189814179052975270304327429018455813733818285211471177834814613063927063383878719949689196594491532718936418786563983423611085975595449375746289644245878540886557332155594235123711585466313388811282119241513091103492947917864765599815754752635525978359199966328540327360697172656186873575401867895472239956286383729518302830767224688143148210767093333761312077897",a2=`89010123
 78121874
 87430965
 96549874
 45678903
 32019012
 01329801
-10456732`,w2=`101234653436698943210876543298108967890123211
+10456732`,F2=`101234653436698943210876543298108967890123211
 900945762567787651028945054167211876965254300
 812876851008632112987632167054340105874367891
 743987945219541003456542108981233234567809892
@@ -4702,10 +4704,10 @@ AXXSSMSXMMMMMSMMSAMSSMXMSMASXSMXMASXMSSMXXMASXSXXXSAMXMAMXMMMMMXSSMXAXMASXMMMSAM
 030501012896109823478766542103454320176354501
 125418923787210734569651033212169010083296101
 654327654654323601234569124349078321190187632
-789210125345434512103678765678767456783276543`,a2="125 17",F2="2 54 992917 5270417 2514 28561 0 990",N2=`AAAA
+789210125345434512103678765678767456783276543`,N2="125 17",Z2="2 54 992917 5270417 2514 28561 0 990",c2=`AAAA
 BBCD
 BBCC
-EEEC`,Z2=`WWWWWWWHHHHHHHWHRRRRRJJBBJJGDDDDDDDDDDDDDDQQFFFFFFFFKFHHHHHEEEEEHHHKHHHHHHHUUUEEEEEEEEEEVVVVVVVVVVVRRRRRRRRUUUUNVVVVVVVVVVVVNNNNNNNNNNNNNYNN
+EEEC`,U2=`WWWWWWWHHHHHHHWHRRRRRJJBBJJGDDDDDDDDDDDDDDQQFFFFFFFFKFHHHHHEEEEEHHHKHHHHHHHUUUEEEEEEEEEEVVVVVVVVVVVRRRRRRRRUUUUNVVVVVVVVVVVVNNNNNNNNNNNNNYNN
 WWWWWWWWHHHHHHHHRRRRJJJJJJJJDDDDDDDDDDDDDQQFFFFFFFFFFFHFHFEEEEEEHHHHHHHHHHHEUEEEEEEEEEEEVVDVVVVVRRRRRRRRRRRRUUUVVVVVVVVVVVVNNVNNNNNNNNNNNNNN
 WWWWWWWHHHHHHHHHRRRJJJJJJJJDDDDDDDDDDDDDDDQFFFFFFFFFFFFFFFEEEEEEEHHHHHHHHHHEEEEEEEEEEEEEVVDVLVVLAARRRRRRRRRRUUUAVVVVVVVVVVVVVVNNNNNNNNNNNNNN
 WWWWWWHHHHHHHHHHRRRRRJJJJJDDDDDDDDDDDDDDDDDDFFFFFFFFFFFFFFEEEEEEEHHHHHHHHHHEEEEEEEEEEEEEVVDVLLLLLLRRRRRRRRRUUUUVVVVVVVVVVVVVVNNNNNNNNNNNNNNN
@@ -4844,7 +4846,7 @@ CCCCRRRRRRRRRRRRRRVRVVVVQQQQQQQQQQQQQRRRRRRRRRRRRCCCCCUUUUUUUUUUUSCTTCSHHHHHHHHH
 CCCCCCRRRRRRRRRRRRRRVVVVQQQQQQQQQQQQQRRRRRRRRRRRRRCCCCCCUUUUUUUUUCCCTCHHHHHHHHHHHFUUJVJJJJWJJJJJFTTTTFTTTTFFFFFFFQQQQQQPPPPPPDOZOOKOOOOOOOOO
 CCCCCCRRRRCRRRRRRVRVVVVVVVQQQQQQQQQQQRRRRRRRRRRRRRRRCCCCUUUUUUUUUCCCCCHHHHHHHHHHHFUUJJJJJJJJJJJJFFFFFFTTTFFFFFFFFFQFQQFPPPPKKKZZZZOOOOOOOOOO
 CCCCCRRCCRCCRRRRRVVVVVVVVVVVQQQQQQQQQRRRRRRRRRRRRRRCCCCCUUUUUUUUUCCCOOHHHWWHHHUUUUUUJUUUUUJJJJJJFFFFFFTTFFFFFFFFFFQFFQFFKKKKKKKZZOOHHOOOOOOO
-CCCCCCCCCCCCRWWRRVVVVVVVVVVVQQQQQQQQQRRRRRRRRRRRRRCCCCCCUUUUUUUUUCCCOHHHHWHHHHHUUUUUUUUUUUUJJUJJJFFFFFFFFFFFFFFFFFFFFFFFKQKKKKZZZZZOOOFOOOOO`,U2=`Button A: X+94, Y+34
+CCCCCCCCCCCCRWWRRVVVVVVVVVVVQQQQQQQQQRRRRRRRRRRRRRCCCCCCUUUUUUUUUCCCOHHHHWHHHHHUUUUUUUUUUUUJJUJJJFFFFFFFFFFFFFFFFFFFFFFFKQKKKKZZZZZOOOFOOOOO`,Q2=`Button A: X+94, Y+34
 Button B: X+22, Y+67
 Prize: X=8400, Y=5400
 
@@ -4858,7 +4860,7 @@ Prize: X=7870, Y=6450
 
 Button A: X+69, Y+23
 Button B: X+27, Y+71
-Prize: X=18641, Y=10279`,Q2=`Button A: X+79, Y+26
+Prize: X=18641, Y=10279`,D2=`Button A: X+79, Y+26
 Button B: X+61, Y+99
 Prize: X=7544, Y=9586
 
@@ -6136,6 +6138,516 @@ Prize: X=6869, Y=8829
 
 Button A: X+14, Y+62
 Button B: X+19, Y+18
-Prize: X=2943, Y=6882`,c2="",D2="",K2="",O2="",E2="",T2="",J2="",H2="",V2="",f2="",d2="",_2="",L2="",p2="",W2="",y2="",z2="",g2="",b2="",$2="",v2="",j2="",x2="",k2="",q2=Object.assign({"../advent/day01/solution.ts":x1,"../advent/day02/solution.ts":M3,"../advent/day03/solution.ts":S3,"../advent/day04/solution.ts":u3,"../advent/day05/solution.ts":r3,"../advent/day06/solution.ts":i3,"../advent/day07/solution.ts":I3,"../advent/day08/solution.ts":F3,"../advent/day09/solution.ts":Q3,"../advent/day10/solution.ts":O3,"../advent/day11/solution.ts":H3,"../advent/day12/solution.ts":_3,"../advent/day13/solution.ts":W3,"../advent/day14/solution.ts":y3,"../advent/day15/solution.ts":z3,"../advent/day16/solution.ts":g3,"../advent/day17/solution.ts":b3,"../advent/day18/solution.ts":$3,"../advent/day19/solution.ts":v3,"../advent/day20/solution.ts":j3,"../advent/day21/solution.ts":x3,"../advent/day22/solution.ts":k3,"../advent/day23/solution.ts":q3,"../advent/day24/solution.ts":n2,"../advent/day25/solution.ts":M2}),n5=Object.assign({"../advent/day01/input-test.md":A2,"../advent/day01/input.md":X2,"../advent/day02/input-test.md":S2,"../advent/day02/input.md":t2,"../advent/day03/input-test.md":e2,"../advent/day03/input-test2.md":o2,"../advent/day03/input.md":u2,"../advent/day04/input-test.md":l2,"../advent/day04/input.md":B2,"../advent/day05/input-test.md":Y2,"../advent/day05/input.md":r2,"../advent/day06/input-test.md":P2,"../advent/day06/input.md":s2,"../advent/day07/input-test.md":m2,"../advent/day07/input.md":i2,"../advent/day08/input-test.md":h2,"../advent/day08/input.md":C2,"../advent/day09/input-test.md":G2,"../advent/day09/input.md":I2,"../advent/day10/input-test.md":R2,"../advent/day10/input.md":w2,"../advent/day11/input-test.md":a2,"../advent/day11/input.md":F2,"../advent/day12/input-test.md":N2,"../advent/day12/input.md":Z2,"../advent/day13/input-test.md":U2,"../advent/day13/input.md":Q2,"../advent/day14/input-test.md":c2,"../advent/day14/input.md":D2,"../advent/day15/input-test.md":K2,"../advent/day15/input.md":O2,"../advent/day16/input-test.md":E2,"../advent/day16/input.md":T2,"../advent/day17/input-test.md":J2,"../advent/day17/input.md":H2,"../advent/day18/input-test.md":V2,"../advent/day18/input.md":f2,"../advent/day19/input-test.md":d2,"../advent/day19/input.md":_2,"../advent/day20/input-test.md":L2,"../advent/day20/input.md":p2,"../advent/day21/input-test.md":W2,"../advent/day21/input.md":y2,"../advent/day22/input-test.md":z2,"../advent/day22/input.md":g2,"../advent/day23/input-test.md":b2,"../advent/day23/input.md":$2,"../advent/day24/input-test.md":v2,"../advent/day24/input.md":j2,"../advent/day25/input-test.md":x2,"../advent/day25/input.md":k2}),M5=Object.freeze(Object.defineProperty({__proto__:null,inputMods:n5,solutionMods:q2},Symbol.toStringTag,{value:"Module"})),F1=M=>parseInt(M.split("day")[1]||"1"),A5=(M,n)=>{const A=(M.match(/input-?(.+)\.md$/)||[])[1]||"Real";return{day:F1(M),name:A,raw:n}},X5=(M,n)=>{const A=!!(n.part1||n.part2),S=n.part1||(()=>"-"),X=n.part2||(()=>"-"),t=n.answers||[["",""]];return{day:F1(M),part1:S,part2:X,answers:t,hasSolution:A}},[M1,S5]=N([]),[T,t5]=N([]),[$,N1]=N(1),[W,Z1]=N(0),[U1,Q1]=N(""),[e5,o5]=N({value:"",time:0,knownGood:!1}),[u5,l5]=N({value:"",time:0,knownGood:!1}),[c1,y]=N(!1),[D1,B5]=N(!0),x=()=>M1().filter(M=>M.day===$()),K1=()=>T().find(M=>M.day===$()),z=(M,n="",A=0,S=!1)=>{M===1&&o5({value:n,time:A,knownGood:S}),M===2&&l5({value:n,time:A,knownGood:S})},A1=()=>[z(1),z(2)],Y5=()=>{H1(()=>{if(W()>=x().length)return Z1(x().length-1);const M=x()[W()],n=K1();if(!M||!n)return A1();Q1(M.raw)})},H=async()=>{const M=K1(),n=U1();if(!M||!n)return A1();const A=M.answers[W()]||["",""];setTimeout(u1,0,1,M.part1,n,A[0]),setTimeout(u1,5,2,M.part2,n,A[1])},u1=async(M,n,A,S)=>{if(c1())return;y(!0);const{output:X,dt:t}=await O1(n,A,D1());z(M,X,t,X===S),y(!1)},O1=async(M,n,A)=>{const S=performance.now();return{output:(()=>{if(!A)return String(M(n));try{return String(M(n))}catch(t){return`Error: ${t}`}})(),dt:performance.now()-S}},r5=async()=>{if(c1())return;y(!0),A1();const M=["",""],n=[0,0],A=[!0,!0];for(let S=0;S<T().length;S++){const X=T()[S],t=M1().filter(e=>e.day===S+1)[0].raw;for(let e=0;e<2;e++){const{output:o,dt:u}=await O1(e===0?X.part1:X.part2,t,!0);n[e]+=u;const l=o===X.answers[0][e];A[e]&&=l,M[e]+=l?"★":"-",z(e+1,M[e],n[e],A[e]),await new Promise(B=>setTimeout(B,0))}}y(!1)},P5=M=>{S5(Object.keys(M.inputMods).map(n=>A5(n,M.inputMods[n])).sort((n,A)=>n.name.localeCompare(A.name))),t5(Object.keys(M.solutionMods).map(n=>X5(n,M.solutionMods[n])).filter(n=>n.hasSolution).sort((n,A)=>n.day-A.day)),H()};P5(M5);N1(T().at(-1)?.day||1);setTimeout(H,0);var s5=D("<div class=label><h4>Part <!>:</h4><div class=time>(<!>ms)"),m5=D("<textarea class=output disabled>");const i5=(M="")=>{const n=M.split(`
-`).length;return Math.min(n,Math.max(n,1,10))},l1=({part:M=1})=>{const n=M===1?e5:u5;return[(()=>{var A=s5(),S=A.firstChild,X=S.firstChild,t=X.nextSibling;t.nextSibling;var e=S.nextSibling,o=e.firstChild,u=o.nextSibling;return u.nextSibling,G(S,M,t),G(e,()=>n().time.toFixed(0),u),A})(),(()=>{var A=m5();return c(S=>{var X=!!n().knownGood,t=i5(n().value);return X!==S.e&&A.classList.toggle("correct-answer",S.e=X),t!==S.t&&y1(A,"rows",S.t=t),S},{e:void 0,t:void 0}),c(()=>A.value=n().value),A})()]};var h5=D("<button>");const v=M=>{const n=()=>({...M.classes,button:!0,toggled:M.isToggled});return(()=>{var A=h5();return z1(A,"click",M.onClick),G(A,()=>M.label),c(S=>g1(A,n(),S)),A})()};h1(["click"]);var C5=D("<div class=label style=align-self:flex-start;><h4>Input:</h4><br>");const G5=()=>{const M=()=>M1().filter(n=>n.day===$()).map((n,A)=>({label:n.name,isToggled:A===W(),onClick:()=>{Z1(A),H()},classes:{"input-toggle":!0}}));return(()=>{var n=C5(),A=n.firstChild;return A.nextSibling,G(n,()=>M().map(S=>R(v,S)),null),n})()},I5=()=>T().map(M=>R(v,{get label(){return M.day.toString().padStart(2,"0")},get isToggled(){return M.day===$()},onClick:()=>{N1(M.day),H()}}));var R5=D("<textarea rows=14>");const w5=M=>(()=>{var n=R5();return n.$$input=A=>{M.onUpdate(A.target.value),H()},c(()=>n.value=M.value),n})(),a5=()=>R(w5,{get value(){return U1()},onUpdate:Q1});h1(["input"]);var F5=D("<div class=catch-area>Catch errors");const N5=()=>(()=>{var M=F5();return M.firstChild,G(M,R(v,{label:"x",classes:{"input-toggle":!0,"catch-button":!0},get isToggled(){return D1()},onClick:()=>B5(n=>!n)}),null),M})(),Z5=()=>R(v,{label:"Run all",classes:{"input-toggle":!1,"run-all-button":!0},isToggled:!1,onClick:()=>r5()});var U5=D("<main><header><h2>Advent 2024</h2></header><article class=layout><div class=label><h4>Days:</h4></div><div><br></div><div>");const Q5=()=>(Y5(),(()=>{var M=U5(),n=M.firstChild,A=n.nextSibling,S=A.firstChild,X=S.nextSibling,t=X.firstChild,e=X.nextSibling;return G(X,R(I5,{}),t),G(X,R(Z5,{}),null),G(A,R(l1,{part:1}),e),G(A,R(l1,{part:2}),e),G(A,R(G5,{}),e),G(A,R(a5,{}),e),G(A,R(N5,{}),null),M})()),c5=document.getElementById("root");W1(Q5,c5);
-//# sourceMappingURL=index-B_Pv8iVH.js.map
+Prize: X=2943, Y=6882`,v2=`p=0,4 v=3,-3
+p=6,3 v=-1,-3
+p=10,3 v=-1,2
+p=2,0 v=2,-1
+p=0,0 v=1,3
+p=3,0 v=-2,-2
+p=7,6 v=-1,-3
+p=3,0 v=-1,-2
+p=9,3 v=2,3
+p=7,3 v=-1,2
+p=2,4 v=2,-3
+p=9,5 v=-3,-3`,K2=`p=91,23 v=98,-65
+p=100,68 v=-43,14
+p=33,76 v=55,34
+p=83,21 v=14,67
+p=59,43 v=-65,77
+p=2,89 v=-53,61
+p=22,83 v=44,85
+p=54,82 v=13,72
+p=72,70 v=-81,43
+p=9,89 v=42,-76
+p=80,10 v=-79,-19
+p=65,86 v=-38,-35
+p=67,41 v=-87,72
+p=39,82 v=-20,-80
+p=76,20 v=-4,98
+p=44,22 v=56,63
+p=91,13 v=-74,19
+p=48,56 v=-15,69
+p=61,30 v=99,74
+p=10,38 v=55,80
+p=24,61 v=59,-72
+p=98,50 v=74,95
+p=17,33 v=3,87
+p=91,70 v=17,-7
+p=79,92 v=31,-49
+p=8,30 v=-73,-95
+p=9,34 v=-83,-34
+p=62,17 v=21,29
+p=47,51 v=-56,38
+p=57,64 v=86,96
+p=92,1 v=18,43
+p=16,72 v=89,-69
+p=85,96 v=-23,-91
+p=7,25 v=95,-50
+p=95,71 v=30,-47
+p=23,5 v=19,-91
+p=79,40 v=87,73
+p=12,84 v=63,6
+p=30,79 v=-92,85
+p=64,36 v=91,70
+p=63,6 v=26,50
+p=64,76 v=-41,-80
+p=61,6 v=-10,-22
+p=54,65 v=41,-68
+p=95,101 v=-33,19
+p=90,18 v=77,19
+p=46,40 v=-91,66
+p=11,10 v=-7,43
+p=9,23 v=33,-48
+p=72,59 v=-95,4
+p=10,40 v=-98,-54
+p=85,80 v=-3,82
+p=56,45 v=-50,76
+p=66,8 v=-55,67
+p=34,101 v=75,-84
+p=57,31 v=66,25
+p=1,98 v=-78,71
+p=95,62 v=-4,-85
+p=68,34 v=6,4
+p=64,83 v=-96,64
+p=59,93 v=43,24
+p=41,37 v=40,-37
+p=53,71 v=-90,6
+p=6,54 v=-38,-27
+p=14,78 v=-98,-35
+p=62,72 v=-19,-49
+p=70,52 v=96,-83
+p=8,71 v=-18,-4
+p=75,67 v=-50,96
+p=93,49 v=37,-30
+p=37,67 v=-51,-10
+p=41,19 v=-30,-23
+p=10,13 v=79,-84
+p=22,83 v=-26,-38
+p=68,79 v=-85,-52
+p=78,72 v=-65,-73
+p=66,53 v=-60,-19
+p=84,79 v=-99,-87
+p=12,67 v=34,-10
+p=77,17 v=67,-71
+p=9,41 v=-93,-58
+p=87,42 v=43,-23
+p=88,90 v=27,16
+p=11,28 v=-82,-19
+p=44,68 v=56,58
+p=1,89 v=-58,-87
+p=6,68 v=85,-55
+p=37,41 v=55,52
+p=4,102 v=-47,-56
+p=30,42 v=-77,-51
+p=14,34 v=74,11
+p=91,68 v=72,-28
+p=28,6 v=-23,74
+p=75,30 v=66,34
+p=66,69 v=50,-79
+p=92,86 v=-26,-82
+p=67,32 v=82,80
+p=44,80 v=-61,-28
+p=86,55 v=22,-45
+p=18,44 v=-11,56
+p=41,76 v=25,5
+p=81,1 v=80,-52
+p=3,64 v=-83,-93
+p=3,30 v=-83,1
+p=100,86 v=-88,44
+p=41,31 v=45,70
+p=60,21 v=-65,-23
+p=4,0 v=54,98
+p=24,68 v=-98,-93
+p=5,25 v=79,-81
+p=39,44 v=26,-51
+p=65,5 v=-49,81
+p=50,2 v=-40,-25
+p=96,100 v=-43,88
+p=21,95 v=34,2
+p=38,42 v=15,97
+p=90,102 v=74,64
+p=29,66 v=-58,-54
+p=86,32 v=7,12
+p=57,83 v=-50,-90
+p=25,35 v=-77,11
+p=97,102 v=47,-95
+p=81,12 v=-54,-98
+p=6,56 v=23,-51
+p=80,102 v=-79,16
+p=93,26 v=-83,83
+p=32,86 v=23,-43
+p=24,84 v=-52,-97
+p=20,52 v=23,79
+p=51,95 v=-96,88
+p=23,89 v=69,3
+p=42,23 v=-66,53
+p=96,69 v=-28,65
+p=23,50 v=99,41
+p=97,77 v=94,-80
+p=10,92 v=-63,19
+p=70,32 v=92,1
+p=7,66 v=-96,-67
+p=77,14 v=-34,-37
+p=99,46 v=41,25
+p=61,39 v=-45,-27
+p=76,80 v=-19,93
+p=57,36 v=52,32
+p=62,53 v=38,-67
+p=83,11 v=39,-45
+p=37,92 v=-46,23
+p=81,39 v=-69,73
+p=48,63 v=-5,-24
+p=14,15 v=74,36
+p=48,35 v=81,-30
+p=31,50 v=-21,-10
+p=87,93 v=-83,33
+p=46,101 v=-55,35
+p=79,96 v=-94,54
+p=71,31 v=1,-23
+p=14,51 v=44,76
+p=42,20 v=-91,14
+p=0,21 v=-48,87
+p=61,24 v=-28,-26
+p=48,27 v=-91,8
+p=84,78 v=-49,-90
+p=35,66 v=-77,13
+p=81,30 v=52,39
+p=66,76 v=85,5
+p=19,45 v=80,-78
+p=51,77 v=-55,-79
+p=59,2 v=82,36
+p=22,83 v=22,-65
+p=82,17 v=52,15
+p=84,61 v=-49,52
+p=19,46 v=80,90
+p=35,81 v=71,-13
+p=94,24 v=78,91
+p=19,33 v=8,61
+p=47,25 v=69,-96
+p=6,8 v=-2,-60
+p=9,20 v=-22,-19
+p=68,0 v=21,-5
+p=30,15 v=-97,84
+p=9,59 v=-19,-84
+p=77,35 v=57,35
+p=91,54 v=-13,-31
+p=53,69 v=81,-69
+p=27,41 v=-54,33
+p=28,69 v=-67,65
+p=23,58 v=60,-48
+p=35,16 v=35,36
+p=39,84 v=-84,-18
+p=41,82 v=45,71
+p=34,48 v=16,61
+p=22,1 v=39,-87
+p=42,85 v=-76,68
+p=5,52 v=18,-34
+p=19,58 v=-62,-34
+p=60,4 v=-30,26
+p=32,43 v=4,-92
+p=10,38 v=-78,1
+p=54,76 v=-46,6
+p=9,93 v=-17,-39
+p=93,27 v=-61,-89
+p=39,89 v=93,6
+p=23,69 v=8,55
+p=23,8 v=-52,43
+p=29,96 v=4,57
+p=88,49 v=2,93
+p=37,49 v=20,-36
+p=48,84 v=85,82
+p=62,101 v=6,16
+p=79,82 v=-39,-4
+p=10,71 v=-12,-4
+p=35,42 v=-31,-61
+p=2,95 v=-50,53
+p=44,26 v=-97,-13
+p=2,36 v=84,-89
+p=3,64 v=-25,-39
+p=35,23 v=4,67
+p=38,102 v=-26,-53
+p=11,70 v=-22,-4
+p=41,42 v=-97,55
+p=59,76 v=52,-82
+p=39,23 v=29,53
+p=7,46 v=-47,1
+p=82,27 v=-84,32
+p=56,20 v=26,-5
+p=76,33 v=16,-58
+p=87,46 v=-74,-68
+p=63,3 v=97,2
+p=71,15 v=-30,22
+p=37,6 v=80,5
+p=39,66 v=60,51
+p=85,62 v=-40,94
+p=26,97 v=41,-51
+p=84,63 v=-86,69
+p=23,59 v=-97,-96
+p=93,32 v=77,-47
+p=88,1 v=-23,64
+p=14,36 v=-67,-49
+p=40,94 v=-25,78
+p=54,54 v=-47,1
+p=96,31 v=93,90
+p=91,21 v=-94,-57
+p=88,23 v=25,21
+p=12,64 v=16,-8
+p=75,17 v=-73,70
+p=32,9 v=38,-36
+p=37,2 v=80,64
+p=72,69 v=66,62
+p=52,98 v=-23,42
+p=10,74 v=36,38
+p=33,6 v=-42,-87
+p=83,55 v=22,-48
+p=59,80 v=-80,76
+p=1,32 v=-70,-30
+p=34,49 v=33,-58
+p=28,25 v=34,74
+p=57,43 v=50,23
+p=7,12 v=53,9
+p=54,30 v=-95,-9
+p=11,91 v=28,37
+p=70,38 v=-9,-92
+p=30,15 v=25,77
+p=88,63 v=-98,39
+p=40,15 v=-51,-19
+p=100,26 v=28,-88
+p=68,30 v=-90,66
+p=44,80 v=-56,54
+p=11,58 v=39,42
+p=62,85 v=67,13
+p=92,6 v=2,-88
+p=71,98 v=-30,-5
+p=99,33 v=-69,-13
+p=90,84 v=-87,76
+p=23,71 v=24,27
+p=62,61 v=16,-35
+p=42,57 v=-86,-34
+p=28,66 v=-16,-7
+p=88,94 v=-99,78
+p=95,42 v=51,-82
+p=82,50 v=52,4
+p=1,69 v=-53,-21
+p=37,21 v=91,-37
+p=30,2 v=-32,-81
+p=18,59 v=-7,-96
+p=40,28 v=-56,94
+p=45,66 v=50,-31
+p=39,79 v=-41,-42
+p=75,68 v=97,-42
+p=27,22 v=-21,-33
+p=6,15 v=-34,-68
+p=28,94 v=-65,-7
+p=48,25 v=-15,63
+p=77,51 v=-85,-54
+p=36,53 v=-48,-7
+p=15,38 v=-73,-41
+p=24,73 v=-23,2
+p=17,15 v=-37,63
+p=12,59 v=-33,57
+p=45,66 v=-96,10
+p=27,98 v=-67,71
+p=88,66 v=-14,79
+p=59,12 v=91,36
+p=7,29 v=3,15
+p=44,90 v=-76,47
+p=77,45 v=67,-23
+p=14,62 v=-47,-86
+p=28,90 v=-77,-80
+p=65,17 v=-80,70
+p=63,47 v=62,-99
+p=47,30 v=-71,97
+p=7,47 v=-58,83
+p=2,57 v=12,-3
+p=57,71 v=70,47
+p=56,26 v=94,55
+p=66,97 v=-71,45
+p=41,54 v=-30,-86
+p=31,85 v=-26,47
+p=63,55 v=-39,48
+p=6,84 v=28,-66
+p=64,62 v=-50,86
+p=51,49 v=91,-82
+p=19,95 v=44,30
+p=54,98 v=96,-32
+p=71,65 v=54,42
+p=97,72 v=83,-21
+p=71,19 v=-95,-9
+p=59,45 v=51,83
+p=85,18 v=37,-53
+p=59,58 v=-60,86
+p=96,63 v=68,-89
+p=53,25 v=58,-22
+p=95,72 v=52,7
+p=10,0 v=-83,16
+p=48,50 v=-16,-44
+p=25,27 v=-30,45
+p=79,33 v=73,44
+p=40,3 v=-36,-70
+p=68,85 v=-64,-72
+p=86,73 v=-9,-72
+p=25,53 v=50,90
+p=64,41 v=68,-76
+p=85,42 v=-69,-61
+p=84,57 v=-10,-73
+p=36,53 v=-89,22
+p=24,55 v=54,-17
+p=1,97 v=-43,93
+p=29,1 v=95,-49
+p=19,22 v=28,90
+p=73,59 v=18,-7
+p=65,36 v=41,48
+p=22,50 v=-57,-72
+p=61,36 v=11,56
+p=18,96 v=-68,-1
+p=88,18 v=-89,5
+p=73,2 v=36,68
+p=24,99 v=49,88
+p=43,50 v=-5,-20
+p=34,99 v=95,-56
+p=9,2 v=48,-52
+p=68,39 v=-55,-30
+p=33,99 v=-42,12
+p=80,26 v=52,-23
+p=31,70 v=19,-7
+p=75,27 v=23,-69
+p=41,8 v=40,-22
+p=2,36 v=-28,-89
+p=13,92 v=49,-38
+p=25,60 v=-82,96
+p=7,33 v=-83,11
+p=58,63 v=56,-65
+p=62,85 v=-85,68
+p=97,16 v=-18,-50
+p=48,34 v=-47,43
+p=43,82 v=-71,20
+p=63,55 v=-60,-17
+p=28,62 v=-75,-70
+p=7,52 v=-12,47
+p=72,73 v=66,-4
+p=98,33 v=68,-64
+p=87,51 v=-79,-89
+p=98,63 v=-58,-72
+p=57,22 v=-15,87
+p=11,20 v=42,-63
+p=72,10 v=66,-67
+p=28,20 v=-87,1
+p=22,5 v=-90,29
+p=23,30 v=66,30
+p=38,26 v=-21,32
+p=90,87 v=-28,58
+p=71,94 v=22,13
+p=32,32 v=24,-71
+p=9,30 v=69,29
+p=34,64 v=-11,17
+p=80,35 v=78,63
+p=39,93 v=72,-8
+p=63,94 v=-42,96
+p=85,26 v=-69,-31
+p=5,100 v=-22,5
+p=96,37 v=99,-85
+p=55,51 v=43,5
+p=20,58 v=84,93
+p=1,29 v=41,82
+p=83,73 v=-79,-62
+p=71,98 v=21,23
+p=49,72 v=-87,-38
+p=0,63 v=-50,62
+p=69,50 v=68,34
+p=94,37 v=48,38
+p=5,28 v=-53,63
+p=99,58 v=-15,44
+p=1,86 v=-78,34
+p=25,25 v=69,-91
+p=15,13 v=-57,-19
+p=68,59 v=92,-17
+p=7,65 v=-58,72
+p=90,88 v=-83,83
+p=31,60 v=69,-40
+p=83,60 v=52,-55
+p=16,63 v=86,-5
+p=21,19 v=-82,-85
+p=4,74 v=-12,-1
+p=51,76 v=-73,-63
+p=71,67 v=26,41
+p=3,86 v=-88,6
+p=5,65 v=73,31
+p=79,66 v=-44,-96
+p=80,79 v=39,49
+p=24,66 v=-25,64
+p=0,1 v=2,-49
+p=40,21 v=-25,97
+p=97,47 v=-28,90
+p=97,70 v=-61,-99
+p=12,42 v=-38,-44
+p=42,39 v=-86,42
+p=17,28 v=94,-16
+p=68,50 v=37,4
+p=31,46 v=-81,-89
+p=95,74 v=-23,-28
+p=24,35 v=-82,-23
+p=53,27 v=54,27
+p=26,17 v=95,-57
+p=77,92 v=37,54
+p=99,33 v=68,-30
+p=46,100 v=20,19
+p=64,22 v=-95,43
+p=9,94 v=-88,6
+p=44,78 v=70,-52
+p=100,67 v=38,-66
+p=31,79 v=90,16
+p=57,67 v=40,-86
+p=79,48 v=67,-96
+p=46,100 v=73,44
+p=26,18 v=-7,80
+p=60,84 v=21,-59
+p=18,16 v=64,17
+p=48,81 v=91,-35
+p=54,9 v=-10,43
+p=34,58 v=-16,31
+p=33,0 v=-77,-63
+p=90,1 v=-36,-27
+p=53,68 v=71,34
+p=37,60 v=75,-93
+p=49,8 v=30,-40
+p=10,102 v=94,19
+p=78,54 v=60,-21
+p=42,52 v=35,48
+p=98,69 v=66,-32
+p=89,98 v=-47,80
+p=44,8 v=56,70
+p=67,8 v=97,26
+p=7,81 v=65,39
+p=87,38 v=23,97
+p=95,11 v=87,-5
+p=23,13 v=14,80
+p=98,13 v=84,34
+p=1,57 v=-22,3
+p=22,10 v=81,-8
+p=75,14 v=-44,-26
+p=7,75 v=3,-80
+p=1,20 v=-58,84
+p=20,12 v=79,-60
+p=80,8 v=78,-36
+p=41,66 v=64,-33
+p=82,30 v=-59,63
+p=95,50 v=53,-84
+p=27,0 v=-87,40
+p=58,18 v=-25,53
+p=50,34 v=65,22
+p=6,41 v=50,37
+p=3,72 v=-56,-25
+p=85,1 v=67,-15
+p=63,52 v=34,-93
+p=28,72 v=4,-35
+p=59,102 v=-71,-39
+p=26,16 v=24,49
+p=10,97 v=-3,90
+p=22,82 v=-32,88
+p=47,25 v=-96,-16
+p=58,102 v=72,-78
+p=26,92 v=76,-72
+p=28,22 v=34,-2`,O2="",E2="",T2="",J2="",H2="",V2="",f2="",d2="",_2="",L2="",W2="",y2="",z2="",g2="",b2="",$2="",j2="",x2="",k2="",q2="",n5="",M5="",A5=Object.assign({"../advent/day01/solution.ts":x1,"../advent/day02/solution.ts":M3,"../advent/day03/solution.ts":S3,"../advent/day04/solution.ts":u3,"../advent/day05/solution.ts":r3,"../advent/day06/solution.ts":i3,"../advent/day07/solution.ts":p3,"../advent/day08/solution.ts":a3,"../advent/day09/solution.ts":c3,"../advent/day10/solution.ts":v3,"../advent/day11/solution.ts":T3,"../advent/day12/solution.ts":f3,"../advent/day13/solution.ts":L3,"../advent/day14/solution.ts":g3,"../advent/day15/solution.ts":b3,"../advent/day16/solution.ts":$3,"../advent/day17/solution.ts":j3,"../advent/day18/solution.ts":x3,"../advent/day19/solution.ts":k3,"../advent/day20/solution.ts":q3,"../advent/day21/solution.ts":n2,"../advent/day22/solution.ts":M2,"../advent/day23/solution.ts":A2,"../advent/day24/solution.ts":X2,"../advent/day25/solution.ts":S2}),X5=Object.assign({"../advent/day01/input-test.md":t2,"../advent/day01/input.md":e2,"../advent/day02/input-test.md":o2,"../advent/day02/input.md":u2,"../advent/day03/input-test.md":l2,"../advent/day03/input-test2.md":B2,"../advent/day03/input.md":Y2,"../advent/day04/input-test.md":r2,"../advent/day04/input.md":P2,"../advent/day05/input-test.md":s2,"../advent/day05/input.md":m2,"../advent/day06/input-test.md":i2,"../advent/day06/input.md":h2,"../advent/day07/input-test.md":C2,"../advent/day07/input.md":G2,"../advent/day08/input-test.md":p2,"../advent/day08/input.md":I2,"../advent/day09/input-test.md":R2,"../advent/day09/input.md":w2,"../advent/day10/input-test.md":a2,"../advent/day10/input.md":F2,"../advent/day11/input-test.md":N2,"../advent/day11/input.md":Z2,"../advent/day12/input-test.md":c2,"../advent/day12/input.md":U2,"../advent/day13/input-test.md":Q2,"../advent/day13/input.md":D2,"../advent/day14/input-test.md":v2,"../advent/day14/input.md":K2,"../advent/day15/input-test.md":O2,"../advent/day15/input.md":E2,"../advent/day16/input-test.md":T2,"../advent/day16/input.md":J2,"../advent/day17/input-test.md":H2,"../advent/day17/input.md":V2,"../advent/day18/input-test.md":f2,"../advent/day18/input.md":d2,"../advent/day19/input-test.md":_2,"../advent/day19/input.md":L2,"../advent/day20/input-test.md":W2,"../advent/day20/input.md":y2,"../advent/day21/input-test.md":z2,"../advent/day21/input.md":g2,"../advent/day22/input-test.md":b2,"../advent/day22/input.md":$2,"../advent/day23/input-test.md":j2,"../advent/day23/input.md":x2,"../advent/day24/input-test.md":k2,"../advent/day24/input.md":q2,"../advent/day25/input-test.md":n5,"../advent/day25/input.md":M5}),S5=Object.freeze(Object.defineProperty({__proto__:null,inputMods:X5,solutionMods:A5},Symbol.toStringTag,{value:"Module"})),a1=M=>parseInt(M.split("day")[1]||"1"),t5=(M,n)=>{const A=(M.match(/input-?(.+)\.md$/)||[])[1]||"Real";return{day:a1(M),name:A,raw:n}},e5=(M,n)=>{const A=!!(n.part1||n.part2),o=n.part1||(()=>"-"),e=n.part2||(()=>"-"),t=n.answers||[["",""]];return{day:a1(M),part1:o,part2:e,answers:t,hasSolution:A}},[M1,o5]=N([]),[O,u5]=N([]),[b,F1]=N(1),[L,N1]=N(0),[Z1,c1]=N(""),[l5,B5]=N({value:"",time:0,knownGood:!1}),[Y5,r5]=N({value:"",time:0,knownGood:!1}),[U1,W]=N(!1),[Q1,P5]=N(!0),x=()=>M1().filter(M=>M.day===b()),D1=()=>O().find(M=>M.day===b()),y=(M,n="",A=0,o=!1)=>{M===1&&B5({value:n,time:A,knownGood:o}),M===2&&r5({value:n,time:A,knownGood:o})},A1=()=>[y(1),y(2)],s5=()=>{T1(()=>{if(L()>=x().length)return N1(x().length-1);const M=x()[L()],n=D1();if(!M||!n)return A1();c1(M.raw)})},T=async()=>{const M=D1(),n=Z1();if(!M||!n)return A1();const A=M.answers[L()]||["",""];setTimeout(u1,0,1,M.part1,n,A[0]),setTimeout(u1,5,2,M.part2,n,A[1])},u1=async(M,n,A,o)=>{if(U1())return;W(!0);const{output:e,dt:t}=await v1(n,A,Q1());y(M,e,t,e===o),W(!1)},v1=async(M,n,A)=>{const o=performance.now();return{output:(()=>{if(!A)return String(M(n));try{return String(M(n))}catch(t){return`Error: ${t}`}})(),dt:performance.now()-o}},m5=async()=>{if(U1())return;W(!0),A1();const M=["",""],n=[0,0],A=[!0,!0];for(let o=0;o<O().length;o++){const e=O()[o],t=M1().filter(X=>X.day===o+1)[0].raw;for(let X=0;X<2;X++){const{output:S,dt:u}=await v1(X===0?e.part1:e.part2,t,!0);n[X]+=u;const l=S===e.answers[0][X];A[X]&&=l,M[X]+=l?"★":"-",y(X+1,M[X],n[X],A[X]),await new Promise(B=>setTimeout(B,0))}}W(!1)},i5=M=>{o5(Object.keys(M.inputMods).map(n=>t5(n,M.inputMods[n])).sort((n,A)=>n.name.localeCompare(A.name))),u5(Object.keys(M.solutionMods).map(n=>e5(n,M.solutionMods[n])).filter(n=>n.hasSolution).sort((n,A)=>n.day-A.day)),T()};i5(S5);F1(O().at(-1)?.day||1);setTimeout(T,0);var h5=Q("<div class=label><h4>Part <!>:</h4><div class=time>(<!>ms)"),C5=Q("<textarea class=output disabled>");const G5=(M="")=>{const n=M.split(`
+`).length;return Math.min(n,Math.max(n,1,10))},l1=({part:M=1})=>{const n=M===1?l5:Y5;return[(()=>{var A=h5(),o=A.firstChild,e=o.firstChild,t=e.nextSibling;t.nextSibling;var X=o.nextSibling,S=X.firstChild,u=S.nextSibling;return u.nextSibling,p(o,M,t),p(X,()=>n().time.toFixed(0),u),A})(),(()=>{var A=C5();return U(o=>{var e=!!n().knownGood,t=G5(n().value);return e!==o.e&&A.classList.toggle("correct-answer",o.e=e),t!==o.t&&W1(A,"rows",o.t=t),o},{e:void 0,t:void 0}),U(()=>A.value=n().value),A})()]};var p5=Q("<button>");const $=M=>{const n=()=>({...M.classes,button:!0,toggled:M.isToggled});return(()=>{var A=p5();return y1(A,"click",M.onClick),p(A,()=>M.label),U(o=>z1(A,n(),o)),A})()};h1(["click"]);var I5=Q("<div class=label style=align-self:flex-start;><h4>Input:</h4><br>");const R5=()=>{const M=()=>M1().filter(n=>n.day===b()).map((n,A)=>({label:n.name,isToggled:A===L(),onClick:()=>{N1(A),T()},classes:{"input-toggle":!0}}));return(()=>{var n=I5(),A=n.firstChild;return A.nextSibling,p(n,()=>M().map(o=>R($,o)),null),n})()},w5=()=>O().map(M=>R($,{get label(){return M.day.toString().padStart(2,"0")},get isToggled(){return M.day===b()},onClick:()=>{F1(M.day),T()}}));var a5=Q("<textarea rows=14>");const F5=M=>(()=>{var n=a5();return n.$$input=A=>{M.onUpdate(A.target.value),T()},U(()=>n.value=M.value),n})(),N5=()=>R(F5,{get value(){return Z1()},onUpdate:c1});h1(["input"]);var Z5=Q("<div class=catch-area>Catch errors");const c5=()=>(()=>{var M=Z5();return M.firstChild,p(M,R($,{label:"x",classes:{"input-toggle":!0,"catch-button":!0},get isToggled(){return Q1()},onClick:()=>P5(n=>!n)}),null),M})(),U5=()=>R($,{label:"Run all",classes:{"input-toggle":!1,"run-all-button":!0},isToggled:!1,onClick:()=>m5()});var Q5=Q("<main><header><h2>Advent 2024</h2></header><article class=layout><div class=label><h4>Days:</h4></div><div><br></div><div>");const D5=()=>(s5(),(()=>{var M=Q5(),n=M.firstChild,A=n.nextSibling,o=A.firstChild,e=o.nextSibling,t=e.firstChild,X=e.nextSibling;return p(e,R(w5,{}),t),p(e,R(U5,{}),null),p(A,R(l1,{part:1}),X),p(A,R(l1,{part:2}),X),p(A,R(R5,{}),X),p(A,R(N5,{}),X),p(A,R(c5,{}),null),M})()),v5=document.getElementById("root");L1(D5,v5);
+//# sourceMappingURL=index-DgE9dH4C.js.map
