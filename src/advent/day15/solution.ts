@@ -8,7 +8,7 @@ export const answers = [
 
 const dirs = {
   '^': [-1, 0],
-  v: [1, 0],
+  v: [1, 0], //     prettier strikes again!
   '<': [0, -1],
   '>': [0, 1],
 } as Record<string, [number, number]>

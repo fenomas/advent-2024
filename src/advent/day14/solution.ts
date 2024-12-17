@@ -57,7 +57,7 @@ export const part2 = (input = '') => {
   }
 
   const cts = Array.from(Array(sx + sy))
-  for (let dt = 7000; dt < 8000; dt++) {
+  for (let dt = 5000; dt < 8000; dt++) {
     cts.fill(0)
     bots.forEach(({ pos, vel }) => {
       const x = mod(pos[0] + vel[0] * dt, sx)
