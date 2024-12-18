@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      abstract-pathfinder:
+        specifier: ^0.1.0
+        version: 0.1.0
       ndarray:
         specifier: ^1.0.19
         version: 1.0.19
@@ -659,6 +662,9 @@ packages:
     resolution: {integrity: sha512-pq19gbaMOmFE3CbL0ZB8J8BFCo2ckfHBfaIsaOZgBIF4EoISJIdLX5xRhd0FGB0LlHReNRuzoJoMGpTjq8F2CQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
+  abstract-pathfinder@0.1.0:
+    resolution: {integrity: sha512-ExABnpG3hZIXdZNO8gnRiXkGShc18PqnnJharMNnyqPcr1rb+NuI0Az4/efGFL9JAI7+ajJx5Qso8Yhp3BFYMQ==}
+
   acorn-jsx@5.3.2:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
     peerDependencies:
@@ -1130,6 +1136,9 @@ packages:
     engines: {node: '>=16'}
     peerDependencies:
       typescript: '>=4.2.0'
+
+  ts-priority-queue@0.1.1:
+    resolution: {integrity: sha512-jNwbk4ItfTHVopnlQ/Z7UUlbF1TNsdXS2cb1W8kI6lm8UauIjs8CYSOEh1E/yrIEhl+HVFUMp60ma6fKuvBhBQ==}
 
   tsx@4.19.2:
     resolution: {integrity: sha512-pOUl6Vo2LUq/bSa8S5q7b91cgNSjctn9ugq/+Mvow99qW6x/UZYwzxy/3NmqoT66eHYfCVvFvACC58UBPFf28g==}
@@ -1745,6 +1754,10 @@ snapshots:
       '@typescript-eslint/types': 8.16.0
       eslint-visitor-keys: 4.2.0
 
+  abstract-pathfinder@0.1.0:
+    dependencies:
+      ts-priority-queue: 0.1.1
+
   acorn-jsx@5.3.2(acorn@8.14.0):
     dependencies:
       acorn: 8.14.0
@@ -2247,6 +2260,8 @@ snapshots:
   ts-api-utils@1.4.3(typescript@5.7.2):
     dependencies:
       typescript: 5.7.2
+
+  ts-priority-queue@0.1.1: {}
 
   tsx@4.19.2:
     dependencies:

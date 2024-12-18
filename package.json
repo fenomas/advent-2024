@@ -16,6 +16,7 @@
     "vite-plugin-solid": "^2.11.0"
   },
   "dependencies": {
+    "abstract-pathfinder": "^0.1.0",
     "ndarray": "^1.0.19",
     "solid-js": "^1.9.3"
   },
