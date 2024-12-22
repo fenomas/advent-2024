@@ -93,11 +93,16 @@ export const runCurrentSolution = async () => {
   const input = inputStr()
   if (!soln || !input) return clearOutputs()
   const answers = soln.answers[inputNum()] || ['', '']
+  setOutput(1)
+  setOutput(2)
 
   // run solutions in timeout so that UI library doesn't catch errors
   setTimeout(runSolution, 0, 1, soln.part1, input, answers[0])
+  await sleep(10)
   setTimeout(runSolution, 5, 2, soln.part2, input, answers[1])
 }
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
 const runSolution = async (part: 1 | 2, sol: Solution, input: string, answer: string) => {
   if (busy()) return
@@ -138,6 +143,7 @@ export const runAllSolutions = async () => {
       const ok = output === sol.answers[0][part]
       oks[part] &&= ok
       outs[part] += ok ? '★' : '-'
+      if (i === solutions().length - 1) outs[part] += ' done!'
       setOutput((part + 1) as 1 | 2, outs[part], dts[part], oks[part])
       await new Promise((r) => setTimeout(r, 0))
     }
@@ -177,4 +183,3 @@ if (import.meta.hot) {
 onModuleImport(imported)
 setDay(solutions().at(-1)?.day || 1)
 setTimeout(runCurrentSolution, 0)
-
