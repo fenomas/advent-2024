@@ -56,18 +56,33 @@ export const part2 = (input = '') => {
     console.log(txt.map((a) => a.map(s).join('')).join('\n'))
   }
 
-  const cts = Array.from(Array(sx + sy))
-  for (let dt = 5000; dt < 8000; dt++) {
-    cts.fill(0)
+  let dt0 = -1
+  let period = 0
+  for (let dt = 0; dt < 1e6; dt++) {
+    let ct = 0
     bots.forEach(({ pos, vel }) => {
-      const x = mod(pos[0] + vel[0] * dt, sx)
       const y = mod(pos[1] + vel[1] * dt, sy)
-      cts[x]++
-      cts[sx + y]++
+      if (y == 44 || y === 76) ct++
     })
-    const hi = cts.reduce((acc, ct) => (ct < 15 ? acc : acc + 1), 0)
-    if (hi < 20) continue
+    if (ct < 50) continue
+    if (dt0 < 0) {
+      dt0 = dt
+    } else {
+      period = dt - dt0
+      break
+    }
+  }
 
+  for (let dt = dt0; dt < 1e6; dt += period) {
+    const seen = new Set()
+    bots.forEach(({ pos, vel }) => {
+      const y = mod(pos[1] + vel[1] * dt, sy)
+      const x = mod(pos[0] + vel[0] * dt, sx)
+      if (x < 35 || x > 65) return
+      if (y === 44) seen.add(x)
+    })
+
+    if (seen.size < 20) continue
     if (LOG) log(dt)
     return dt
   }
