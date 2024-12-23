@@ -130,6 +130,7 @@ export const runAllSolutions = async () => {
   setBusy(true)
   clearOutputs()
 
+  const times = []
   const outs = ['', '']
   const dts = [0, 0]
   const oks = [true, true]
@@ -139,6 +140,7 @@ export const runAllSolutions = async () => {
 
     for (let part = 0; part < 2; part++) {
       const { output, dt } = await runOneSolution(part === 0 ? sol.part1 : sol.part2, input, true)
+      times.push({ dt, name: `Day ${sol.day} part ${part + 1}` })
       dts[part] += dt
       const ok = output === sol.answers[0][part]
       oks[part] &&= ok
@@ -149,6 +151,8 @@ export const runAllSolutions = async () => {
     }
   }
 
+  times.sort((a, b) => a.dt - b.dt)
+  console.table(times.map(({ name, dt }) => ({ name, ms: Math.round(dt * 10) / 10 })))
   setBusy(false)
 }
 
