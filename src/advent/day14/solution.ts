@@ -57,8 +57,8 @@ export const part2 = (input = '') => {
   }
 
   let dt0 = -1
-  let period = 0
-  for (let dt = 0; dt < 1e6; dt++) {
+  let period = 100
+  for (let dt = 0; dt < 1e4; dt++) {
     let ct = 0
     bots.forEach(({ pos, vel }) => {
       const y = mod(pos[1] + vel[1] * dt, sy)
@@ -73,7 +73,7 @@ export const part2 = (input = '') => {
     }
   }
 
-  for (let dt = dt0; dt < 1e6; dt += period) {
+  for (let dt = dt0; dt < 1e5; dt += period) {
     const seen = new Set()
     bots.forEach(({ pos, vel }) => {
       const y = mod(pos[1] + vel[1] * dt, sy)

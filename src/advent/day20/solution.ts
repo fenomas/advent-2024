@@ -28,9 +28,7 @@ const countSkips = (input: string, skipTime = 1, cutoff = 10) => {
     nodeToPrimitive: (node) => node.join(','),
     getNeighbors: ([i, j]) => dirs.map(([di, dj]) => [i + di, j + dj]),
     getMoveCost: (_, [i, j]) => (get(i, j) === '#' ? -1 : 1),
-    getHeuristic: (a, b) => {
-      return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1])
-    },
+    getHeuristic: (a, b) => Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]),
   })
   const path = finder.findPath(spos, epos)
   const times = new Map<number, number>()
@@ -52,10 +50,8 @@ const countSkips = (input: string, skipTime = 1, cutoff = 10) => {
   path.forEach(([i, j]) => {
     const t = times.get(key(i, j)) || 0
     offsets.forEach(([di, dj, dist]) => {
-      const k = key(i + di, j + dj)
-      if (!times.has(k)) return
-      const save = (times.get(k) || 0) - t - dist
-      if (save >= cutoff) skips++
+      const t2 = times.get(key(i + di, j + dj)) || 0
+      if (t2 - t - dist >= cutoff) skips++
     })
   })
   return skips
