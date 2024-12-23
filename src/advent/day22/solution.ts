@@ -6,7 +6,7 @@ export const answers = [
 //
 //
 
-const mask = 2 ** 24 - 1
+const mask = (1 << 24) - 1
 const evolve = (num: number, iter = 1) => {
   while (iter-- > 0) {
     num = (num ^ (num << 6)) & mask
@@ -25,6 +25,7 @@ export const part2 = (input = '') => {
   const lookup = new Map()
   const keyMask = (1 << 28) - 1
 
+  let best = 0
   input.split('\n').forEach((line) => {
     const seen = new Set()
     let num = Number(line)
@@ -38,11 +39,12 @@ export const part2 = (input = '') => {
       prev = price
       if (!seen.has(key) && i >= 5) {
         seen.add(key)
-        const ct = lookup.get(key) || 0
-        lookup.set(key, ct + price)
+        const tot = (lookup.get(key) || 0) + price
+        lookup.set(key, tot)
+        if (tot > best) best = tot
       }
     }
   })
 
-  return lookup.values().reduce((acc, val) => Math.max(acc, val), 0)
+  return best
 }
